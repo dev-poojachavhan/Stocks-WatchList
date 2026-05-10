@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+:root {
+  --bg: #f5f5f5;
+  --card: #ffffff;
+  --text: #111111;
+  --border: #e5e5e5;
+}
+
+[data-theme="dark"] {
+  --bg: #0a0a0f;
+  --card: rgba(255, 255, 255, 0.05);
+  --text: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+}
