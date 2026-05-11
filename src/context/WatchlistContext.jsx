@@ -44,11 +44,24 @@ export const WatchlistProvider = ({ children }) => {
 
           if (!data || data.status === "error") return stock;
 
-          return {
-            ...stock,
-            price: parseFloat(data.close),
-            percent_change: parseFloat(data.percent_change),
-          };
+         return {
+  ...stock,
+
+  // Core
+  price: parseFloat(data.close),
+  percent_change: parseFloat(data.percent_change),
+
+  // Metrics
+  open: parseFloat(data.open),
+  high: parseFloat(data.high),
+  low: parseFloat(data.low),
+
+  previous_close: parseFloat(data.previous_close),
+
+  volume: data.volume,
+
+  market_cap: data.market_cap,
+};
         })
       );
 

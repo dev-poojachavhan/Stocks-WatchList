@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StockCard } from "../components/StockCard";
 import { WatchlistContext } from "../context/WatchlistContext";
+import { StockDetails } from "../Components/StockDetails";
 
 import { CandleChart } from "../components/CandleChart";
 
@@ -64,7 +65,7 @@ dark:bg-gradient-to-br dark:from-[#21212f] dark:via-[#131728] dark:to-black"
           <h2 className="text-lg font-semibold mb-4">Stock Details</h2>
 
           {selectedStock ? (
-            <p className="text-gray-400">Details panel for {selectedStock.symbol}</p>
+           <StockDetails stock={selectedStock} />
           ) : (
             <p className="text-gray-500">Select a stock</p>
           )}

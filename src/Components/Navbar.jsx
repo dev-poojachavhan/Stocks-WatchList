@@ -100,11 +100,29 @@ dark:bg-white/5 dark:border-white/10 dark:text-white backdrop-blur-md"
             <button
               onClick={() => {
                 addStock({
-                  symbol: searchedStock.symbol,
-                  price: parseFloat(searchedStock.close),
-                  percent_change: parseFloat(searchedStock.percent_change),
-                  currency: searchedStock.currency, // ✅ ADD HERE
-                });
+  symbol: searchedStock.symbol,
+
+  // Core
+  price: parseFloat(searchedStock.close),
+  percent_change: parseFloat(
+    searchedStock.percent_change
+  ),
+
+  currency: searchedStock.currency,
+
+  // Metrics
+  open: parseFloat(searchedStock.open),
+  high: parseFloat(searchedStock.high),
+  low: parseFloat(searchedStock.low),
+
+  previous_close: parseFloat(
+    searchedStock.previous_close
+  ),
+
+  volume: searchedStock.volume,
+
+  market_cap: searchedStock.market_cap,
+});
 
                 setQuery("");
                 setSearchedStock(null);
