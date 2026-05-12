@@ -60,7 +60,9 @@ export const WatchlistProvider = ({ children }) => {
 
   volume: data.volume,
 
-  market_cap: data.market_cap,
+           market_cap: data.market_cap,
+  is_market_open: data.is_market_open,
+exchange: data.exchange,
 };
         })
       );

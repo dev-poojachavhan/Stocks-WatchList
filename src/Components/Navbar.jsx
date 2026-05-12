@@ -121,7 +121,9 @@ dark:bg-white/5 dark:border-white/10 dark:text-white backdrop-blur-md"
 
   volume: searchedStock.volume,
 
-  market_cap: searchedStock.market_cap,
+                  market_cap: searchedStock.market_cap,
+  is_market_open: searchedStock.is_market_open,
+exchange: searchedStock.exchange,
 });
 
                 setQuery("");
