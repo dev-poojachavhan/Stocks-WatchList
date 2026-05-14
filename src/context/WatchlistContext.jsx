@@ -1,115 +1,116 @@
-import { createContext, useState, useEffect,useRef  } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
+import { fetchStock } from "../services/api";
 
 export const WatchlistContext = createContext();
 
 export const WatchlistProvider = ({ children }) => {
-
-  
-
   const [watchlist, setWatchlist] = useState(() => {
-    try{
+    try {
       const saved = localStorage.getItem("watchlist");
       return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
     }
-  catch {
-    return [];
-  }
   });
 
   //Create a ref to track latest watchlist
   const watchlistRef = useRef(watchlist);
 
-    useEffect(() => {
-  watchlistRef.current = watchlist;
-}, [watchlist]);
+  useEffect(() => {
+    watchlistRef.current = watchlist;
+  }, [watchlist]);
 
   useEffect(() => {
     localStorage.setItem("watchlist", JSON.stringify(watchlist));
   }, [watchlist]);
 
   useEffect(() => {
-  const updatePrices = async () => {
-    const currentList = watchlistRef.current;
+    const updatePrices = async () => {
+      const currentList = watchlistRef.current;
 
-    if (currentList.length === 0) return;
+      if (currentList.length === 0) return;
 
-    try {
-      const updated = await Promise.all(
-        currentList.map(async (stock) => {
-          const res = await fetch(
-            `https://api.twelvedata.com/quote?symbol=${stock.symbol}&apikey=${import.meta.env.VITE_TWELVE_API_KEY}`
-          );
+      try {
+        const updated = await Promise.all(
+          currentList.map(async (stock) => {
+            const data = await fetchStock(stock.symbol);
 
-          const data = await res.json();
+            if (!data) return stock;
 
-          if (!data || data.status === "error") return stock;
+            const previousSparkline = stock.sparkline || [];
 
-         return {
-  ...stock,
+            const updatedSparkline = [
+              ...previousSparkline,
+              {
+                price: Number(data.price) 
+                
+              },
+            ].slice(-10);
 
-  // Core
-  price: parseFloat(data.close),
-  percent_change: parseFloat(data.percent_change),
+            return {
+              ...stock,
+              ...data,
 
-  // Metrics
-  open: parseFloat(data.open),
-  high: parseFloat(data.high),
-  low: parseFloat(data.low),
+              sparkline: updatedSparkline,
+            };
+          }),
+        );
 
-  previous_close: parseFloat(data.previous_close),
+        // ✅ prevent unnecessary re-renders
+        setWatchlist((prev) => {
+          const changed = prev.some((stock, index) => {
+            return (
+              stock.price !== updated[index].price ||
+              stock.percent_change !== updated[index].percent_change ||
+              stock.volume !== updated[index].volume ||
+              stock.sparkline?.length !== updated[index].sparkline?.length
+            );
+          });
 
-  volume: data.volume,
+          return changed ? updated : prev;
+        });
+      } catch (err) {
+        console.error("Price update error:", err);
+      }
+    };
 
-           market_cap: data.market_cap,
-  is_market_open: data.is_market_open,
-exchange: data.exchange,
-};
-        })
-      );
+    updatePrices(); // initial call
 
-      // ✅ prevent unnecessary re-renders
-      setWatchlist((prev) => {
-        let changed = false;
+    const interval = setInterval(updatePrices, 50000); // 1 minute
 
-for (let i = 0; i < prev.length; i++) {
-  if (
-    prev[i].price !== updated[i].price ||
-    prev[i].percent_change !== updated[i].percent_change
-  ) {
-    changed = true;
-    break;
-  }
-}
-
-return changed ? updated : prev;
-      });
-
-    } catch (err) {
-      console.error("Price update error:", err);
-    }
-  };
-
-  updatePrices(); // initial call
-
-  const interval = setInterval(updatePrices, 60000); // every 15s
-
-  return () => clearInterval(interval);
-}, []); // ✅ run only once
-
-
+    return () => clearInterval(interval);
+  }, []); // ✅ run only once
 
   const addStock = (stock) => {
     setWatchlist((prev) => {
       const exists = prev.find((s) => s.symbol === stock.symbol);
+
       if (exists) return prev;
-      return [...prev, stock];
+
+      const basePrice = Number(stock.price);
+
+const initialSparkline = Array.from(
+  { length: 10 },
+  (_, i) => ({
+    price:
+      basePrice +
+      Math.sin(i / 2) * 0.8 +
+      (Math.random() - 0.5) * 0.4,
+  })
+);
+
+return [
+  ...prev,
+  {
+    ...stock,
+    sparkline: initialSparkline,
+  },
+];
     });
   };
 
   const removeStock = (symbol) => {
-    setWatchlist((prev) =>
-      prev.filter((s) => s.symbol !== symbol)
-    );
+    setWatchlist((prev) => prev.filter((s) => s.symbol !== symbol));
   };
 
   return (

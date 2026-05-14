@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { StockCard } from "../components/StockCard";
 import { WatchlistContext } from "../context/WatchlistContext";
 import { StockDetails } from "../Components/StockDetails";
-
+import { AnimatePresence } from "framer-motion";
 import { CandleChart } from "../components/CandleChart";
 
 export const Dashboard = () => {
@@ -39,6 +39,7 @@ dark:bg-gradient-to-br dark:from-[#21212f] dark:via-[#131728] dark:to-black"
       <div className="grid grid-cols-[300px_1fr_320px] gap-4 mt-5">
         {/* LEFT SIDEBAR */}
         <aside className="space-y-3"> 
+          <AnimatePresence>
           {watchlist.map((stock) => (
             <StockCard  
               key={stock.symbol}
@@ -47,6 +48,7 @@ dark:bg-gradient-to-br dark:from-[#21212f] dark:via-[#131728] dark:to-black"
               isActive={selectedStock?.symbol === stock.symbol}
             />
           ))}
+            </AnimatePresence>
         </aside>
 
         {/* CENTER CHART */}
