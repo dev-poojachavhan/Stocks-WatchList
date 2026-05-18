@@ -4,6 +4,29 @@ import { fetchStock } from "../services/api";
 export const WatchlistContext = createContext();
 
 export const WatchlistProvider = ({ children }) => {
+
+
+  const sortWatchlist = (list) => {
+  return [...list].sort((a, b) => {
+
+    // pinned first
+    if (a.pinned && !b.pinned)
+      return -1;
+
+    if (!a.pinned && b.pinned)
+      return 1;
+
+    // then rising stocks
+    return (
+      b.percent_change -
+      a.percent_change
+    );
+  });
+};
+
+
+
+
   const [watchlist, setWatchlist] = useState(() => {
     try {
       const saved = localStorage.getItem("watchlist");
@@ -67,7 +90,9 @@ export const WatchlistProvider = ({ children }) => {
             );
           });
 
-          return changed ? updated : prev;
+         return changed
+  ? sortWatchlist(updated)
+  : prev;
         });
       } catch (err) {
         console.error("Price update error:", err);
@@ -76,7 +101,7 @@ export const WatchlistProvider = ({ children }) => {
 
     updatePrices(); // initial call
 
-    const interval = setInterval(updatePrices, 50000); // 1 minute
+    const interval = setInterval(updatePrices, 600000); // 1 minute
 
     return () => clearInterval(interval);
   }, []); // ✅ run only once
@@ -99,22 +124,48 @@ const initialSparkline = Array.from(
   })
 );
 
-return [
+return sortWatchlist([
   ...prev,
   {
     ...stock,
+    pinned: false,
     sparkline: initialSparkline,
   },
-];
+])
     });
   };
 
   const removeStock = (symbol) => {
     setWatchlist((prev) => prev.filter((s) => s.symbol !== symbol));
-  };
+  };  
+
+ const togglePin = (symbol) => {
+  setWatchlist((prev) => {
+
+    const updated = prev.map((stock) =>
+      stock.symbol === symbol
+        ? {
+            ...stock,
+            pinned: !stock.pinned,
+          }
+        : stock
+    );
+
+    return sortWatchlist(updated);
+  });
+};
+  
+
 
   return (
-    <WatchlistContext.Provider value={{ watchlist, addStock, removeStock }}>
+    <WatchlistContext.Provider  value={{
+    watchlist,
+    addStock,
+    removeStock,
+
+    togglePin,
+   
+  }}>
       {children}
     </WatchlistContext.Provider>
   );

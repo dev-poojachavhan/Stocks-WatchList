@@ -16,7 +16,9 @@
           {/* Main Content */}
           <main className="">
             <Dashboard />
+            
           </main>
+         
 
         </div>
       </WatchlistProvider>

@@ -1,16 +1,48 @@
-import { useContext } from "react";
+import { useContext, useEffect,useRef,useState } from "react";
 import { WatchlistContext } from "../context/WatchlistContext";
 import { SparklineChart } from "../Components/SparklineChart";
 import { motion } from "framer-motion";
+import { FiStar } from "react-icons/fi";
 
 export const StockCard = ({ stock, onClick, isActive }) => {
-  const { removeStock } = useContext(WatchlistContext);
+
+  const { removeStock,togglePin  } = useContext(WatchlistContext);
   const isPositive = stock.percent_change >= 0;
 
   const price = Number(stock.price);
   const percent = Number(stock.percent_change);
 
+  const previousPrice = useRef(stock.price);
+
+const [flash, setFlash] = useState("");
+
   const sparklineData = stock.sparkline || [];
+
+  useEffect(() => {
+  if (
+    previousPrice.current <
+    stock.price
+  ) {
+    setFlash("green");
+  }
+
+  else if (
+    previousPrice.current >
+    stock.price
+  ) {
+    setFlash("red");
+  }
+
+  previousPrice.current =
+    stock.price;
+
+  const timer = setTimeout(() => {
+    setFlash("");
+  }, 700);
+
+  return () => clearTimeout(timer);
+
+}, [stock.price]);  
 
   return (
     <motion.div
@@ -23,7 +55,13 @@ export const StockCard = ({ stock, onClick, isActive }) => {
 
       animate={{
         opacity: 1,
-        y:0,
+        y: 0,
+        boxShadow:
+       flash === "green"
+      ? "0 0 20px rgba(34,197,94,0.18)"
+      : flash === "red"
+      ? "0 0 20px rgba(239,68,68,0.18)"
+      : "0 0 0px rgba(0,0,0,0)",
       }}
 
       exit={{
@@ -43,32 +81,65 @@ export const StockCard = ({ stock, onClick, isActive }) => {
       transition={{
         type: "spring",
         stiffness: 260,
-        damping:20, 
+        damping: 20,
+        boxShadow: {
+        duration: 0.35,
+        },
+
+       scale: {
+       duration: 0.2,
+        },
       }}
      
       onClick={onClick}
-      className={`relative group p-4 rounded-xl cursor-pointer transition-all duration-300
-  border
+      className={`relative group p-5 rounded-xl cursor-pointer transition-all duration-300
+  border h-[115px] relative
 
   bg-white border-gray-200 shadow-sm
   hover:shadow-md hover:-translate-y-[2px]
 
   dark:bg-white/[0.04] dark:border-white/20 dark:shadow-none dark:hover:bg-white/[0.07]
 
-  ${
-    isActive
-      ? `
-      ring-1 ring-cyan-400/40
-      border-cyan-400/30
+${
+  isActive
+    ? `
+      !bg-cyan-500/10
+      !border-cyan-400/50
 
-      bg-cyan-500/[0.05]
+      shadow-[0_0_30px_rgba(34,211,238,0.18)]
 
-      shadow-[0_0_25px_rgba(34,211,238,0.08)]
+      scale-[1.01]
     `
-      : ""
-  }
+    : ""
+}
 `}
     >
+      <button
+  onClick={(e) => {
+    e.stopPropagation();
+
+    togglePin(stock.symbol);
+  }}
+
+  className="
+    absolute
+    top-3
+    right-7
+    z-20
+  "
+>
+  <FiStar
+    className={`
+      transition
+
+      ${
+        stock.pinned
+          ? "fill-yellow-400 text-yellow-400"
+          : "text-gray-500"
+      }
+    `}
+  />
+</button>
       {/* ❌ Remove Button */}
       <button
         onClick={(e) => {
@@ -80,7 +151,7 @@ export const StockCard = ({ stock, onClick, isActive }) => {
         ✕
       </button>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between ">
         {/* LEFT SIDE */}
         <div>
           <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -95,20 +166,14 @@ export const StockCard = ({ stock, onClick, isActive }) => {
           <p className={isPositive ? "text-green-400" : "text-red-400"}>
             {percent.toFixed(2)}%
           </p>
-        </div>
+        </div >
 
         {/* RIGHT SIDE */}
-        <SparklineChart data={sparklineData} isPositive={isPositive} />
+        <div className="w-[160px]">
+        <SparklineChart data={sparklineData} isPositive={isPositive} /></div>
       </div>
 
-      <div
-        className="absolute top-8 left-1/2 -translate-x-1/2 
-  opacity-0 group-hover:opacity-100 z-10
- translate-y-2 group-hover:translate-y-0 duration-300
-  bg-black text-white text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap"
-      >
-        Click to view chart 📊
-      </div>
+     
     </motion.div>
   );
 };

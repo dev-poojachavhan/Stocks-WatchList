@@ -34,11 +34,11 @@ export const StockDetails = ({ stock }) => {
       initial={{ opacity: 0, x: 30 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3 }}
-      className="space-y-5"
+      className="space-y-3"
     >
       {/* HEADER */}
       <div>
-        <h2 className="text-xl font-bold text-white">{stock.symbol}</h2>
+        <h2 className="text-lg font-semibold text-white">{stock.symbol}</h2>
 
         <motion.p
           key={stock.price}
@@ -92,7 +92,7 @@ export const StockDetails = ({ stock }) => {
     rounded-full px-3 py-1 text-xs font-medium
     border
 
-    ${
+    ${  
       stock.is_market_open
         ? "border-green-500/20 bg-green-500/10 text-green-400"
         : "border-red-500/20 bg-red-500/10 text-red-400"
@@ -107,7 +107,7 @@ export const StockDetails = ({ stock }) => {
       </div>
 
       {/* METRICS GRID */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3  ">
         <MetricCard label="Open" value={stock.open?.toFixed(2)} />
 
         <MetricCard

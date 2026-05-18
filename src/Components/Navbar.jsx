@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { fetchStock } from "../services/api";
 import { WatchlistContext } from "../context/WatchlistContext";
 import { ThemeToggle } from "../components/ThemeToggle";
+import {motion,AnimatePresence,} from "framer-motion";
 
 export const Navbar = () => {
   const [query, setQuery] = useState("");
@@ -49,12 +50,13 @@ export const Navbar = () => {
 bg-white/80 border-b border-gray-200
 dark:bg-[#0d0f1a]/80 dark:border-white/10"
     >
-      <div className="flex items-center justify-between px-6 gap-4  py-4">
+      <div className="flex items-center justify-between px-6 gap-4  py-6">
         <h1  className="font-semibold text-gray-800 dark:text-white tracking-wide">
           StockWatch
         </h1>
 
-        <input
+        <div className="relative">
+            <input
           type="text"
           placeholder="Search (AAPL)"
           value={query}
@@ -65,6 +67,7 @@ focus:outline-none focus:ring-2 focus:ring-gray-300
 
 dark:bg-white/10 dark:text-white dark:placeholder-gray-500" 
         />
+      </div>
 
         <ThemeToggle />
       </div>
@@ -76,42 +79,146 @@ dark:bg-white/10 dark:text-white dark:placeholder-gray-500"
         </p>
       )}
 
-      {/* 📊 Search Result */}
-      {searchedStock && (
-        <div className="px-4 pb-3">
-          <div
-            className="p-3 rounded-xl mt-2 border shadow-sm
-bg-white border-gray-200 text-gray-800
-dark:bg-white/5 dark:border-white/10 dark:text-white backdrop-blur-md"
-          >
-            <p className="font-medium">{searchedStock.symbol}</p>
-            <p>₹ {searchedStock.price || searchedStock.close}</p>
+  
+
+
+      {/* {replaced block} */}
+      <AnimatePresence>
+
+  {searchedStock && (
+
+    <motion.div
+
+      initial={{
+        opacity: 0,
+        y: -10,
+      }}
+
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+
+      exit={{
+        opacity: 0,
+        y: -10,
+      }}
+
+      transition={{
+        duration: 0.2,
+      }}
+
+      className="
+        absolute
+        top-[70px]
+        left-1/2
+        -translate-x-1/2
+        z-50
+        w-[300px]
+      "
+    >
+
+      <div
+        className="
+          rounded-2xl
+          border
+          shadow-xl
+          p-4
+
+          bg-white
+          border-gray-200
+
+          dark:bg-[#111827]
+          dark:border-white/10
+
+          backdrop-blur-xl
+        "
+      >
+
+        <div
+          className="
+            flex items-center
+            justify-between
+          "
+        >
+
+          <div>
+
+            <p className="font-semibold">
+              {searchedStock.symbol}
+            </p>
+
+            <p className="text-sm text-gray-400">
+              {searchedStock.currency}
+            </p>
+
+          </div>
+
+          <div className="text-right">
+
+            <p className="font-semibold">
+              $
+              {Number(
+                searchedStock.price
+              ).toFixed(2)}
+            </p>
 
             <p
               className={
-                searchedStock.percent_change > 0
+                searchedStock.percent_change >= 0
                   ? "text-green-400"
                   : "text-red-400"
               }
             >
-              {searchedStock.percent_change}%
+              {
+                searchedStock.percent_change
+              }%
             </p>
 
-            <button
-              onClick={() => {
-                addStock(searchedStock);
-
-                setQuery("");
-                setSearchedStock(null);
-              }}
-              className="mt-2 px-3 py-1 rounded-md bg-blue-500 text-white 
-hover:bg-blue-600 transition shadow-sm"
-            >
-              Add to Watchlist
-            </button>
           </div>
+
         </div>
-      )}
+
+        <button
+          onClick={() => {
+
+            addStock({
+              ...searchedStock,
+            });
+
+            setQuery("");
+            setSearchedStock(null);
+
+          }}
+
+          className="
+            mt-4
+            w-full
+            rounded-xl
+            bg-cyan-500
+            py-2
+            font-medium
+            text-white
+
+            hover:bg-cyan-400
+
+            transition
+          "
+        >
+          Add to Watchlist
+        </button>
+
+      </div>
+
+    </motion.div>
+
+  )}
+
+</AnimatePresence>
+
+
+
+
     </header>
   );
 };
