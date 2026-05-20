@@ -7,7 +7,8 @@ import { CandleChart } from "../components/CandleChart";
 import { AnalyticsCard } from "../Components/AnalyticsCard";
 import { StockNews } from "../Components/StockNews";
 import { MarketHeatmap } from "../Components/MarketHeatmap";
-
+import { PopularStocks } from "../Components/PopularStocks";
+import { CryptoWidget } from "../Components/CryptoWidget";
 
 
 
@@ -54,10 +55,10 @@ export const Dashboard = () => {
 
   return (
     <div
-      className="px-6 py-5 min-h-screen lg:px-7 bg-[#f6f7fb] 
+      className="px-6 pt-5 p-28 min-h-screen lg:px-7 bg-[#f6f7fb] 
       dark:bg-gradient-to-br dark:from-[#21212f] dark:via-[#131728] dark:to-black"
     >
-      <div className="flex items-end justify-between  mb-5 ">
+      <div className="flex items-center gap-3  mb-5 ">
         {/* LEFT */}
         <div>
           <h2 className="text-4xl font-bold tracking-tight  text-white">
@@ -68,6 +69,8 @@ export const Dashboard = () => {
             Track your market movers & portfolio performance
           </p>
         </div>
+         {/* {popular stocks} */}
+          <PopularStocks />
       </div>
       {/* LEFT SIDEBAR */}
       <div className="grid grid-cols-[300px_minmax(0,1fr)_320px]   gap-x-5 gap-y-4   p-3">
@@ -149,6 +152,9 @@ export const Dashboard = () => {
         
         {/* CENTER CHART */}
         <main className=" flex flex-col  gap-8 min-w-0 ">
+
+
+           
           {/* CHART */}
 
           <div className="h-[430px] ">
@@ -226,6 +232,8 @@ export const Dashboard = () => {
               <p className="text-gray-500">Select a stock</p>
             )}
           </div>
+
+          <CryptoWidget />
           
         </section>
 

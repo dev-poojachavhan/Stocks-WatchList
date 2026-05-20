@@ -6,7 +6,7 @@ export const MarketHeatmap = ({
   setSelectedSymbol,
 }) => {
   return (
-    <div className="mt-8">
+    <div className="mt-8 rounded-3xl  border border-white/10 bg-white/[0.03]  p-6">
       <h2 className="text-2xl font-bold text-white mb-4">
         Market Heatmap
       </h2>
@@ -15,7 +15,8 @@ export const MarketHeatmap = ({
         {watchlist.map((stock, index) => {
           const percent = Number(stock.percent_change);
 
-          const isPositive = percent >= 0;
+            const isPositive = percent >= 0;
+            const intensity = Math.min(Math.abs(percent) * 12,70);
 
           return (
             <motion.div
@@ -39,11 +40,12 @@ export const MarketHeatmap = ({
                 flex
                 flex-col
                 justify-between
+                hover:shadow-[0_0_30px_rgba(34,211,238,0.12)]
 
-                ${
-                  isPositive
-                    ? "bg-green-500/20 border-green-400/30"
-                    : "bg-red-500/20 border-red-400/30"
+               ${
+                isPositive
+                    ? `border-green-400/30`
+                    : `border-red-400/30`
                 }
 
                 ${
@@ -53,11 +55,18 @@ export const MarketHeatmap = ({
                 }
 
                 ${
-                  index % 5 === 0
-                    ? "md:col-span-2 md:row-span-2"
-                    : ""
+                 Math.abs(percent) > 2
+                ? "md:col-span-2 md:row-span-2"
+                : ""
                 }
               `}
+                
+                style={{
+                 backgroundColor: isPositive
+                    ? `rgba(34,197,94,${intensity / 100})`
+                    : `rgba(239,68,68,${intensity / 100
+                    })`,
+                }}
             >
               <div>
                 <h3 className="text-white font-bold text-lg">

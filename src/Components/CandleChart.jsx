@@ -211,17 +211,20 @@ textColor:
 
       <p className="text-3xl font-bold text-white">
           {stock.currency === "USD" ? "$" : "₹"}
-          {stock.price.toFixed(2)}
+           {Number(stock?.price || 0).toFixed(2)}
      </p>
 
 <p
   className={
-    stock.percent_change >= 0
+     Number(stock?.percent_change || 0) >= 0
       ? "text-green-400"
       : "text-red-400"
   }
 >
-  {stock.percent_change.toFixed(2)}%
+ {Number(
+    stock?.percent_change || 0
+  ).toFixed(2)}
+  %
 </p>  
 
       {/* 🔥 Timeframe buttons */}
@@ -332,28 +335,28 @@ textColor:
       <p className="text-gray-400">
         O:
         <span className="text-white ml-1">
-          {hoverData.open.toFixed(2)}
+         {Number( hoverData?.open || 0).toFixed(2)}
         </span>
       </p>
 
       <p className="text-gray-400">
         H:
         <span className="text-green-400 ml-1">
-          {hoverData.high.toFixed(2)}
+          {Number(hoverData?.high || 0).toFixed(2)}
         </span>
       </p>
 
       <p className="text-gray-400">
         L:
         <span className="text-red-400 ml-1">
-          {hoverData.low.toFixed(2)}
+          {Number(hoverData?.low || 0).toFixed(2)}
         </span>
       </p>
 
       <p className="text-gray-400">
         C:
         <span className="text-cyan-400 ml-1">
-          {hoverData.close.toFixed(2)}
+          {Number(hoverData?.close || 0).toFixed(2)}
         </span>
       </p>
     </div>

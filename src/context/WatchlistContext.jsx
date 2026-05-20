@@ -1,10 +1,31 @@
 import { createContext, useState, useEffect, useRef } from "react";
-import { fetchStock } from "../services/api";
+import { fetchCryptoData, fetchPopularStocks, fetchStock,  } from "../services/api";
 
 export const WatchlistContext = createContext();
 
-export const WatchlistProvider = ({ children }) => {
 
+export const WatchlistProvider = ({ children }) => {
+const POPULAR_SYMBOLS = [
+  "AAPL",
+  "MSFT",
+  "NVDA",
+  "TSLA",
+  "META",
+  "NFLX",
+  "GOOGL",
+];
+
+const CRYPTO_SYMBOLS = [
+  "BTC/USD",
+  "ETH/USD",
+  "SOL/USD",
+  "BNB/USD",
+  ];
+  const MARKET_SYMBOLS = [
+  ...POPULAR_SYMBOLS,
+
+  ...CRYPTO_SYMBOLS,
+];
 
   const sortWatchlist = (list) => {
   return [...list].sort((a, b) => {
@@ -24,7 +45,11 @@ export const WatchlistProvider = ({ children }) => {
   });
 };
 
+const [popularStocks, setPopularStocks] =
+  useState([]);
 
+const [cryptoData, setCryptoData] =
+  useState([]);
 
 
   const [watchlist, setWatchlist] = useState(() => {
@@ -42,6 +67,42 @@ export const WatchlistProvider = ({ children }) => {
   useEffect(() => {
     watchlistRef.current = watchlist;
   }, [watchlist]);
+
+
+const fetchExtraMarketData =
+  async () => {
+
+    try {
+
+      // POPULAR STOCKS
+      const popular =
+        await fetchPopularStocks(
+          POPULAR_SYMBOLS
+        );
+
+      // CRYPTO
+      const crypto =
+        await fetchCryptoData(
+          CRYPTO_SYMBOLS
+        );
+
+      // SAVE TO STATE
+      setPopularStocks(
+        Object.values(popular)
+      );
+
+      setCryptoData(
+        Object.values(crypto)
+      );
+
+    } catch (err) {
+
+      console.error(
+        "Extra market data error:",
+        err
+      );
+    }
+};
 
   useEffect(() => {
     localStorage.setItem("watchlist", JSON.stringify(watchlist));
@@ -98,12 +159,13 @@ export const WatchlistProvider = ({ children }) => {
         console.error("Price update error:", err);
       }
     };
-
+  
+    fetchExtraMarketData();
     updatePrices(); // initial call
 
-    const interval = setInterval(updatePrices, 600000); // 1 minute
+   // const interval = setInterval(updatePrices, 6000000); // 1 minute
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, []); // ✅ run only once
 
   const addStock = (stock) => {
@@ -162,8 +224,9 @@ return sortWatchlist([
     watchlist,
     addStock,
     removeStock,
-
-    togglePin,
+      togglePin,
+     popularStocks,
+  cryptoData,
    
   }}>
       {children}

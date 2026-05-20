@@ -7,8 +7,8 @@
 
   function App() {
     return (
-      <WatchlistProvider>
-        <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+      <WatchlistProvider >
+        <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] ">
           
           {/* Top Navigation */}
           <Navbar />
