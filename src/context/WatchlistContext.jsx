@@ -25,7 +25,9 @@ const CRYPTO_SYMBOLS = [
   ...POPULAR_SYMBOLS,
 
   ...CRYPTO_SYMBOLS,
-];
+  ];
+  
+
 
   const sortWatchlist = (list) => {
   return [...list].sort((a, b) => {
@@ -51,6 +53,15 @@ const [popularStocks, setPopularStocks] =
 const [cryptoData, setCryptoData] =
   useState([]);
 
+    const [loadingMap, setLoadingMap] =
+  useState({
+    chart: false,
+    popular: false,
+    crypto: false,
+    news: false,
+    watchlist: false,
+    heatmap: false,
+  });
 
   const [watchlist, setWatchlist] = useState(() => {
     try {
@@ -68,9 +79,25 @@ const [cryptoData, setCryptoData] =
     watchlistRef.current = watchlist;
   }, [watchlist]);
 
+  const startLoading = (key) => {
+  setLoadingMap((prev) => ({
+    ...prev,
+    [key]: true,
+  }));
+};
+
+const stopLoading = (key) => {
+  setLoadingMap((prev) => ({
+    ...prev,
+    [key]: false,
+  }));
+};
 
 const fetchExtraMarketData =
   async () => {
+
+    startLoading("popular");
+startLoading("crypto");
 
     try {
 
@@ -95,7 +122,14 @@ const fetchExtraMarketData =
         Object.values(crypto)
       );
 
+      stopLoading("popular");
+stopLoading("crypto");
+
     } catch (err) {
+
+
+       stopLoading("popular");
+  stopLoading("crypto");
 
       console.error(
         "Extra market data error:",
@@ -110,9 +144,15 @@ const fetchExtraMarketData =
 
   useEffect(() => {
     const updatePrices = async () => {
+      startLoading("watchlist");
+startLoading("heatmap");
       const currentList = watchlistRef.current;
 
-      if (currentList.length === 0) return;
+      if (currentList.length === 0) {
+  stopLoading("watchlist");
+  stopLoading("heatmap");
+  return;
+}
 
       try {
         const updated = await Promise.all(
@@ -155,7 +195,11 @@ const fetchExtraMarketData =
   ? sortWatchlist(updated)
   : prev;
         });
+        stopLoading("watchlist");
+stopLoading("heatmap");
       } catch (err) {
+        stopLoading("watchlist");
+  stopLoading("heatmap");
         console.error("Price update error:", err);
       }
     };
@@ -226,7 +270,10 @@ return sortWatchlist([
     removeStock,
       togglePin,
      popularStocks,
-  cryptoData,
+      cryptoData,
+  loadingMap,
+startLoading,
+stopLoading,
    
   }}>
       {children}

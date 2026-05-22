@@ -1,32 +1,38 @@
 import { useContext } from "react";
 import { WatchlistContext } from "../context/WatchlistContext";
+import { Shimmer } from "./LoadingShimmer/Shimmer";
 
 import { motion } from "framer-motion";
 
 export const PopularStocks = () => {
 
   const {
-  popularStocks = [],
-} = useContext(WatchlistContext);
+    popularStocks = [], loadingMap, } = useContext(WatchlistContext);
+  
+  if (loadingMap.popular) {
+  return (
+    <div className="flex gap-3 overflow-hidden">
+      {[1,2,3,4,5,6].map((i) => (
+        <Shimmer
+          key={i}
+          className="w-[80px] h-[80px]"
+        />
+      ))}
+    </div>
+  );
+}
 
   return (
     <div
     className="
-  rounded-2xl
+  rounded-2xl   h-[90px]
   
   px-3
   py-2
 
 "
     >
-     
-      
-
-        
-
-     
-
-      {/* STOCK ROW */}
+    {/* STOCK ROW */}
       <div className="overflow-hidden">
 
   <motion.div
@@ -59,7 +65,7 @@ export const PopularStocks = () => {
             }}
 
             className="
-              min-w-[10 0px]
+              min-w-[100px]
               rounded-xl
               border border-white/10
               bg-white/[0.04]

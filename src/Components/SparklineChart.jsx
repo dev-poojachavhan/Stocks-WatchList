@@ -11,7 +11,7 @@ export const SparklineChart = ({
 }) => {
 
   return (
-    <div className="h-20 w-32">
+    <div className="h-20 w-28">
 
       <ResponsiveContainer
         width="100%"
@@ -36,7 +36,7 @@ export const SparklineChart = ({
             ]}
           />
 
-          <Line
+          <Line 
             dataKey="price"
 
             type="monotone"
@@ -47,7 +47,7 @@ export const SparklineChart = ({
                 : "#ff5c5c"
             }
 
-            strokeWidth={2.5}
+            strokeWidth={2}
 
             strokeLinecap="round"
 

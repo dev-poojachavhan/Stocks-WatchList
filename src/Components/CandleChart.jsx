@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { createChart, CandlestickSeries } from "lightweight-charts";
 import { useQuery } from "@tanstack/react-query";
 import {FiMaximize2,FiMinimize2,FiRotateCcw,FiMoon,FiSun} from "react-icons/fi";
-
+import { Shimmer } from "./LoadingShimmer/Shimmer";
+import { WatchlistContext } from "../context/WatchlistContext";
+import { motion } from "framer-motion";
 
 
 
@@ -18,6 +20,7 @@ export const CandleChart = ({ stock }) => {
   const [chartTheme, setChartTheme] = useState("dark");
   const containerRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false); //changing icon state
+  const {loadingMap} = useContext(WatchlistContext)
 
   const symbol = stock?.symbol;
   //  Fetch function (TanStack handles caching)
@@ -45,6 +48,7 @@ export const CandleChart = ({ stock }) => {
     if (!data.values) {
       throw new Error("No candle data available");
     }
+
 
     return data.values
       .map((item) => ({
@@ -81,7 +85,7 @@ export const CandleChart = ({ stock }) => {
   }
 };
 
-  //screenshoot
+ 
  
 
   const handleResetZoom = () => {
@@ -95,11 +99,22 @@ export const CandleChart = ({ stock }) => {
 };
   //Create chart ONLY once
   useEffect(() => {
+    
     if (!chartRef.current) return;
 
-    chartInstance.current = createChart(chartRef.current, {
+
+    // cleanup previous
+  if (chartInstance.current) {
+    chartInstance.current.remove();
+    chartInstance.current = null;
+  }
+
+     // create chart
+    chartInstance.current = createChart(
+      chartRef.current,
+      {
       width: chartRef.current.clientWidth,
-      height: 380,
+      height:   chartRef.current.clientHeight,
       layout: {
         background: {
   color:
@@ -127,6 +142,22 @@ textColor:
         secondsVisible: false,
       },
     });
+
+ setTimeout(() => {
+
+  if (!chartRef.current) return;
+
+  chartInstance.current.applyOptions({
+    width:
+      chartRef.current.clientWidth,
+
+    height:
+      chartRef.current.clientHeight,
+  });
+
+  chartInstance.current.timeScale().fitContent();
+
+}, 0);
 
     seriesRef.current = chartInstance.current.addSeries(CandlestickSeries);
 
@@ -158,8 +189,11 @@ textColor:
 );
 
     const handleResize = () => {
+     
       chartInstance.current.applyOptions({
         width: chartRef.current.clientWidth,
+         height:
+      chartRef.current.clientHeight,
       });
     };
 
@@ -196,12 +230,14 @@ textColor:
           : "#111827",
     },
   });
-}, [chartTheme]);
+  }, [chartTheme]);
+  
+
 
   return (
     <div
       ref={containerRef}
-      className=" p-4 rounded-xl border min-h-[430px] border-gray-200 shadow-sm  
+      className=" p-4 rounded-xl border h-[540px] border-gray-200 shadow-sm  
                  dark:bg-gradient-to-br dark:from-white/[0.03] dark:to-white/[0.02] 
                  dark:border-white/10 backdrop-blur-md"
       >
@@ -301,17 +337,6 @@ textColor:
   </div>
 </div>
 
-      {/* Loading */}
-     {isLoading && (
-  <div
-    className="
-      h-[380px]
-      rounded-xl
-      bg-white/[0.08]
-      animate-pulse
-    "
-  />
-)}
 
       {/* 🔥 Error */}
       {error && <p className="text-red-400 mb-2">{error.message}</p>}
@@ -362,9 +387,87 @@ textColor:
     </div>
   )}
 
-        {!isLoading && (
+        {/* {!isLoading && (
   <div ref={chartRef} />
-)}
+)} */}
+        
+
+
+        <div className="relative h-[350px]">
+
+  {/* CHART ALWAYS MOUNTED */}
+  <div
+    ref={chartRef}
+    className={`
+      h-full
+      transition-opacity
+      duration-300
+
+      ${isLoading ? "opacity-0" : "opacity-100"}
+    `}
+  />
+
+  {/* SHIMMER OVERLAY */}
+  {isLoading && (
+    <div
+      className="
+        absolute
+        inset-0
+        z-20
+        overflow-hidden
+        rounded-xl
+        border border-white/10
+        bg-zinc-900/80
+      "
+    >
+      <motion.div
+        animate={{
+          x: ["-100%", "220%"],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 1.4,
+          ease: "linear",
+        }}
+        className="
+          absolute
+          inset-y-0
+          left-0
+          w-1/3
+          skew-x-[-20deg]
+          bg-gradient-to-r
+          from-transparent
+          via-white/20
+          to-transparent
+        "
+      />
+
+      <div className="absolute inset-0 p-6">
+        <div className="space-y-4 opacity-40">
+
+          <div className="h-4 w-32 rounded bg-white/10" />
+
+          <div className="h-[250px] rounded-xl bg-white/[0.03]" />
+
+          <div className="flex gap-3">
+            {[1,2,3].map((i) => (
+              <div
+                key={i}
+                className="
+                  h-8
+                  w-16
+                  rounded-lg
+                  bg-white/10
+                "
+              />
+            ))}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  )}
+</div>
 </div>
   </div>
   );

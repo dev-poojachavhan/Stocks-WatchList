@@ -3,10 +3,13 @@ import { WatchlistContext } from "../context/WatchlistContext";
 import { SparklineChart } from "../Components/SparklineChart";
 import { motion } from "framer-motion";
 import { FiStar } from "react-icons/fi";
+import { Shimmer } from "./LoadingShimmer/Shimmer";
+
+
 
 export const StockCard = ({ stock, onClick, isActive }) => {
 
-  const { removeStock,togglePin  } = useContext(WatchlistContext);
+  const { removeStock,togglePin,loadingMap } = useContext(WatchlistContext);
   const isPositive = stock.percent_change >= 0;
 
   const price = Number(stock.price);
@@ -43,6 +46,9 @@ const [flash, setFlash] = useState("");
   return () => clearTimeout(timer);
 
 }, [stock.price]);  
+
+ 
+  
 
   return (
     <motion.div
@@ -93,7 +99,7 @@ const [flash, setFlash] = useState("");
      
       onClick={onClick}
       className={`relative group p-5 rounded-xl cursor-pointer transition-all duration-300
-  border h-[115px] relative
+  border h-[110px] relative
 
   bg-white border-gray-200 shadow-sm
   hover:shadow-md hover:-translate-y-[2px]
@@ -107,8 +113,8 @@ ${
       !border-cyan-400/50
 
       shadow-[0_0_30px_rgba(34,211,238,0.18)]
-
-      scale-[1.01]
+      
+     
     `
     : ""
 }
@@ -151,7 +157,7 @@ ${
         ✕
       </button>
 
-      <div className="flex items-center justify-between ">
+      <div className="flex items-center justify-between gap-4">
         {/* LEFT SIDE */}
         <div>
           <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -170,7 +176,9 @@ ${
 
         {/* RIGHT SIDE */}
         <div className="w-[160px]">
-        <SparklineChart data={sparklineData} isPositive={isPositive} /></div>
+          <SparklineChart data={sparklineData} isPositive={isPositive
+            
+        } /></div>
       </div>
 
      

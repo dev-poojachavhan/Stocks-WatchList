@@ -1,13 +1,30 @@
 import { useContext } from "react";
+import { Shimmer } from "./LoadingShimmer/Shimmer";
 
 import { WatchlistContext }
 from "../context/WatchlistContext";
 
 export const CryptoWidget = () => {
 
+
+
   const {
-  cryptoData = [],
-} = useContext(WatchlistContext);
+    cryptoData = [],
+    loadingMap
+  } = useContext(WatchlistContext);
+  
+  if (loadingMap.crypto) {
+  return (
+    <div className="space-y-4">
+      {[1,2,3,4].map((i) => (
+        <Shimmer
+          key={i}
+          className="h-[90px]"
+        />
+      ))}
+    </div>
+  );
+}
 
   return (
     <div
