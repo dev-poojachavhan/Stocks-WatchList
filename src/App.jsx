@@ -4,9 +4,13 @@
 
   import {Navbar} from "./components/Navbar";
   import  {Dashboard}  from "./pages/Dashboard";
+import { LandingPage } from "./pages/LandingPage";
 
   function App() {
     return (
+
+<>
+      <LandingPage />
       <WatchlistProvider >
         <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] ">
           
@@ -22,7 +26,7 @@
 
         </div>
       </WatchlistProvider>
-    );
+ </>   );
   }
 
   export default App;
