@@ -1,5 +1,10 @@
 import { createContext, useState, useEffect, useRef } from "react";
 import { fetchCryptoData, fetchPopularStocks, fetchStock,  } from "../services/api";
+import toast from "react-hot-toast";
+
+
+
+
 
 export const WatchlistContext = createContext();
 
@@ -27,8 +32,6 @@ const CRYPTO_SYMBOLS = [
   ...CRYPTO_SYMBOLS,
   ];
   
-
-
   const sortWatchlist = (list) => {
   return [...list].sort((a, b) => {
 
@@ -230,6 +233,11 @@ const initialSparkline = Array.from(
   })
 );
 
+      
+toast.success(
+  `${stock.symbol} added`
+);
+
 return sortWatchlist([
   ...prev,
   {
@@ -242,10 +250,16 @@ return sortWatchlist([
   };
 
   const removeStock = (symbol) => {
+    toast.error(
+  `${symbol} removed`
+);
     setWatchlist((prev) => prev.filter((s) => s.symbol !== symbol));
   };  
 
- const togglePin = (symbol) => {
+  const togglePin = (symbol) => {
+   toast(
+  `${symbol} pinned`
+);
   setWatchlist((prev) => {
 
     const updated = prev.map((stock) =>

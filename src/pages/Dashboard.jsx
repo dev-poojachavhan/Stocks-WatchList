@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { StockCard } from "../components/StockCard";
 import { WatchlistContext } from "../context/WatchlistContext";
 import { StockDetails } from "../Components/StockDetails";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence,motion  } from "framer-motion";
 import { CandleChart } from "../components/CandleChart";
 import { AnalyticsCard } from "../Components/AnalyticsCard";
 import { StockNews } from "../Components/StockNews";
@@ -10,12 +10,16 @@ import { MarketHeatmap } from "../Components/MarketHeatmap";
 import { PopularStocks } from "../Components/PopularStocks";
 import { CryptoWidget } from "../Components/CryptoWidget";
 import { Shimmer } from "../Components/LoadingShimmer/Shimmer";
+import { fetchStock } from "../services/api";
 
 
 
 
-export const Dashboard = () => {
-  const { watchlist, loadingMap } = useContext(WatchlistContext);
+export const Dashboard = ({
+  initialSymbol,
+}) => {  
+  
+  const { watchlist, loadingMap,addStock, } = useContext(WatchlistContext);
   
   const [selectedSymbol, setSelectedSymbol] = useState(null);
   const selectedStock =
@@ -37,6 +41,8 @@ export const Dashboard = () => {
     (a, b) => a.percent_change - b.percent_change,
   )[0];
 
+
+  
   //default stock
   useEffect(() => {
     if (
@@ -49,10 +55,59 @@ export const Dashboard = () => {
   }
   },[ watchlist, selectedSymbol]);
 
+useEffect(() => {
 
+  const loadInitialStock = async () => {
+
+    if (!initialSymbol) return;
+
+    try {
+
+      const stockData =
+        await fetchStock(initialSymbol);
+
+      if (!stockData) return;
+
+      addStock(stockData);
+
+      setSelectedSymbol(
+        stockData.symbol
+      );
+
+    } catch (err) {
+
+      console.error(
+        "Initial stock load failed:",
+        err
+      );
+    }
+  };
+
+  loadInitialStock();
+
+}, [initialSymbol,addStock]);
 
   return (
-  <div
+    <motion.div
+      initial={{
+      opacity: 0,
+      y: 30,
+    }}
+
+    animate={{
+      opacity: 1,
+      y: 0,
+    }}
+
+    exit={{
+      opacity: 0,
+      y: -20,
+    }}
+
+    transition={{
+      duration: 0.45,
+      ease: "easeOut",
+    }}
     className="
       min-h-screen
       px-6
@@ -238,18 +293,54 @@ export const Dashboard = () => {
     ))}
   </div>
 ) 
-       :(   watchlist.map((stock) => (
-            <StockCard
-              key={stock.symbol}
-              stock={stock}
-              onClick={() =>
-                setSelectedSymbol(stock.symbol)
-              }
-              isActive={
-                selectedSymbol === stock.symbol
-              }
-            />
-          )))}
+       : watchlist.length === 0 ? (
+
+  <div
+    className="
+      rounded-2xl
+      border border-dashed border-white/10
+
+      bg-white/[0.03]
+
+      p-10
+      text-center
+    "
+  >
+    <div className="text-5xl mb-4">
+      📈
+    </div>
+
+    <h3
+      className="
+        text-xl
+        font-semibold
+        text-white
+      "
+    >
+      Build Your Watchlist
+    </h3>
+
+    <p className="mt-3 text-gray-400">
+      Search stocks from landing page
+      to begin tracking markets.
+    </p>
+
+  </div>
+
+) : (
+
+  watchlist.map((stock) => (
+    <StockCard
+      key={stock.symbol}
+      stock={stock}
+      onClick={() =>
+        setSelectedSymbol(stock.symbol)
+      }
+      isActive={
+        selectedSymbol === stock.symbol
+      }
+    />
+  )))}
             </AnimatePresence>
           </div>   
       {/* ================================= */}
@@ -396,6 +487,6 @@ export const Dashboard = () => {
     
 
     </div>
-  </div>
+  </motion.div>
 );
 };

@@ -1,10 +1,17 @@
 import { MarketTicker } from "../components/landing/MarketTicker";
 import { motion } from "framer-motion";
 import heroImage from "../assets/dashboard-preview.jpg";
+import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 
-export const LandingPage = () => {
+export const LandingPage = ({
+  setShowDashboard,
+  setInitialSymbol,
+  setIsLaunching,
+}) => {
+  const [search, setSearch] = useState("");
   return (
-    <div
+    <motion.div
       className="
         
        bg-[#050816]
@@ -62,6 +69,11 @@ to-teal-500/10
             transition={{
               duration: 0.8,
               ease: "easeOut",
+            }}
+            exit={{
+              opacity: 0,
+              y: -20,
+              scale: 0.98,
             }}
             className="
       relative z-10
@@ -169,6 +181,8 @@ transition-all duration-200
         "
               >
                 <input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   type="text"
                   placeholder="Search AAPL, TSLA, BTC/USD..."
                   className="
@@ -185,12 +199,24 @@ transition-all duration-200
 
             placeholder:text-gray-500
             focus:ring-emerald-400/40
-focus:border-emerald-400
+        focus:border-emerald-400
           "
                 />
 
                 <button
-                  className="
+                  onClick={() => {
+                    if (!search.trim()) return;
+                    setInitialSymbol(search);
+
+                    setIsLaunching(true);
+
+                    setTimeout(() => {
+                      setShowDashboard(true);
+
+                      setIsLaunching(false);
+                    }, 1200);
+                  }}
+                  className={`
             rounded-xl
 
            bg-emerald-500
@@ -202,9 +228,21 @@ focus:border-emerald-400
             text-black
 
             transition
-            shadow-[0_0_25px_rgba(16,185,129,0.28)]
-            hover:scale-105
-          "
+            ${
+              search.trim()
+                ? `
+        bg-emerald-500
+        hover:bg-emerald-400
+        hover:scale-105
+        shadow-[0_0_25px_rgba(16,185,129,0.28)]
+      `
+                : `
+        bg-gray-500/40
+        cursor-not-allowed
+        text-gray-300
+      `
+            }
+`}
                 >
                   <span className="flex items-center gap-2">
                     Launch Dashboard
@@ -444,7 +482,6 @@ pb-10
                 duration: 0.45,
                 ease: "easeOut",
               }}
-             
               className={`
           relative
           flex-1
@@ -531,6 +568,6 @@ transition-all duration-300
           ))}
         </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };

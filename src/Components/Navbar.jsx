@@ -2,14 +2,38 @@ import React, { useState, useEffect, useContext } from "react";
 import { fetchStock } from "../services/api";
 import { WatchlistContext } from "../context/WatchlistContext";
 import { ThemeToggle } from "../components/ThemeToggle";
-import {motion,AnimatePresence,} from "framer-motion";
+import { motion, AnimatePresence, } from "framer-motion";
 
-export const Navbar = () => {
+
+const TRENDING_STOCKS = [
+  "AAPL",
+  "TSLA",
+  "NVDA",
+  "MSFT",
+  "META",
+  "AMZN",
+  "GOOGL",
+  "NFLX",
+  "BTC/USD",
+  "ETH/USD",
+];
+
+export const Navbar = ({setShowDashboard}) => {
   const [query, setQuery] = useState("");
   const [searchedStock, setSearchedStock] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const { addStock } = useContext(WatchlistContext);
+
+  const filteredSuggestions =
+  TRENDING_STOCKS.filter((item) =>
+    item
+      .toLowerCase()
+      .includes(query.toLowerCase())
+  );
+
+  
 
   // 🔍 Debounced search  
   useEffect(() => {
@@ -54,19 +78,170 @@ dark:bg-[#0d0f1a]/80 dark:border-white/10"
         <h1  className="font-semibold text-gray-800 dark:text-white tracking-wide">
           StockWatch
         </h1>
+        <button
+  onClick={() => {
+            setShowDashboard(false
+      
+    );
+  }}
+
+  className="
+    rounded-xl
+    border border-white/10
+
+    px-4
+    py-2
+
+    text-sm
+    text-gray-300
+
+    hover:bg-white/[0.05]
+  "
+>
+  ← Back
+</button>
 
         <div className="relative">
             <input
           type="text"
           placeholder="Search (AAPL)"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelectedIndex(-1);
+            }}
+             onKeyDown={(e) => {
+
+    if (
+      e.key === "ArrowDown"
+    ) {
+
+      e.preventDefault();
+
+      setSelectedIndex((prev) =>
+        prev <
+        filteredSuggestions.length - 1
+          ? prev + 1
+          : prev
+      );
+    }
+
+    if (
+      e.key === "ArrowUp"
+    ) {
+
+      e.preventDefault();
+
+      setSelectedIndex((prev) =>
+        prev > 0
+          ? prev - 1
+          : 0
+      );
+    }
+
+    if (
+      e.key === "Enter"
+    ) {
+
+      if (
+        filteredSuggestions[
+          selectedIndex
+        ]
+      ) {
+
+        setQuery(
+          filteredSuggestions[
+            selectedIndex
+          ]
+        );
+      }
+    }
+  }}
           className="px-4 py-2 rounded-full w-[250px]
 bg-gray-100 text-gray-800 placeholder-gray-400
 focus:outline-none focus:ring-2 focus:ring-gray-300
 
 dark:bg-white/10 dark:text-white dark:placeholder-gray-500" 
-        />
+          />
+          
+          {query &&
+  filteredSuggestions.length > 0 && (
+
+    <motion.div
+
+      initial={{
+        opacity: 0,
+        y: -8,
+      }}
+
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+
+      exit={{
+        opacity: 0,
+        y: -8,
+      }}
+
+      className="
+        absolute
+        top-[55px]
+        left-0
+
+        z-50
+        w-full
+
+        overflow-hidden
+
+        rounded-2xl
+        border border-white/10
+
+        bg-[#111827]
+
+        shadow-2xl
+        backdrop-blur-xl
+      "
+    >
+
+      {filteredSuggestions.map(
+        (item, index) => (
+
+          <button
+            key={item}
+
+            onClick={() => {
+              setQuery(item);
+            }}
+
+            className={`
+              w-full
+              px-4
+              py-3
+              text-left
+              text-sm
+              transition
+
+              ${
+                selectedIndex === index
+                  ? `
+                    bg-emerald-500/20
+                    text-emerald-300
+                  `
+                  : `
+                    hover:bg-white/[0.05]
+                    text-white
+                  `
+              }
+            `}
+          >
+            {item}
+          </button>
+        )
+      )}
+
+    </motion.div>
+)}
       </div>
 
         <ThemeToggle />

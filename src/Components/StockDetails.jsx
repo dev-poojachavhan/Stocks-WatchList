@@ -64,7 +64,7 @@ export const StockDetails = ({ stock }) => {
         >
           {stock.currency === "USD" ? "$" : "₹"}
 
-          {Number(stock.price).toFixed(2)}
+          {stock.price.toFixed(2) || "--"}
         </motion.p>
 
         <div className="flex items-center gap-2">
@@ -83,7 +83,7 @@ export const StockDetails = ({ stock }) => {
               isPositive ? "text-green-400" : "text-red-400"
             }`}
           >
-            {Number(stock.percent_change).toFixed(2)}%
+            {stock.percent_change.toFixed(2) || "--"}%
           </motion.p>
 
           <div
