@@ -38,7 +38,7 @@ export const StockDetails = ({ stock }) => {
     >
       {/* HEADER */}
       <div>
-        <h2 className="text-lg font-semibold text-white">{stock.symbol}</h2>
+        <h2 className="text-lg font-semibold text-white/95 tracking-tight">{stock.symbol}</h2>
 
         <motion.p
           key={stock.price}
@@ -57,9 +57,9 @@ export const StockDetails = ({ stock }) => {
     text-3xl font-bold text-white mt-1
     transition-all duration-500
 
-    ${flash === "green" ? "drop-shadow-[0_0_14px_rgba(0,255,170,0.45)]" : ""}
+    ${flash === "green" ? "drop-shadow-[0_0_18px_rgba(16,185,129,0.30)]" : ""}
 
-    ${flash === "red" ? "drop-shadow-[0_0_14px_rgba(255,80,80,0.45)]" : ""}
+    ${flash === "red" ? "drop-shadow-[0_0_18px_rgba(239,68,68,0.28)]" : ""}
   `}
         >
           {stock.currency === "USD" ? "$" : "₹"}
@@ -94,8 +94,16 @@ export const StockDetails = ({ stock }) => {
 
     ${  
       stock.is_market_open
-        ? "border-green-500/20 bg-green-500/10 text-green-400"
-        : "border-red-500/20 bg-red-500/10 text-red-400"
+        ? `
+        border-emerald-400/30
+        bg-emerald-500/[0.10]
+        text-emerald-400
+        `
+        : `
+        border-red-400/20
+        bg-red-500/[0.20]
+        text-red-400
+        `
     }
   `}
           >
@@ -138,10 +146,10 @@ export const StockDetails = ({ stock }) => {
         <MetricCard
           label="Volume"
           value={stock.volume}
-          valueClassName="text-cyan-400"
+          valueClassName="text-emerald-300"
           cardClassName="
-    border-cyan-500/20
-    bg-cyan-500/[0.03]
+    border-emerald-400/20
+bg-emerald-400/[0.04]
   "
         />
 
@@ -204,15 +212,29 @@ const MetricCard = ({
   return (
     <div
       className={`
-      rounded-lg
-      border
-      border-white/5  
-      bg-white/[0.02]
-      p-3
-       transition-all duration-300
+       rounded-xl
+  border
 
-  hover:bg-white/[0.05]
-  hover:-translate-y-[1px]
+  border-emerald-400/[0.10]
+
+  
+   from-[#101928]
+via-[#0d1725]
+to-[#0a1420]
+
+  backdrop-blur-xl
+
+  p-3.5
+
+  transition-all
+  duration-300
+
+  hover:border-emerald-400/20
+  hover:bg-[#101a2a]
+  hover:-translate-y-[2px]
+
+  shadow-[0_0_25px_rgba(16,185,129,0.03)]
+
          ${cardClassName}
       `}
     >

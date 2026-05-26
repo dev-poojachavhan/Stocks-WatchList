@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, } from "react";
 import { WatchlistProvider } from "./context/WatchlistContext";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { AnimatePresence, motion } from "framer-motion";
@@ -8,11 +8,28 @@ import { LandingPage } from "./pages/LandingPage";
 import { Toaster } from "react-hot-toast";
 
 function App() {
-  const [showDashboard, setShowDashboard] = useState(false);
+  const [showDashboard, setShowDashboard] =  useState(() => {
+
+    return (
+      localStorage.getItem(
+        "showDashboard"
+      ) === "true"
+    );
+
+  });
   const [isLaunching, setIsLaunching] =
   useState(false);
 
   const [initialSymbol, setInitialSymbol] = useState("");
+
+   useEffect(() => {
+
+    localStorage.setItem(
+      "showDashboard",
+      showDashboard
+    );
+
+  }, [showDashboard]);
 
    if (isLaunching) {
     return (
@@ -95,13 +112,15 @@ function App() {
                   duration: 0.45,
                   ease: "easeOut",
                 }}>
-                <Navbar
-                   setShowDashboard={setShowDashboard}
+                <Navbar setShowDashboard={setShowDashboard}
+                   
 />
                 
 
                 <main>
-                  <Dashboard initialSymbol={initialSymbol} />
+                  <Dashboard initialSymbol={initialSymbol}
+                    
+                  />
                 </main>
               </motion.div>
             ) : (

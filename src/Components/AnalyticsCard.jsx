@@ -22,14 +22,14 @@ animate={{
 }}
 
 whileHover={{
-  y: -3,
-  scale: 1.02,
+  y: -2,
+  scale: 1.01,
 }}
 
 transition={{
   type: "spring",
-  stiffness: 260,
-  damping: 18,
+  stiffness: 320,
+  damping: 24,
 }}
       className="
         min-w-[120px]
@@ -41,14 +41,56 @@ transition={{
 
         px-4 py-3
 
-        backdrop-blur-md
+        backdrop-blur-xl 
+  overflow-hidden
+
+  min-w-[120px]
+
+  rounded-2xl
+  border
+
+  border-emerald-400/[0.08]
+
+  bg-gradient-to-br
+  from-[#101928]
+  via-[#0d1725]
+  to-[#0a1420]
+
+  px-4
+  py-3.5
+
+  backdrop-blur-xl
+
+  shadow-[0_0_20px_rgba(16,185,129,0.03)]
+
+ 
+
+  hover:border-emerald-400/15
+  hover:shadow-[0_0_30px_rgba(16,185,129,0.06)]
       "
     >
+
+      <div
+  className="
+    absolute
+    inset-0
+
+    opacity-0
+    group-hover:opacity-100
+
+    transition-opacity
+    duration-500
+
+    pointer-events-none
+
+    bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.08),transparent_55%)]
+  "
+/>
 
       <p
         className="
           text-xs
-          text-gray-400
+          text-white/45
         "
       >
         {label}
@@ -58,7 +100,9 @@ transition={{
         className="
           mt-1
           text-lg
-          font-bold
+font-semibold
+text-white/95
+tracking-tight
         "
       >
         {value}
@@ -71,7 +115,7 @@ transition={{
 
             ${
               positive
-                ? "text-green-400"
+                ? "text-emerald-300"
                 : ""
             }
 

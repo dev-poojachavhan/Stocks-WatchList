@@ -43,7 +43,7 @@ import { Shimmer } from "./LoadingShimmer/Shimmer";
       <div className="w-full
     rounded-3xl
     border
-    border-white/10
+    border border-emerald-400/20
     bg-white/[0.03]
     p-6">
         {/* HEADER */}

@@ -70,14 +70,30 @@ export const Navbar = ({setShowDashboard}) => {
 
   return (
     <header
-      className="sticky top-0 z-50 backdrop-blur 
-bg-white/80 border-b border-gray-200
-dark:bg-[#0d0f1a]/80 dark:border-white/10"
+      className="sticky top-0 z-50 backdrop-blur relative
+overflow-hidden
+border-b
+
+border-emerald-400/[0.08]
+
+bg-[#050816]/85
+
+backdrop-blur-2xl
+
+shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
     >
+      <div
+  className="
+    absolute
+    inset-0
+
+    pointer-events-none
+
+    bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.06),transparent_65%)]
+  "
+/>
       <div className="flex items-center justify-between px-6 gap-4  py-6">
-        <h1  className="font-semibold text-gray-800 dark:text-white tracking-wide">
-          StockWatch
-        </h1>
+        
         <button
   onClick={() => {
             setShowDashboard(false
@@ -86,22 +102,53 @@ dark:bg-[#0d0f1a]/80 dark:border-white/10"
   }}
 
   className="
-    rounded-xl
-    border border-white/10
+ rounded-2xl
+border
 
-    px-4
-    py-2
+border-emerald-400/[0.08]
 
-    text-sm
-    text-gray-300
+bg-gradient-to-br
+from-[#111a29]
+to-[#0b1420]
 
-    hover:bg-white/[0.05]
+px-4
+py-2.5
+
+text-sm
+text-white/75
+
+backdrop-blur-xl
+
+transition-all
+duration-300
+
+hover:border-emerald-400/20
+hover:text-white
+hover:shadow-[0_0_25px_rgba(16,185,129,0.08)]
   "
 >
   ← Back
 </button>
 
         <div className="relative">
+          <div
+  className="
+    absolute
+    inset-0
+
+    rounded-full
+
+    opacity-0
+    focus-within:opacity-100
+
+    transition-opacity
+    duration-300
+
+    bg-[radial-gradient(circle,rgba(16,185,129,0.08),transparent_70%)]
+
+    pointer-events-none
+  "
+/>
             <input
           type="text"
           placeholder="Search (AAPL)"
@@ -158,10 +205,21 @@ dark:bg-[#0d0f1a]/80 dark:border-white/10"
     }
   }}
           className="px-4 py-2 rounded-full w-[250px]
-bg-gray-100 text-gray-800 placeholder-gray-400
-focus:outline-none focus:ring-2 focus:ring-gray-300
+border
+border-emerald-400/[0.08]
 
-dark:bg-white/10 dark:text-white dark:placeholder-gray-500" 
+bg-gradient-to-br
+from-[#131d2d]
+to-[#0c1522]
+
+text-white
+placeholder:text-white/30
+
+backdrop-blur-xl
+
+focus:outline-none
+focus:border-emerald-400/20
+focus:shadow-[0_0_20px_rgba(16,185,129,0.08)]" 
           />
           
           {query &&
@@ -195,9 +253,11 @@ dark:bg-white/10 dark:text-white dark:placeholder-gray-500"
         overflow-hidden
 
         rounded-2xl
-        border border-white/10
+        border border-emerald-400/[0.08]
 
-        bg-[#111827]
+        bg-gradient-to-br
+      from-[#131d2d]
+      to-[#0c1522]
 
         shadow-2xl
         backdrop-blur-xl
@@ -229,7 +289,7 @@ dark:bg-white/10 dark:text-white dark:placeholder-gray-500"
                     text-emerald-300
                   `
                   : `
-                    hover:bg-white/[0.05]
+                    hover:bg-emerald-400/[0.05]
                     text-white
                   `
               }
@@ -300,11 +360,11 @@ dark:bg-white/10 dark:text-white dark:placeholder-gray-500"
           shadow-xl
           p-4
 
-          bg-white
-          border-gray-200
+          border-emerald-400/[0.08]
 
-          dark:bg-[#111827]
-          dark:border-white/10
+bg-gradient-to-br
+from-[#131d2d]
+to-[#0c1522]
 
           backdrop-blur-xl
         "
@@ -370,7 +430,14 @@ dark:bg-white/10 dark:text-white dark:placeholder-gray-500"
             mt-4
             w-full
             rounded-xl
-            bg-cyan-500
+            border border-emerald-400/20
+
+bg-emerald-500/15
+
+text-emerald-300
+
+hover:bg-emerald-500/20
+hover:shadow-[0_0_25px_rgba(16,185,129,0.12)]
             py-2
             font-medium
             text-white

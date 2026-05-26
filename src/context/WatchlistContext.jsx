@@ -117,13 +117,33 @@ startLoading("crypto");
         );
 
       // SAVE TO STATE
-      setPopularStocks(
-        Object.values(popular)
-      );
+     // FORMAT POPULAR STOCKS
+const formattedPopular =
+  Object.values(popular).map(
+    (stock) => ({
+      symbol: stock.symbol,
+      price: Number(stock.close),
+      percent_change: Number(
+        stock.percent_change
+      ),
+    })
+  );
 
-      setCryptoData(
-        Object.values(crypto)
-      );
+// FORMAT CRYPTO
+const formattedCrypto =
+  Object.values(crypto).map(
+    (coin) => ({
+      symbol: coin.symbol,
+      price: Number(coin.close),
+      percent_change: Number(
+        coin.percent_change
+      ),
+    })
+        );
+      // SAVE TO STATE
+setPopularStocks(formattedPopular);
+
+setCryptoData(formattedCrypto);
 
       stopLoading("popular");
 stopLoading("crypto");

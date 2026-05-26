@@ -51,8 +51,8 @@ export const PopularStocks = () => {
     {[...popularStocks, ...popularStocks].map(
       (stock, index) => {
 
-        const positive =
-          stock.percent_change >= 0;
+    const positive =
+  stock.percent_change >= 0;
 
         return (
 
@@ -94,8 +94,7 @@ export const PopularStocks = () => {
             </div>
 
             <p className="text-sm font-bold text-white mt-1">
-              $
-              {Number(stock.price).toFixed(2)}
+               ${stock.price?.toFixed(2) || "--"}
             </p>
 
             <p
@@ -105,9 +104,7 @@ export const PopularStocks = () => {
                   : "text-red-400"
               }`}
             >
-              {Number(
-                stock.percent_change
-              ).toFixed(2)}%
+              ${stock.percent_change?.toFixed(2) || "--"}%
             </p>
 
           </motion.div>

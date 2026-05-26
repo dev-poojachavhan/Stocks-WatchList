@@ -119,7 +119,7 @@ export const CandleChart = ({ stock }) => {
         background: {
   color:
     chartTheme === "dark"
-      ? "#09090b"
+      ? "#07101a"
       : "#ffffff",
 },
 
@@ -129,8 +129,8 @@ textColor:
     : "#111827",
       },
       grid: {
-        vertLines: { color: "#27272a" },
-        horzLines: { color: "#27272a" },
+        vertLines: { color: "rgba(255,255,255,0.06)"  },
+        horzLines: { color: "rgba(255,255,255,0.06)"  },
       },
       crosshair: { mode: 1 },
       rightPriceScale: {
@@ -220,7 +220,7 @@ textColor:
       background: {
         color:
           chartTheme === "dark"
-            ? "#09090b"
+            ? "#07101a"
             : "#ffffff",
       },
 
@@ -237,11 +237,30 @@ textColor:
   return (
     <div
       ref={containerRef}
-      className=" p-4 rounded-xl border h-[540px] border-gray-200 shadow-sm  
-                 dark:bg-gradient-to-br dark:from-white/[0.03] dark:to-white/[0.02] 
-                 dark:border-white/10 backdrop-blur-md"
-      >
-      <h2 className="mb-4 text-sm font-semibold text-gray-600 dark:text-gray-300">
+      className="relative
+                 h-[540px]
+                 overflow-hidden
+                 rounded-[26px]
+                 border
+                 p-5
+                 border-emerald-400/12
+                 bg-gradient-to-br
+                 from-[#0d1726]
+                 via-[#091321]
+                 to-[#07101c]
+                 backdrop-blur-xl
+                 shadow-[0_0_60px_rgba(16,185,129,0.05)]"
+    >
+      <div
+  className="
+    absolute
+    inset-0
+    pointer-events-none
+
+    bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.08),transparent_28%)]
+  "
+/>
+      <h2 className="mb-4 text-sm font-semibold text-white/75">
         {stock.symbol}
       </h2>
 
@@ -273,12 +292,23 @@ textColor:
         key={item}
         onClick={() => setTimeframe(item)}
         className={`
-          px-3 py-1 rounded-lg text-sm transition
+          px-3 py-1.5
+rounded-xl
+text-sm
+
+transition-all
+duration-300
 
           ${
             timeframe === item
-              ? "bg-blue-500 text-white"
-              : "bg-zinc-700 text-gray-300"
+              ? `bg-emerald-400/14
+                   border border-emerald-400/20
+                   text-emerald-200
+                   shadow-[0_0_20px_rgba(16,185,129,0.10)]`
+              : ` bg-white/[0.05]
+                  border border-white/[0.05]
+                  text-white/60
+                  hover:bg-white/[0.08]`
           }
         `}
       >
@@ -297,7 +327,15 @@ textColor:
     <button
       onClick={handleResetZoom}
       className="p-2 rounded-lg
-      bg-zinc-700 hover:bg-zinc-600
+     bg-white/[0.05]
+
+border border-white/[0.05]
+
+text-white/70
+
+hover:bg-emerald-400/[0.08]
+hover:border-emerald-400/15
+hover:text-emerald-200
       transition"
     >
       <FiRotateCcw size={16} />
@@ -306,7 +344,15 @@ textColor:
     <button
       onClick={handleFullscreen}
       className=" p-2 rounded-lg
-      bg-zinc-700 hover:bg-zinc-600
+      bg-white/[0.05]
+
+border border-white/[0.05]
+
+text-white/70
+
+hover:bg-emerald-400/[0.08]
+hover:border-emerald-400/15
+hover:text-emerald-200
       transition"
     >
     {
@@ -323,7 +369,15 @@ textColor:
     <button
       onClick={toggleTheme}
       className="p-2 rounded-lg
-      bg-zinc-700 hover:bg-zinc-600
+      bg-white/[0.05]
+
+border border-white/[0.05]
+
+text-white/70
+
+hover:bg-emerald-400/[0.08]
+hover:border-emerald-400/15
+hover:text-emerald-200
       transition
     "
     >
@@ -350,7 +404,7 @@ textColor:
       absolute top-2 left-2 z-10
       rounded-lg
       border border-white/10
-      bg-black/70
+      bg-[#08111d]/90
       backdrop-blur-md
       px-3 py-2
       text-xs
@@ -380,7 +434,7 @@ textColor:
 
       <p className="text-gray-400">
         C:
-        <span className="text-cyan-400 ml-1">
+        <span className="text-emerald-300 ml-1">
           {Number(hoverData?.close || 0).toFixed(2)}
         </span>
       </p>
@@ -402,7 +456,7 @@ textColor:
       h-full
       transition-opacity
       duration-300
-
+  
       ${isLoading ? "opacity-0" : "opacity-100"}
     `}
   />
@@ -416,8 +470,9 @@ textColor:
         z-20
         overflow-hidden
         rounded-xl
-        border border-white/10
-        bg-zinc-900/80
+        border border-emerald-400/10
+        bg-[#07101a]/88
+        
       "
     >
       <motion.div
@@ -437,7 +492,7 @@ textColor:
           skew-x-[-20deg]
           bg-gradient-to-r
           from-transparent
-          via-white/20
+          via-emerald-300/20
           to-transparent
         "
       />
