@@ -44,7 +44,7 @@ export const PopularStocks = () => {
 
     transition={{
       repeat: Infinity,
-      duration: 18,
+      duration: 22,
       ease: "linear",
     }}
   >
@@ -61,23 +61,28 @@ export const PopularStocks = () => {
 
             whileHover={{
               y: -2,
-              scale: 1.03,
+              scale: 1.015,
             }}
 
             className="
               min-w-[100px]
               rounded-xl
-              border border-white/10
-              bg-white/[0.04]
+              border border border-[var(--surface-border)]
+
+
+              bg-[var(--surface-glass)]
+              shadow-[var(--card-shadow)]
+              hover:border-emerald-400/15
+
               px-2
-              py-1.5
+              py-2
               shrink-0
               cursor-pointer
             "
           >
             <div className="flex items-center justify-between">
 
-              <h3 className="text-sm font-semibold text-white">
+              <h3 className="text-sm font-semibold text-[var(--text)]">
                 {stock.symbol}
               </h3>
 
@@ -104,7 +109,7 @@ export const PopularStocks = () => {
                   : "text-red-400"
               }`}
             >
-              ${stock.percent_change?.toFixed(2) || "--"}%
+              {stock.percent_change?.toFixed(2) || "--"}%
             </p>
 
           </motion.div>

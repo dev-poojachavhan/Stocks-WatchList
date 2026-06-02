@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 export const StockDetails = ({ stock }) => {
   if (!stock) {
-    return <p className="text-gray-500">Select a stock</p>;
+    return <p className="text-[var(--text-muted)]">Select a stock</p>;
   }
 
   const isPositive = stock.percent_change >= 0;
@@ -38,7 +38,7 @@ export const StockDetails = ({ stock }) => {
     >
       {/* HEADER */}
       <div>
-        <h2 className="text-lg font-semibold text-white/95 tracking-tight">{stock.symbol}</h2>
+        <h2 className="text-lg font-semibold text-[var(--text-strong)] tracking-tight">{stock.symbol}</h2>
 
         <motion.p
           key={stock.price}
@@ -54,7 +54,7 @@ export const StockDetails = ({ stock }) => {
             duration: 0.25,
           }}
           className={`
-    text-3xl font-bold text-white mt-1
+    text-3xl font-bold text-[var(--text)] mt-1
     transition-all duration-500
 
     ${flash === "green" ? "drop-shadow-[0_0_18px_rgba(16,185,129,0.30)]" : ""}
@@ -188,8 +188,8 @@ bg-emerald-400/[0.04]
       </div>
 
       {/*//overview section*/}
-      <div className="pt-4 border-t border-white/10">
-        <h3 className="text-sm font-semibold text-gray-300 mb-3">Overview</h3>
+      <div className="pt-5 border-t border-[var(--surface-border)]">
+        <h3 className="text-sm font-semibold text-[var(--text-soft)] mb-3">Overview</h3>
 
         <div className="space-y-3">
           <OverviewRow label="Exchange" value={stock.exchange || "--"} />
@@ -215,12 +215,10 @@ const MetricCard = ({
        rounded-xl
   border
 
-  border-emerald-400/[0.10]
+  border-[var(--surface-border)]
 
   
-   from-[#101928]
-via-[#0d1725]
-to-[#0a1420]
+bg-[var(--surface-glass)]
 
   backdrop-blur-xl
 
@@ -229,16 +227,18 @@ to-[#0a1420]
   transition-all
   duration-300
 
-  hover:border-emerald-400/20
-  hover:bg-[#101a2a]
-  hover:-translate-y-[2px]
+ 
+  hover:bg-white/[0.02]
 
-  shadow-[0_0_25px_rgba(16,185,129,0.03)]
+hover:border-white/10
+  hover:-translate-y-[1px]
+
+  shadow-[var(--surface-shadow)]
 
          ${cardClassName}
       `}
     >
-      <p className="text-xs text-gray-400 mb-1">{label}</p>
+      <p className="text-xs text-[var(--text-soft)] mb-1">{label}</p>
 
       <p className={`text-sm font-semibold ${valueClassName}`}>
         {value || "--"}
@@ -250,9 +250,9 @@ to-[#0a1420]
 const OverviewRow = ({ label, value }) => {
   return (
     <div className="flex items-center justify-between">
-      <p className="text-sm text-gray-400">{label}</p>
+      <p className="text-sm text-[var(--text-soft)]">{label}</p>
 
-      <p className="text-sm font-medium text-white">{value}</p>
+      <p className="text-sm font-medium text-[var(--text)]">{value}</p>
     </div>
   );
 };

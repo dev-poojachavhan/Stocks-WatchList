@@ -96,11 +96,13 @@ border
 
 backdrop-blur-xl
 
-bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.06),transparent_40%),linear-gradient(to_bottom_right,#0b1220,#0a1322,#071019)]
+bg-[var(--watchlist-card-bg)]
+
+
 
 border-emerald-400/10
 
-shadow-[0_0_25px_rgba(16,185,129,0.04)]
+shadow-[var(--card-shadow)]
 
 hover:border-emerald-400/20
 hover:shadow-[0_0_35px_rgba(16,185,129,0.08)]
@@ -112,8 +114,7 @@ ${
     ? `
       border-emerald-400/30
 
-   bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.12),transparent_40%),linear-gradient(to_bottom_right,#0f1726,#0c1829,#091320)]
-
+bg-[var(--watchlist-card-active)]
       shadow-[0_0_40px_rgba(16,185,129,0.14)]
     `
     : ""
@@ -138,7 +139,7 @@ ${
                 className={`
                 transition
 
-                ${stock.pinned ? "fill-yellow-400 text-yellow-400" : "text-white/30"}
+                ${stock.pinned ? "fill-yellow-400 text-yellow-400" : "text-[var(--text-muted)]"}
               `}
              /></button>
 
@@ -170,11 +171,11 @@ ${
             <div className="flex items-center justify-between gap-4">
         {/* LEFT SIDE */}
         <div>
-          <h2 className="text-sm font-semibold text-white/90 dark:text-gray-200">
+          <h2 className="text-sm font-semibold text-[var(--text-strong)]">
             {stock.symbol}
           </h2>
 
-          <p className="text-lg font-medium text-white dark:text-white">
+          <p className="text-lg font-medium text-[var(--text)]">
             {stock.currency === "USD" ? "$" : "₹"}
             {price.toFixed(2)}
           </p>

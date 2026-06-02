@@ -32,42 +32,33 @@ transition={{
   damping: 24,
 }}
       className="
-        min-w-[120px]
-        rounded-2xl
-        border
-        border-white/10
+group
+relative
 
-        bg-white/[0.04]
+overflow-hidden
 
-        px-4 py-3
+min-w-[125px]
 
-        backdrop-blur-xl 
-  overflow-hidden
+rounded-2xl
+border
 
-  min-w-[120px]
+border-[var(--surface-border)]
 
-  rounded-2xl
-  border
+bg-[var(--surface-glass)]
 
-  border-emerald-400/[0.08]
+px-4
+py-3.5
 
-  bg-gradient-to-br
-  from-[#101928]
-  via-[#0d1725]
-  to-[#0a1420]
+backdrop-blur-xl
 
-  px-4
-  py-3.5
+shadow-[var(--card-shadow)]
 
-  backdrop-blur-xl
 
-  shadow-[0_0_20px_rgba(16,185,129,0.03)]
 
- 
-
-  hover:border-emerald-400/15
-  hover:shadow-[0_0_30px_rgba(16,185,129,0.06)]
-      "
+hover:border-emerald-400/20
+hover:shadow-[0_0_20px_rgba(16,185,129,0.04)]
+"
+      
     >
 
       <div
@@ -90,7 +81,7 @@ transition={{
       <p
         className="
           text-xs
-          text-white/45
+          text-[var(--text-soft)]
         "
       >
         {label}
@@ -101,7 +92,7 @@ transition={{
           mt-1
           text-lg
 font-semibold
-text-white/95
+text-[var(--text)]
 tracking-tight
         "
       >

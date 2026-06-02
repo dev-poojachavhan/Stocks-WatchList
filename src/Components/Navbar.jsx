@@ -71,16 +71,16 @@ export const Navbar = ({setShowDashboard}) => {
   return (
     <header
       className="sticky top-0 z-50 backdrop-blur relative
-overflow-hidden
+
 border-b
 
-border-emerald-400/[0.08]
+border-[var(--border)]
 
-bg-[#050816]/85
+bg-[var(--nav-bg)]
 
 backdrop-blur-2xl
 
-shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
+shadow-[var(--nav-shadow)]"
     >
       <div
   className="
@@ -102,30 +102,29 @@ shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
   }}
 
   className="
- rounded-2xl
+group
+rounded-2xl
 border
 
-border-emerald-400/[0.08]
+border-[var(--border)]
 
-bg-gradient-to-br
-from-[#111a29]
-to-[#0b1420]
+bg-[var(--surface)]
 
 px-4
 py-2.5
 
 text-sm
-text-white/75
+text-[var(--text-muted)]
 
 backdrop-blur-xl
 
-transition-all
+transition-colors
 duration-300
 
-hover:border-emerald-400/20
-hover:text-white
-hover:shadow-[0_0_25px_rgba(16,185,129,0.08)]
-  "
+hover:border-emerald-400/30
+hover:text-[var(--text)]
+hover:bg-[var(--accent-soft)]
+"
 >
   ← Back
 </button>
@@ -145,7 +144,7 @@ hover:shadow-[0_0_25px_rgba(16,185,129,0.08)]
     duration-300
 
     bg-[radial-gradient(circle,rgba(16,185,129,0.08),transparent_70%)]
-
+    shadow-[inset_0_1px_2px_rgba(255,255,255,0.35)]
     pointer-events-none
   "
 />
@@ -204,22 +203,31 @@ hover:shadow-[0_0_25px_rgba(16,185,129,0.08)]
       }
     }
   }}
-          className="px-4 py-2 rounded-full w-[250px]
+         className="
+px-4
+py-2
+
+rounded-full
+w-[250px]
+
 border
-border-emerald-400/[0.08]
+border-[var(--border)]
 
-bg-gradient-to-br
-from-[#131d2d]
-to-[#0c1522]
+bg-[var(--surface)]
 
-text-white
-placeholder:text-white/30
+text-[var(--text)]
+
+placeholder:text-[var(--text-muted)]
 
 backdrop-blur-xl
 
+transition-colors
+duration-300
+
 focus:outline-none
-focus:border-emerald-400/20
-focus:shadow-[0_0_20px_rgba(16,185,129,0.08)]" 
+focus:border-emerald-500/30
+focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
+"
           />
           
           {query &&
@@ -253,11 +261,9 @@ focus:shadow-[0_0_20px_rgba(16,185,129,0.08)]"
         overflow-hidden
 
         rounded-2xl
-        border border-emerald-400/[0.08]
+        border border-[var(--border)]
 
-        bg-gradient-to-br
-      from-[#131d2d]
-      to-[#0c1522]
+        bg-[var(--surface-solid)]
 
         shadow-2xl
         backdrop-blur-xl
@@ -285,12 +291,12 @@ focus:shadow-[0_0_20px_rgba(16,185,129,0.08)]"
               ${
                 selectedIndex === index
                   ? `
-                    bg-emerald-500/20
-                    text-emerald-300
+                    bg-[var(--accent-soft)]
+                    text-[var(--text)]
                   `
                   : `
-                    hover:bg-emerald-400/[0.05]
-                    text-white
+                    hhover:bg-[var(--accent-soft)]
+                     text-[var(--text)]
                   `
               }
             `}
@@ -309,15 +315,13 @@ focus:shadow-[0_0_20px_rgba(16,185,129,0.08)]"
 
       {/* 🔄 Loading */}
       {loading && (
-        <p className="px-4 text-sm text-gray-500 dark:text-gray-400">
+        <p className="px-4 text-sm text-[var(--text-muted)]">
           Loading...
         </p>
       )}
 
   
 
-
-      {/* {replaced block} */}
       <AnimatePresence>
 
   {searchedStock && (
@@ -360,12 +364,10 @@ focus:shadow-[0_0_20px_rgba(16,185,129,0.08)]"
           shadow-xl
           p-4
 
-          border-emerald-400/[0.08]
+          border-[var(--border)]
 
-bg-gradient-to-br
-from-[#131d2d]
-to-[#0c1522]
-
+bg-[var(--surface-solid)]
+shadow-[var(--surface-shadow)]
           backdrop-blur-xl
         "
       >
@@ -383,7 +385,7 @@ to-[#0c1522]
               {searchedStock.symbol}
             </p>
 
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-[var(--text-muted)]">
               {searchedStock.currency}
             </p>
 
@@ -426,26 +428,29 @@ to-[#0c1522]
 
           }}
 
-          className="
-            mt-4
-            w-full
-            rounded-xl
-            border border-emerald-400/20
+          
+           className="
+mt-4
+w-full
 
-bg-emerald-500/15
+rounded-xl
+border border-emerald-400/20
 
-text-emerald-300
+bg-emerald-500/12
 
-hover:bg-emerald-500/20
+py-2
+font-medium
+
+text-emerald-400
+
+transition-all
+duration-300
+
+hover:bg-emerald-500/18
+hover:border-emerald-400/30
 hover:shadow-[0_0_25px_rgba(16,185,129,0.12)]
-            py-2
-            font-medium
-            text-white
-
-            hover:bg-cyan-400
-
-            transition
-          "
+"
+          
         >
           Add to Watchlist
         </button>

@@ -55,7 +55,7 @@ p-2
   {watchlist.map((stock) => (
     <motion.div
       key={stock.symbol}
-      whileHover={{ scale: 1.03 }}
+      whileHover={{ scale: 1.015 }}
       onClick={() =>
         setSelectedSymbol(stock.symbol)
       }
@@ -63,12 +63,12 @@ p-2
        rounded-2xl
   p-3
   cursor-pointer
-  transition-all
+  
 
   flex
   flex-col
   justify-between
-  
+  backdrop-blur-xl
   h-[115px]
 
         ${
@@ -86,7 +86,7 @@ p-2
         ${
           selectedSymbol === stock.symbol
             ?`border-cyan-400
-            shadow-[0_0_0_1px_rgba(34,211,238,0.9),0_0_18px_rgba(34,211,238,0.18)]`  
+           shadow-[0_0_0_1px_rgba(34,211,238,0.9),0_0_18px_rgba(34,211,238,0.18)]` 
             : ""
         }
       `}
@@ -96,7 +96,7 @@ p-2
           {stock.symbol}
         </h3>
 
-        <p className="text-gray-300 text-sm mt-1">
+        <p className="text-white/70 text-sm mt-1">
           ${Number(stock.price).toFixed(2)}
         </p>
       </div>

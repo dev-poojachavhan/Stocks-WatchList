@@ -14,6 +14,9 @@ import { fetchStock } from "../services/api";
 
 export const Dashboard = ({ initialSymbol }) => {
   const { watchlist, loadingMap, addStock } = useContext(WatchlistContext);
+  const [theme, setTheme] = useState(
+  document.documentElement.getAttribute("data-theme") || "light"
+);
 
   const [selectedSymbol, setSelectedSymbol] = useState(null);
   const selectedStock = watchlist.find(
@@ -32,6 +35,21 @@ export const Dashboard = ({ initialSymbol }) => {
   const topLoser = [...watchlist].sort(
     (a, b) => a.percent_change - b.percent_change,
   )[0];
+
+  useEffect(() => {
+  const observer = new MutationObserver(() => {
+    setTheme(
+      document.documentElement.getAttribute("data-theme")
+    );
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+
+  return () => observer.disconnect();
+}, []);
 
   //default stock
   useEffect(() => {
@@ -85,13 +103,8 @@ export const Dashboard = ({ initialSymbol }) => {
   min-h-screen
   px-6
   py-6
+bg-[var(--bg)]
 
- bg-[#040816]
-
-dark:bg-gradient-to-br
-dark:from-[#020617]
-dark:via-[#071426]
-dark:to-[#01030a]
     "
     >
 
@@ -118,7 +131,7 @@ dark:to-[#01030a]
 
       rounded-full
 
-      bg-emerald-400/10
+      bg-emerald-400/[0.08]
       blur-[120px]
     "
   />
@@ -135,7 +148,7 @@ dark:to-[#01030a]
 
     rounded-full
 
-    bg-teal-400/10
+   bg-teal-400/[0.06]
     blur-[140px]
     "
   />
@@ -152,7 +165,7 @@ dark:to-[#01030a]
 
       rounded-full
 
-      bg-voilet-500/5
+      bg-violet-500/5
       blur-[150px]
     "
   />
@@ -189,13 +202,13 @@ dark:to-[#01030a]
             className="
       text-4xl
       font-bold
-      text-white
+      text-[var(--text)]
     "
           >
             My Watchlist
           </h2>
 
-          <p className="text-cyan-100/60 text-sm mt-3">
+          <p className="text-[var(--text-soft)] text-sm mt-3">
             Track your market movers & portfolio performance
           </p>
         </div>
@@ -214,13 +227,11 @@ dark:to-[#01030a]
 
           border border-emerald-400/15
 
-bg-gradient-to-br
-from-white/[0.04]
-to-emerald-400/[0.015]
+bg-[var(--surface-glass)]
 
 backdrop-blur-xl
 
-shadow-[0_0_50px_rgba(16,185,129,0.06)]
+shadow-[var(--surface-shadow)]
 
           px-4
           py-2
@@ -257,26 +268,24 @@ shadow-[0_0_50px_rgba(16,185,129,0.06)]
           <div
             className="
             rounded-2xl
-            border border-emerald-400/20
+            border border-[var(--surface-border)]
 
-            bg-gradient-to-b
-            from-white/[0.04]
-            to-transparent
+            bg-[var(--surface-panel)]
 
             backdrop-blur-xl
 
-            shadow-[0_0_60px_rgba(16,185,129,0.06)]
+           shadow-[var(--surface-shadow)]
             p-5
           "
           >
-            <h2 className="text-xl font-semibold text-white mb-5">
+            <h2 className="text-xl font-semibold text-[var(--text)] mb-5">
               Stock Details
             </h2>
 
             {selectedStock ? (
               <StockDetails stock={selectedStock} />
             ) : (
-              <p className="text-gray-500">Select a stock</p>
+              <p className="text-[var(--text-muted)]">Select a stock</p>
             )}
           </div>
 
@@ -288,11 +297,9 @@ shadow-[0_0_50px_rgba(16,185,129,0.06)]
             className="
       rounded-2xl
       
-      border border-emerald-400/20
+      border border-[var(--surface-border)]
 
-bg-gradient-to-br
-from-white/[0.03]
-to-emerald-400/[0.02]
+bg-[var(--surface-panel)]
       p-5
     "
           >
@@ -365,13 +372,13 @@ to-transparent
                     className="
         text-xl
         font-semibold
-        text-white
+        text-[var(--text)]
       "
                   >
                     Build Your Watchlist
                   </h3>
 
-                  <p className="mt-3 text-gray-400">
+                  <p className="mt-3 text-[var(--text-soft)]">
                     Search stocks from landing page to begin tracking markets.
                   </p>
                 </div>
@@ -397,11 +404,9 @@ to-transparent
           row-start-3
 
           rounded-2xl
-          border border-emerald-400/20
+         border border-[var(--surface-border)]
 
-          bg-gradient-to-br
-from-white/[0.04]
-to-transparent
+          bg-[var(--surface-panel)]
 
 backdrop-blur-xl
 
@@ -411,11 +416,11 @@ backdrop-blur-xl
         "
           >
             <div className="mb-4">
-              <h2 className="text-xl tracking-tight font-semibold text-white">
+              <h2 className="text-xl tracking-tight font-semibold text-[var(--text)]">
                 Portfolio Analytics
               </h2>
 
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-[var(--text-muted)] mt-1">
                 Quick market overview
               </p>
             </div>
@@ -457,7 +462,7 @@ backdrop-blur-xl
           overflow-hidden
         "
         >
-          <div>{selectedStock && <CandleChart stock={selectedStock} />}</div>
+          <div>{selectedStock && <CandleChart stock={selectedStock} chartTheme={theme} />}</div>
         </div>
 
         {/* ================================= */}
@@ -472,10 +477,8 @@ backdrop-blur-xl
     row-start-3
 
     rounded-2xl
-    border border-emerald-400/20
-   bg-gradient-to-br
-from-white/[0.04]
-to-transparent
+   border border-[var(--surface-border)]
+bg-[var(--surface-panel)]
 
 backdrop-blur-xl
 
@@ -484,9 +487,9 @@ backdrop-blur-xl
   "
         >
           <div className="mb-5">
-            <h2 className="text-2xl font-bold text-white">Market Heatmap</h2>
+            <h2 className="text-2xl font-bold text-[var(--text)]">Market Heatmap</h2>
 
-            <p className="text-sm text-gray-400 mt-2">
+            <p className="text-sm text-[var(--text-muted)] mt-2">
               Visual market movement overview
             </p>
           </div>

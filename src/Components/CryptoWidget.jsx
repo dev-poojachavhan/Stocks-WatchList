@@ -34,28 +34,25 @@ mt-5
 rounded-3xl
 border
 
-border-emerald-400/[0.08]
+border-[var(--surface-border)]
 
-bg-gradient-to-br
-from-[#0f1726]
-via-[#0b1422]
-to-[#09111d]
+bg-[var(--surface-panel)]
 
 p-5
 
 backdrop-blur-xl
 
-shadow-[0_0_30px_rgba(16,185,129,0.04)]
+shadow-[var(--surface-shadow)]
       "
     >
       {/* HEADER */}
       <div className="mb-5">
 
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className="text-lg font-semibold text-[var(--text)]">
           Crypto Market
         </h2>
 
-        <p className="text-sm text-gray-400 mt-1">
+        <p className="text-sm text-[var(--text-muted)] mt-1">
           Live crypto overview
         </p>
 
@@ -105,17 +102,15 @@ shadow-[0_0_30px_rgba(16,185,129,0.04)]
     justify-between
 
     overflow-hidden
-
+shadow-[var(--card-shadow)]
     rounded-2xl
-   border border-emerald-400/[0.06]
+   border border-[var(--surface-border)]
 
-bg-gradient-to-br
-from-[#121c2b]
-to-[#0b1420]
+bg-[var(--surface-glass)]
     p-3
 
   hover:border-emerald-400/20
-hover:shadow-[0_0_30px_rgba(16,185,129,0.08)]
+hover:shadow-[0_0_20px_rgba(16,185,129,0.06)]
 
               "
             >
@@ -139,11 +134,11 @@ hover:shadow-[0_0_30px_rgba(16,185,129,0.08)]
   
               <div>
 
-                <h4 className="font-medium text-white">
+                <h4 className="font-medium text-[var(--text)]">
                   {coin.symbol}
                 </h4>
 
-                <p className="text-xs text-white/45 mt-1">
+                <p className="text-xs text-[var(--text-soft)] mt-1">
                   Crypto Asset
                 </p>
 

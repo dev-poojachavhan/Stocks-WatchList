@@ -43,17 +43,21 @@ import { Shimmer } from "./LoadingShimmer/Shimmer";
       <div className="w-full
     rounded-3xl
     border
-    border border-emerald-400/20
-    bg-white/[0.03]
+    border border-[var(--surface-border)]
+   bg-[var(--surface-panel)]
+
+shadow-[var(--surface-shadow)]
+
+backdrop-blur-xl
     p-6">
         {/* HEADER */}
        
         <div className="mb-6">
-  <h2 className="text-2xl font-bold text-white">
+  <h2 className="text-2xl font-bold text-[var(--text)]">
     Market News
   </h2>
 
-  <p className="text-gray-400 mt-2">
+  <p className="text-[var(--text-muted)] mt-2">
     Trending market stories & stock coverage
   </p>
 </div>
@@ -71,7 +75,7 @@ import { Shimmer } from "./LoadingShimmer/Shimmer";
 )}
 
         {/* NEWS LIST */}
-        <div className="space-y-4  max-h-[520px] overflow-y-auto pr-3">
+        <div className="space-y-4  max-h-[520px] overflow-y-auto pr-3 shadow-[var(--card-shadow)]">
           {news.map((item, index) => (
             <motion.a
               key={item.uuid}
@@ -89,11 +93,11 @@ import { Shimmer } from "./LoadingShimmer/Shimmer";
 
               whileHover={{
               y: -6,
-              scale: 1.01,
+              scale: 1,
               }}
 
               transition={{
-                delay: index * 0.08,
+                delay: index * 0.09,
               }}
               className="
               flex
@@ -101,13 +105,13 @@ import { Shimmer } from "./LoadingShimmer/Shimmer";
 
   min-h-[130px]
     rounded-2xl
-    border border-white/10
+    border border-[var(--surface-border)]
 
-    bg-white/[0.03]
+    bg-[var(--surface-glass)]
 
     hover:bg-white/[0.05]
-
-    transition
+    hover:border-emerald-400/20
+    overflow-hidden
               "
             >
               {/* IMAGE */}
@@ -164,7 +168,7 @@ flex-shrink-0
                   className="
                     text-[15px]
                     font-semibold
-                    text-white
+                   text-[var(--text)]
                     leading-6
                     line-clamp-2
   "
@@ -180,7 +184,7 @@ flex-shrink-0
                     justify-between
                     
                     text-xs
-                    text-gray-500
+                    text-[var(--text-muted)]
                   "
                 >
                   <span>{item.source}</span>

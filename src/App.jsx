@@ -39,9 +39,10 @@ function App() {
           min-h-screen
           items-center
           justify-center
-
-          bg-[#050816]
+        bg-[#050816]
           text-white
+          transition-colors
+          duration-300
         "
       >
         <div className="text-center">

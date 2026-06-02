@@ -7,7 +7,10 @@ export const ThemeToggle = () => {
 });
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
+  document.documentElement.setAttribute(
+  "data-theme",
+  theme
+);
   localStorage.setItem("theme", theme);
   }, [theme]);
 
@@ -28,25 +31,23 @@ overflow-hidden
 rounded-2xl
 border
 
-border-emerald-400/[0.08]
+border-[var(--border)]
 
-bg-gradient-to-br
-from-[#131d2d]
-to-[#0c1522]
+bg-[var(--surface)]
 
 px-4
 py-2.5
 
-text-white/80
+text-[var(--text)]
 
 backdrop-blur-xl
 
 transition-all
 duration-300
 
-hover:border-emerald-400/20
-hover:text-white
-
+hover:border-emerald-400/30
+hover:text-[var(--text)]
+hover:bg-[var(--accent-soft)]
 hover:shadow-[0_0_25px_rgba(16,185,129,0.08)]
 hover:scale-[1.02]
 active:scale-[0.98]
