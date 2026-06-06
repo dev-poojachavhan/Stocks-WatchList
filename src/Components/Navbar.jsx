@@ -92,7 +92,7 @@ shadow-[var(--nav-shadow)]"
     bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.06),transparent_65%)]
   "
 />
-      <div className="flex items-center justify-between px-6 gap-4  py-6">
+      <div className="flex items-center justify-between px-4 gap-3  py-4 sm:px-6 sm:py-6">
         
         <button
   onClick={() => {
@@ -110,8 +110,8 @@ border-[var(--border)]
 
 bg-[var(--surface)]
 
-px-4
-py-2.5
+px-3 py-2
+sm:px-4 sm:py-2.5
 
 text-sm
 text-[var(--text-muted)]
@@ -129,20 +129,16 @@ hover:bg-[var(--accent-soft)]
   ← Back
 </button>
 
-        <div className="relative">
+        <div className="relative flex-1 min-w-0 flex justify-center ">
           <div
   className="
     absolute
     inset-0
-
     rounded-full
-
     opacity-0
     focus-within:opacity-100
-
     transition-opacity
     duration-300
-
     bg-[radial-gradient(circle,rgba(16,185,129,0.08),transparent_70%)]
     shadow-[inset_0_1px_2px_rgba(255,255,255,0.35)]
     pointer-events-none
@@ -208,7 +204,9 @@ px-4
 py-2
 
 rounded-full
-w-[250px]
+w-full
+sm:w-[320px]
+lg:w-[420px]
 
 border
 border-[var(--border)]
@@ -295,7 +293,7 @@ focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
                     text-[var(--text)]
                   `
                   : `
-                    hhover:bg-[var(--accent-soft)]
+                    hover:bg-[var(--accent-soft)]
                      text-[var(--text)]
                   `
               }
@@ -353,7 +351,9 @@ focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
         left-1/2
         -translate-x-1/2
         z-50
-        w-[300px]
+         w-[92vw]
+        sm:w-[300px]
+        max-w-[300px]
       "
     >
 

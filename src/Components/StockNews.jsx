@@ -41,21 +41,19 @@ import { Shimmer } from "./LoadingShimmer/Shimmer";
 
     return (
       <div className="w-full
-    rounded-3xl
-    border
-    border border-[var(--surface-border)]
-   bg-[var(--surface-panel)]
-
-shadow-[var(--surface-shadow)]
-
-backdrop-blur-xl
-    p-6">
+            rounded-3xl
+            border
+            border border-[var(--surface-border)]
+            bg-[var(--surface-panel)]
+            shadow-[var(--surface-shadow)]
+            backdrop-blur-xl
+            p-4 lg:p-6">
         {/* HEADER */}
        
-        <div className="mb-6">
-  <h2 className="text-2xl font-bold text-[var(--text)]">
-    Market News
-  </h2>
+        <div className="mb-4 lg:mb-6">
+          <h2 className="text-xl lg:text-2xl font-bold text-[var(--text)]">
+              Market News
+          </h2>
 
   <p className="text-[var(--text-muted)] mt-2">
     Trending market stories & stock coverage
@@ -75,7 +73,7 @@ backdrop-blur-xl
 )}
 
         {/* NEWS LIST */}
-        <div className="space-y-4  max-h-[520px] overflow-y-auto pr-3 shadow-[var(--card-shadow)]">
+        <div className="space-y-4 max-h-none  lg:max-h-[520px] overflow-visible lg:overflow-y-auto lg:  pr-3 shadow-[var(--card-shadow)]">
           {news.map((item, index) => (
             <motion.a
               key={item.uuid}
@@ -100,18 +98,16 @@ backdrop-blur-xl
                 delay: index * 0.09,
               }}
               className="
-              flex
-   items-stretch
-
-  min-h-[130px]
-    rounded-2xl
-    border border-[var(--surface-border)]
-
-    bg-[var(--surface-glass)]
-
-    hover:bg-white/[0.05]
-    hover:border-emerald-400/20
-    overflow-hidden
+              flex flex-col
+              lg:flex-row
+              items-stretch
+              min-h-[130px]
+              rounded-2xl
+              border border-[var(--surface-border)]
+              bg-[var(--surface-glass)]
+              hover:bg-white/[0.05]
+              hover:border-emerald-400/20
+              overflow-hidden
               "
             >
               {/* IMAGE */}
@@ -120,20 +116,24 @@ backdrop-blur-xl
                   src={item.image_url}
                   alt={item.title}
                   className="
-    w-[190px]
-min-h-[145px]
-object-cover
-rounded-l-2xl
-flex-shrink-0
-   
-  "
+                 lg:w-[190px]
+                 lg:min-h-[145px]
+                 w-full
+                 h-[130px]
+                sm:h-[150px]
+                lg:h-[180px]
+                 object-cover
+                 rounded-t-2xl
+                 lg:rounded-t-none
+                 lg:rounded-l-2xl
+                 flex-shrink-0"
                 />
               )}
 
               {/* CONTENT */}
-              <div className="flex-1 p-5 flex
-    flex-col
-    justify-between">
+              <div className="flex-1 p-4 lg:p-5 flex
+                   flex-col
+                   justify-between">
                 {/* SENTIMENT */}
                 <div
                   className={`
@@ -169,8 +169,9 @@ flex-shrink-0
                     text-[15px]
                     font-semibold
                    text-[var(--text)]
-                    leading-6
-                    line-clamp-2
+                   leading-5 lg:leading-6
+                   line-clamp-3
+                   lg:line-clamp-2
   "
                 >
                   {item.title}

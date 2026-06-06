@@ -15,7 +15,7 @@ export const PopularStocks = () => {
       {[1,2,3,4,5,6].map((i) => (
         <Shimmer
           key={i}
-          className="w-[80px] h-[80px]"
+          className="w-[80px] h-[80px]  sm:h-[80px]"
         />
       ))}
     </div>
@@ -25,10 +25,11 @@ export const PopularStocks = () => {
   return (
     <div
     className="
-  rounded-2xl   h-[90px]
-  
-  px-3
-  py-2
+  rounded-2xl   
+   h-[75px]
+  sm:h-[90px]
+  px-2
+  py-1
 
 "
     >
@@ -39,7 +40,7 @@ export const PopularStocks = () => {
     className="flex gap-3 w-max"
     
     animate={{
-      x: ["0%", "-60%"],
+      x: ["0%", "-50%"],
     }}
 
     transition={{
@@ -65,9 +66,11 @@ export const PopularStocks = () => {
             }}
 
             className="
-              min-w-[100px]
+              min-w-[80px]
+              sm:min-w-[90px]
+              lg:min-w-[100px]
               rounded-xl
-              border border border-[var(--surface-border)]
+               border border-[var(--surface-border)]
 
 
               bg-[var(--surface-glass)]
@@ -82,7 +85,7 @@ export const PopularStocks = () => {
           >
             <div className="flex items-center justify-between">
 
-              <h3 className="text-sm font-semibold text-[var(--text)]">
+              <h3 className="text-xs sm:text-sm font-semibold text-[var(--text)]">
                 {stock.symbol}
               </h3>
 
@@ -98,7 +101,7 @@ export const PopularStocks = () => {
 
             </div>
 
-            <p className="text-sm font-bold text-white mt-1">
+            <p className="text-xs sm:text-sm font-bold text-[var(--text-strong)] mt-1">
                ${stock.price?.toFixed(2) || "--"}
             </p>
 

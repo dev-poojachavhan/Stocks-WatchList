@@ -11,12 +11,13 @@ import { PopularStocks } from "../Components/PopularStocks";
 import { CryptoWidget } from "../Components/CryptoWidget";
 import { Shimmer } from "../Components/LoadingShimmer/Shimmer";
 import { fetchStock } from "../services/api";
+import { AnalyticsSection } from "../Components/AnalyticsSection";
 
 export const Dashboard = ({ initialSymbol }) => {
   const { watchlist, loadingMap, addStock } = useContext(WatchlistContext);
   const [theme, setTheme] = useState(
-  document.documentElement.getAttribute("data-theme") || "light"
-);
+    document.documentElement.getAttribute("data-theme") || "light",
+  );
 
   const [selectedSymbol, setSelectedSymbol] = useState(null);
   const selectedStock = watchlist.find(
@@ -37,19 +38,17 @@ export const Dashboard = ({ initialSymbol }) => {
   )[0];
 
   useEffect(() => {
-  const observer = new MutationObserver(() => {
-    setTheme(
-      document.documentElement.getAttribute("data-theme")
-    );
-  });
+    const observer = new MutationObserver(() => {
+      setTheme(document.documentElement.getAttribute("data-theme"));
+    });
 
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["data-theme"],
-  });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
 
-  return () => observer.disconnect();
-}, []);
+    return () => observer.disconnect();
+  }, []);
 
   //default stock
   useEffect(() => {
@@ -97,80 +96,59 @@ export const Dashboard = ({ initialSymbol }) => {
         ease: "easeOut",
       }}
       className="
-      relative
-
-
-  min-h-screen
-  px-6
-  py-6
-bg-[var(--bg)]
-
-    "
+      relative min-h-screen
+      px-4 py-4 sm:px-6 sm:py-6
+      bg-[var(--bg)]"
     >
-
-
+      
       {/* ATMOSPHERIC BACKGROUND */}
 
-<div
-  className="
-    pointer-events-none
-    absolute
-    inset-0
-    overflow-hidden
-  "
->
-  {/* TOP EMERALD */}
-  <div
-    className="
-      absolute
-      top-[-120px]
-      left-[18%]
+      <div
+        className="
+        pointer-events-none
+        absolute
+        inset-0
+        overflow-hidden"   
+      >
+        {/* TOP EMERALD */}
+        <div
+          className="
+          absolute
+          top-[-120px]
+          left-[18%]
+          h-[320px] w-[320px]
+          rounded-full
+        bg-emerald-400/[0.08]
+          blur-[120px] "
+        />
 
-      h-[320px]
-      w-[320px]
+        {/* RIGHT CYAN */}
+        <div
+          className="
+          absolute
+          right-[-120px]
+          top-[28%]
+          h-[320px]
+          w-[320px]
+          rounded-full
+   b      g-teal-400/[0.06]
+          blur-[140px]
+          "
+        />
 
-      rounded-full
-
-      bg-emerald-400/[0.08]
-      blur-[120px]
-    "
-  />
-
-  {/* RIGHT CYAN */}
-  <div
-    className="
-      absolute
-    right-[-120px]
-    top-[28%]
-
-    h-[320px]
-    w-[320px]
-
-    rounded-full
-
-   bg-teal-400/[0.06]
-    blur-[140px]
-    "
-  />
-
-  {/* CENTER PURPLE */}
-  <div
-    className="
-      absolute
-      left-[40%]
-      top-[10%]
-
-      h-[260px]
-      w-[260px]
-
-      rounded-full
-
-      bg-violet-500/5
-      blur-[150px]
-    "
-  />
-</div>
-
+        {/* CENTER PURPLE */}
+        <div
+          className="
+           absolute
+           left-[40%]
+           top-[10%]
+           h-[260px]
+           w-[260px]
+           rounded-full
+           bg-violet-500/5
+           blur-[150px]"
+        />
+      </div>
 
       {/* MAIN GRID */}
       <div
@@ -178,31 +156,34 @@ bg-[var(--bg)]
         max-w-[1700px]
         mx-auto
         relative z-10
-         grid
-    grid-cols-[260px_1fr_320px]
-    grid-rows-[90px_560px_auto_auto]
-
-    gap-6
-    items-start
-      "
+        grid
+        grid-cols-1
+        lg:grid-cols-[260px_1fr_320px]
+        lg:grid-rows-[90px_560px_auto_auto]
+         gap-6
+         items-start"
       >
+
         {/* ================================= */}
         {/* TOP LEFT TITLE */}
         {/* ================================= */}
 
         <div
           className="
-          col-start-1
-          row-start-1
+          order-2
+          lg:order-none
+          lg:col-start-1
+          lg:row-start-1
           flex flex-col justify-start
-           
-        "
+           "
         >
           <h2
             className="
-      text-4xl
-      font-bold
-      text-[var(--text)]
+            text-2xl
+            sm:text-3xl
+            xl:text-4xl
+            font-bold
+            text-[var(--text)]
     "
           >
             My Watchlist
@@ -219,20 +200,17 @@ bg-[var(--bg)]
 
         <div
           className="
-          col-start-2
-          row-start-1
-
+          order-1
+          lg:order-none
+          col-span-1
+          lg:col-start-2
+          lg:row-start-1
           overflow-hidden
           rounded-2xl
-
           border border-emerald-400/15
-
-bg-[var(--surface-glass)]
-
-backdrop-blur-xl
-
-shadow-[var(--surface-shadow)]
-
+          bg-[var(--surface-glass)]
+          backdrop-blur-xl
+          shadow-[var(--surface-shadow)]
           px-4
           py-2
           h-[90px]
@@ -248,32 +226,29 @@ shadow-[var(--surface-shadow)]
 
         <section
           className="
-         col-start-3
-    row-start-1
-    row-span-4
+            order-5
+            lg:order-none
+            lg:col-start-3
+            lg:row-start-1
+            lg:row-span-4
 
-    sticky
-    top-24
-    self-start
+            lg:sticky
+            lg:top-24
+            self-start
 
-    flex
-    flex-col
-    gap-6
+            flex
+            flex-col
+            gap-6
 
-    h-fit
+            h-fit
         "
         >
-          {/* {STOCK DETAILS} */}
-
           <div
             className="
             rounded-2xl
             border border-[var(--surface-border)]
-
             bg-[var(--surface-panel)]
-
             backdrop-blur-xl
-
            shadow-[var(--surface-shadow)]
             p-5
           "
@@ -282,9 +257,9 @@ shadow-[var(--surface-shadow)]
               Stock Details
             </h2>
 
-            {selectedStock ? (
-              <StockDetails stock={selectedStock} />
-            ) : (
+            {selectedStock
+              ? (<StockDetails stock={selectedStock} />)
+              : (
               <p className="text-[var(--text-muted)]">Select a stock</p>
             )}
           </div>
@@ -295,17 +270,46 @@ shadow-[var(--surface-shadow)]
 
           <div
             className="
-      rounded-2xl
-      
-      border border-[var(--surface-border)]
-
-bg-[var(--surface-panel)]
-      p-5
-    "
+            order-7
+            rounded-2xl 
+            border border-[var(--surface-border)]
+            bg-[var(--surface-panel)]
+            p-5"
           >
             <CryptoWidget />
           </div>
         </section>
+
+
+
+        
+        {/* ================================= */}
+        {/* MOBILE ANALYTICS */}
+        {/* ================================= */}
+
+         
+            <div
+            className="
+            order-6
+            lg:order-none
+             lg:hidden
+          lg:col-start-1
+          lg:row-start-3
+          rounded-2xl
+         border border-[var(--surface-border)]
+          bg-[var(--surface-panel)]
+          backdrop-blur-xl
+          p-4
+          h-fit
+        "
+          >
+           <AnalyticsSection
+              totalValue={totalValue}
+              watchlistLength={watchlist.length}
+              topGainer={topGainer}
+              topLoser={topLoser}
+            />
+          </div>
 
         {/* ================================= */}
         {/* WATCHLIST */}
@@ -313,37 +317,31 @@ bg-[var(--surface-panel)]
 
         <aside
           className="
-     col-start-1
-    row-start-2
-
-    sticky
-    top-24
-    self-start
-
-    flex
-    flex-col
-    gap-6
-   
-    pr-2
-    self-start
-  "
+          order-3
+          lg:order-none
+          lg:col-start-1
+          lg:row-start-2
+          lg:sticky
+          lg:top-24
+          self-start
+          flex
+          flex-col
+          gap-6  
+          pr-2"
         >
           <div
             className="
-      flex
-      flex-col
-      gap-6
-
-      max-h-[470px]
-      overflow-y-auto
-     
-      scrollbar-thin
-      scrollbar-thumb-emerald-400/30
-      hover:scrollbar-thumb-emerald-300/50
-      scrollbar-track-transparent
-      pb-4
-      pr-3
-    "
+              flex
+              flex-col
+              gap-6
+              max-h-[470px]
+              overflow-y-auto    
+              scrollbar-thin
+              scrollbar-thumb-emerald-400/30
+              hover:scrollbar-thumb-emerald-300/50
+              scrollbar-track-transparent
+              pb-4
+              pr-3"
           >
             <AnimatePresence>
               {loadingMap.watchlist ? (
@@ -355,25 +353,19 @@ bg-[var(--surface-panel)]
               ) : watchlist.length === 0 ? (
                 <div
                   className="
-      rounded-2xl
-      border border-dashed border-white/10
-
-     bg-gradient-to-br
-from-emerald-400/[0.08]
-to-transparent
-
-      p-10
-      text-center
-    "
+                    rounded-2xl
+                    border border-dashed border-white/10
+                    bg-gradient-to-br from-emerald-400/[0.08] to-transparent
+                    p-10
+                    text-center"
                 >
                   <div className="text-5xl mb-4">📈</div>
 
                   <h3
                     className="
-        text-xl
-        font-semibold
-        text-[var(--text)]
-      "
+                      text-xl
+                      font-semibold
+                      text-[var(--text)]"
                   >
                     Build Your Watchlist
                   </h3>
@@ -398,10 +390,13 @@ to-transparent
           {/* ANALYTICS */}
           {/* ================================= */}
 
-          <div
+          <div className="hidden lg:block">
+            <div
             className="
-          col-start-1
-          row-start-3
+            order-6
+            lg:order-none
+          lg:col-start-1
+          lg:row-start-3
 
           rounded-2xl
          border border-[var(--surface-border)]
@@ -415,40 +410,17 @@ backdrop-blur-xl
           h-fit
         "
           >
-            <div className="mb-4">
-              <h2 className="text-xl tracking-tight font-semibold text-[var(--text)]">
-                Portfolio Analytics
-              </h2>
-
-              <p className="text-xs text-[var(--text-muted)] mt-1">
-                Quick market overview
-              </p>
-            </div>
-
-            <div className="grid gap-3">
-              <AnalyticsCard
-                label="Portfolio"
-                value={`$${totalValue.toFixed(2)}`}
-              />
-
-              <AnalyticsCard label="Assets" value={watchlist.length} />
-
-              <AnalyticsCard
-                label="Top Gainer"
-                value={topGainer?.symbol || "--"}
-                subValue={`+${topGainer?.percent_change?.toFixed(2) || 0}%`}
-                positive
-              />
-
-              <AnalyticsCard
-                label="Top Loser"
-                value={topLoser?.symbol || "--"}
-                subValue={`${topLoser?.percent_change?.toFixed(2) || 0}%`}
-                negative
-              />
-            </div>
+           <AnalyticsSection
+      totalValue={totalValue}
+      watchlistLength={watchlist.length}
+      topGainer={topGainer}
+      topLoser={topLoser}
+    />
+          </div>
           </div>
         </aside>
+
+      
 
         {/* ================================= */}
         {/* CENTER CHART */}
@@ -456,14 +428,24 @@ backdrop-blur-xl
 
         <div
           className="
-          col-start-2
-          row-start-2
+          order-4
+
+  lg:order-none
+          lg:col-start-2
+          lg:row-start-2
           
           overflow-hidden
         "
         >
-          <div>{selectedStock && <CandleChart stock={selectedStock} chartTheme={theme} />}</div>
+          <div>
+            {selectedStock && (
+              <CandleChart stock={selectedStock} chartTheme={theme} />
+            )}
+          </div>
         </div>
+
+
+          
 
         {/* ================================= */}
         {/* CENTER LOWER CONTENT */}
@@ -473,8 +455,11 @@ backdrop-blur-xl
 
         <div
           className="
-    col-start-2
-    row-start-3
+          order-7
+
+lg:order-none
+    lg:col-start-2
+    lg:row-start-3
 
     rounded-2xl
    border border-[var(--surface-border)]
@@ -487,7 +472,9 @@ backdrop-blur-xl
   "
         >
           <div className="mb-5">
-            <h2 className="text-2xl font-bold text-[var(--text)]">Market Heatmap</h2>
+            <h2 className="text-2xl font-bold text-[var(--text)]">
+              Market Heatmap
+            </h2>
 
             <p className="text-sm text-[var(--text-muted)] mt-2">
               Visual market movement overview
@@ -505,8 +492,9 @@ backdrop-blur-xl
 
         <div
           className="
-    col-start-2
-    row-start-4
+          order-9
+    lg:col-start-2
+    lg:row-start-4
    "
         >
           {selectedStock && <StockNews symbol={selectedStock.symbol} />}

@@ -81,51 +81,36 @@ export const StockCard = ({ stock, onClick, isActive }) => {
       }}
       onClick={onClick}
       className={`
+            relative
+            group
+            h-[110px]
+            cursor-pointer
+            rounded-2xl
+            border
+            h-[95px] lg:h-[110px]
+            backdrop-blur-xl
+            bg-[var(--watchlist-card-bg)]
+            border-emerald-400/10
+            shadow-[var(--card-shadow)]
+            hover:border-emerald-400/20
+            hover:shadow-[0_0_35px_rgba(16,185,129,0.08)]
+            p-2.5 lg:p-3
 
-relative
-group
-
-
-h-[110px]
-cursor-pointer
-
-rounded-2xl
-border
-
-
-
-backdrop-blur-xl
-
-bg-[var(--watchlist-card-bg)]
-
-
-
-border-emerald-400/10
-
-shadow-[var(--card-shadow)]
-
-hover:border-emerald-400/20
-hover:shadow-[0_0_35px_rgba(16,185,129,0.08)]
-
-p-3
-
-${
-  isActive
-    ? `
-      border-emerald-400/30
-
-bg-[var(--watchlist-card-active)]
-      shadow-[0_0_40px_rgba(16,185,129,0.14)]
-    `
-    : ""
-}
-`}
+          ${
+            isActive
+              ? `
+                border-emerald-400/30          
+                bg-[var(--watchlist-card-active)]
+                shadow-[0_0_40px_rgba(16,185,129,0.14)]
+              `
+              : ""
+          }
+          `}
     >
      
             <button
               onClick={(e) => {
                 e.stopPropagation();
-
                 togglePin(stock.symbol);
               }}
               className="
@@ -138,7 +123,6 @@ bg-[var(--watchlist-card-active)]
               <FiStar
                 className={`
                 transition
-
                 ${stock.pinned ? "fill-yellow-400 text-yellow-400" : "text-[var(--text-muted)]"}
               `}
              /></button>
@@ -153,40 +137,35 @@ bg-[var(--watchlist-card-active)]
                 absolute
                 top-2
                 right-2
-                z-10
-                
-                text-red-400/80
-                
+                z-10               
+                text-red-400/80                
                 opacity-0
-                group-hover:opacity-100
-                
-                
-                
+                group-hover:opacity-100                
                 hover:scale-110
                 "
               >
               ✕
                </button>
 
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-around  lg:justify-between  lg:gap-4">
         {/* LEFT SIDE */}
         <div>
           <h2 className="text-sm font-semibold text-[var(--text-strong)]">
             {stock.symbol}
           </h2>
 
-          <p className="text-lg font-medium text-[var(--text)]">
+          <p className="text-base lg:text-lg font-medium text-[var(--text)]">
             {stock.currency === "USD" ? "$" : "₹"}
             {price.toFixed(2)}
           </p>
 
-          <p className={isPositive ? "text-green-400" : "text-red-400"}>
+          <p className={`text-sm ${isPositive ? "text-green-400" : "text-red-400"}`}>
             {percent.toFixed(2)}%
           </p>
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="w-[160px]">
+        <div className="w-[110px]  sm:w-[140px] lg:w-[160px]">
           <SparklineChart data={sparklineData} isPositive={isPositive} />
         </div>
              </div>

@@ -11,7 +11,7 @@ export const SparklineChart = ({
 }) => {
 
   return (
-    <div className="h-20 w-28">
+    <div className="h-16 w-full sm:h-18 lg:h-20">
 
       <ResponsiveContainer
         width="100%"

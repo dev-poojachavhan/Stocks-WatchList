@@ -54,7 +54,7 @@ export const StockDetails = ({ stock }) => {
             duration: 0.25,
           }}
           className={`
-    text-3xl font-bold text-[var(--text)] mt-1
+    text-2xl lg:text-3xl font-bold text-[var(--text)] mt-1
     transition-all duration-500
 
     ${flash === "green" ? "drop-shadow-[0_0_18px_rgba(16,185,129,0.30)]" : ""}
@@ -67,7 +67,7 @@ export const StockDetails = ({ stock }) => {
           {stock.price.toFixed(2) || "--"}
         </motion.p>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <motion.p
             key={stock.percent_change}
             initial={{
@@ -88,8 +88,9 @@ export const StockDetails = ({ stock }) => {
 
           <div
             className={`
-    mt-3  inline-flex items-center gap-2
-    rounded-full px-3 py-1 text-xs font-medium
+    mt-2  inline-flex items-center gap-1.5
+    rounded-full px2.5 py-1 text-[11px] font-medium sm:px-3
+sm:text-xs
     border
 
     ${  
@@ -188,7 +189,7 @@ bg-emerald-400/[0.04]
       </div>
 
       {/*//overview section*/}
-      <div className="pt-5 border-t border-[var(--surface-border)]">
+      <div className="pt-4 lg:pt-5 border-t border-[var(--surface-border)]">
         <h3 className="text-sm font-semibold text-[var(--text-soft)] mb-3">Overview</h3>
 
         <div className="space-y-3">
@@ -206,34 +207,24 @@ bg-emerald-400/[0.04]
 const MetricCard = ({
   label,
   value,
-  valueClassName = "text-white",
+  valueClassName = "text-[var(--text-strong)]",
   cardClassName = "",
 }) => {
   return (
     <div
       className={`
        rounded-xl
-  border
-
-  border-[var(--surface-border)]
-
-  
-bg-[var(--surface-glass)]
-
-  backdrop-blur-xl
-
-  p-3.5
-
-  transition-all
-  duration-300
-
- 
-  hover:bg-white/[0.02]
-
-hover:border-white/10
-  hover:-translate-y-[1px]
-
-  shadow-[var(--surface-shadow)]
+       border
+       border-[var(--surface-border)]  
+       bg-[var(--surface-glass)]
+       backdrop-blur-xl
+       p-2.5 lg:p-3.5 sm:p-3
+       transition-all
+       duration-300
+       hover:bg-white/[0.02]
+      hover:border-white/10
+        hover:-translate-y-[1px]
+        shadow-[var(--surface-shadow)]
 
          ${cardClassName}
       `}

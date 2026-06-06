@@ -38,7 +38,8 @@ border-[var(--surface-border)]
 
 bg-[var(--surface-panel)]
 
-p-5
+p-4
+sm:p-5
 
 backdrop-blur-xl
 
@@ -134,7 +135,7 @@ hover:shadow-[0_0_20px_rgba(16,185,129,0.06)]
   
               <div>
 
-                <h4 className="font-medium text-[var(--text)]">
+                <h4 className="  text-sm sm:text-basefont-medium text-[var(--text)]">
                   {coin.symbol}
                 </h4>
 
@@ -146,7 +147,7 @@ hover:shadow-[0_0_20px_rgba(16,185,129,0.06)]
 
               <div className="text-right">
 
-                <p className="text-white font-semibold">
+                <p className="font-semibold text-[var(--text-strong)]">
                  ${coin.price?.toFixed(2) || "--"}
                 </p>
 

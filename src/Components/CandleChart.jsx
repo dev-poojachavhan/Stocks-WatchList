@@ -211,9 +211,8 @@ export const CandleChart = ({ stock, chartTheme}) => {
   return (
     <div
       ref={containerRef}
-      className="relative
-      
-                 h-[540px]
+      className="relative    
+                h-[420px] sm:h-[500px] lg:h-[540px]
                  overflow-hidden
                  rounded-[26px]
                  border
@@ -236,7 +235,7 @@ export const CandleChart = ({ stock, chartTheme}) => {
         {stock.symbol}
       </h2>
 
-      <p className="text-3xl font-bold text-[var(--text)]">
+      <p className="text-2xl sm:text-3xl font-bold text-[var(--text)]">
           {stock.currency === "USD" ? "$" : "₹"}
            {Number(stock?.price || 0).toFixed(2)}
      </p>
@@ -255,7 +254,8 @@ export const CandleChart = ({ stock, chartTheme}) => {
 </p>  
 
       {/* 🔥 Timeframe buttons */}
-     <div className="flex items-center justify-between mb-5">
+     <div className="flex items-center justify-between sm:flex-row sm:items-center
+    sm:justify-between mb-5">
 
   {/* LEFT */}
   <div className="flex gap-2">
@@ -265,11 +265,10 @@ export const CandleChart = ({ stock, chartTheme}) => {
         onClick={() => setTimeframe(item)}
         className={`
           px-3 py-1.5
-rounded-xl
-text-sm
-
-transition-all
-duration-300
+          rounded-xl
+          text-sm
+          transition-all
+          duration-300
 
           ${
             timeframe === item
@@ -278,9 +277,9 @@ duration-300
                    text-emerald-200
                    shadow-[0_0_20px_rgba(16,185,129,0.10)]`
               : ` bg-[var(--surface)]
-border border-[var(--border)]
-text-[var(--text-soft)]
-hover:bg-[var(--accent-soft)]`
+                  border border-[var(--border)]
+                  text-[var(--text-soft)]
+                  hover:bg-[var(--accent-soft)]`
           }
         `}
       >
@@ -299,46 +298,29 @@ hover:bg-[var(--accent-soft)]`
     <button
       onClick={handleResetZoom}
       className="p-2 rounded-lg
-    bg-[var(--surface)]
-border border-[var(--border)]
-text-[var(--text-soft)]
-
-hover:bg-emerald-400/[0.08]
-hover:border-emerald-400/15
-hover:text-emerald-200
-      transition"
+                 bg-[var(--surface)]
+                 border border-[var(--border)]
+                 text-[var(--text-soft)]
+                 hover:bg-emerald-400/[0.08]
+                 hover:border-emerald-400/15
+                 hover:text-emerald-200
+                 transition"
     >
       <FiRotateCcw size={16} />
-    </button>
+      </button>
 
-    <button
+      <button
       onClick={handleFullscreen}
       className=" p-2 rounded-lg
-      
-
-
-border border-white/[0.05]
-
-
-
-hover:bg-emerald-400/[0.08]
-hover:border-emerald-400/15
-hover:text-emerald-200
-      transition"
-    >
-    {
-  document.fullscreenElement ? (
-    <FiMinimize2 size={16} />
-  ) : (
-    <FiMaximize2 size={16} />
-  )
-}
+                border border-white/[0.05]
+                hover:bg-emerald-400/[0.08]
+                hover:border-emerald-400/15
+                hover:text-emerald-200
+                transition"
+      >
+    
+     { document.fullscreenElement ? (<FiMinimize2 size={16} />) : (<FiMaximize2 size={16} />) }
     </button>
-
-  
-
-   
-
   </div>
 </div>
 
@@ -397,7 +379,7 @@ hover:text-emerald-200
         
 
 
-        <div className="relative h-[350px] ">
+        <div className="relative h-[240px] sm:h-[320px] lg:h-[350px] ">
 
   {/* CHART ALWAYS MOUNTED */}
   <div

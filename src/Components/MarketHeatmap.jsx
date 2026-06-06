@@ -17,7 +17,7 @@ export const MarketHeatmap = ({
     <div className="
       grid
       grid-cols-2
-      md:grid-cols-3
+      xl:grid-cols-3
       gap-4
     ">
       {[1,2,3,4,5,6].map((i) => (
@@ -33,19 +33,21 @@ export const MarketHeatmap = ({
 
   return (
     <div className="  
-    max-h-[420px]
+    lg:max-h-[420px]
+    lg:overflow-y-auto
+    pr-2
+    overflow-visible
     overflow-y-auto
-    pr-2">
+    ">
      
 
      <div
   className="
       grid
-      grid-cols-1
-sm:grid-cols-2
-xl:grid-cols-3
-      gap-4
-
+      grid-cols-2
+      xl:grid-cols-3
+      gap-3
+     sm:gap-4
     auto-rows-fr
 p-2
     
@@ -61,7 +63,7 @@ p-2
       }
       className={`
        rounded-2xl
-  p-3
+  p-3 
   cursor-pointer
   
 
@@ -69,7 +71,8 @@ p-2
   flex-col
   justify-between
   backdrop-blur-xl
-  h-[115px]
+  h-[95px]
+sm:h-[115px]
 
         ${
           stock.percent_change >= 0
@@ -92,18 +95,18 @@ p-2
       `}
     >
       <div>
-        <h3 className="text-xl font-semibold text-white">
+        <h3 className="text-lg sm:text-xl font-semibold text-[var(--text-strong)]">
           {stock.symbol}
         </h3>
 
-        <p className="text-white/70 text-sm mt-1">
+        <p className="text-[var(--text-strong)] text-sm mt-1">
           ${Number(stock.price).toFixed(2)}
         </p>
       </div>
 
       <p
         className={`
-          text-2xl
+          text-xl 
           font-bold
 
           ${
