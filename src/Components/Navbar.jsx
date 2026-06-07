@@ -129,7 +129,7 @@ hover:bg-[var(--accent-soft)]
   ← Back
 </button>
 
-        <div className="relative flex-1 min-w-0 flex justify-center ">
+        <div className="flex-1 min-w-0 flex justify-center ">
           <div
   className="
     absolute
@@ -143,7 +143,8 @@ hover:bg-[var(--accent-soft)]
     shadow-[inset_0_1px_2px_rgba(255,255,255,0.35)]
     pointer-events-none
   "
-/>
+          />
+          <div className="relative w-full sm:w-[320px] lg:w-[420px]">
             <input
           type="text"
           placeholder="Search (AAPL)"
@@ -226,7 +227,8 @@ focus:outline-none
 focus:border-emerald-500/30
 focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
 "
-          />
+            />
+           
           
           {query &&
   filteredSuggestions.length > 0 && (
@@ -252,17 +254,12 @@ focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
         absolute
         top-[55px]
         left-0
-
         z-50
         w-full
-
         overflow-hidden
-
         rounded-2xl
         border border-[var(--border)]
-
         bg-[var(--surface-solid)]
-
         shadow-2xl
         backdrop-blur-xl
       "
@@ -304,8 +301,9 @@ focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
         )
       )}
 
-    </motion.div>
-)}
+    </motion.div> 
+              )}
+             </div>
       </div>
 
         <ThemeToggle />

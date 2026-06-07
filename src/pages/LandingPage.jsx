@@ -1,7 +1,7 @@
 import { MarketTicker } from "../components/landing/MarketTicker";
 import { motion } from "framer-motion";
 import heroImage from "../assets/dashboard-preview.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 
 export const LandingPage = ({
@@ -10,6 +10,23 @@ export const LandingPage = ({
   setIsLaunching,
 }) => {
   const [search, setSearch] = useState("");
+  const [hasWatchlist, setHasWatchlist] = useState(false);
+
+
+  useEffect(() => {
+  try {
+    const savedWatchlist = JSON.parse(
+      localStorage.getItem("watchlist") || "[]"
+    );
+
+    setHasWatchlist(savedWatchlist.length > 0);
+  } catch {
+    setHasWatchlist(false);
+  }
+  }, []);
+  
+
+
   return (
     <motion.div
       className="
@@ -22,6 +39,26 @@ export const LandingPage = ({
       "
     >
       <MarketTicker />
+{/* back to dashboard */}
+      {hasWatchlist && (
+  <div className="mx-auto max-w-[1400px]  p-8 mt-5 flex justify-end">
+    <button
+      onClick={() => setShowDashboard(true)}
+      className="
+        rounded-full
+        border border-emerald-500/30
+        bg-emerald-500/10
+        px-4 py-2
+        text-sm font-medium
+        text-emerald-400
+        hover:bg-emerald-500/20
+        transition-all
+      "
+    >
+       ← Dashboard
+    </button>
+  </div>
+)}
 
       <div className="pt-22">
         <div
@@ -51,7 +88,7 @@ export const LandingPage = ({
            "
           />
 
-          {/* HERO */}
+ {/* HERO */}
           <motion.div
             initial={{
               opacity: 0,
@@ -85,6 +122,9 @@ export const LandingPage = ({
             "
           >
             {/* LEFT SIDE */}
+
+           
+            
             <motion.div
               initial="hidden"
               animate="visible"
@@ -348,7 +388,7 @@ export const LandingPage = ({
                       {value}
                     </h3>
 
-                    <p className="text-gray-500">{label}</p>
+                    <p className="text-gray-500 text-[16px]">{label}</p>
                   </div>
                 ))}
               </motion.div>
@@ -365,6 +405,8 @@ export const LandingPage = ({
             </motion.div>
 
             {/* RIGHT SIDE */}
+           
+            
             <motion.div
               className="relative hidden lg:block"
               animate={{
