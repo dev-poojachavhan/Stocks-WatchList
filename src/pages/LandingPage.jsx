@@ -18,7 +18,7 @@ export const LandingPage = ({
         text-white
         pb-10
         bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.018)_1px,transparent_1px)]
-bg-[size:80px_80px]
+        bg-[size:80px_80px]
       "
     >
       <MarketTicker />
@@ -27,31 +27,28 @@ bg-[size:80px_80px]
         <div
           className="
     relative
-    overflow-hidden
-
-    
+    overflow-hidden    
     px-6
     pt-3
-    h-[620px]
+    min-h-[650px]
+    lg:min-h-[490px]
 
   "
         >
           {/* BACKGROUND GLOW */}
           <div
             className="
-      absolute
-      top-40 left-1/2
-      h-[500px]
-      w-[500px]
-
-      -translate-x-1/2
-
-      rounded-full
-      bg-gradient-to-r
-from-emerald-500/10
-to-teal-500/10
-      blur-[140px]
-    "
+              absolute
+              top-40 left-1/2
+              h-[500px]
+              w-[500px]
+              -translate-x-1/2
+              rounded-full
+              bg-gradient-to-r
+            from-emerald-500/10
+            to-teal-500/10
+              blur-[140px]
+           "
           />
 
           {/* HERO */}
@@ -76,17 +73,16 @@ to-teal-500/10
               scale: 0.98,
             }}
             className="
-      relative z-10
-      
-      mx-auto
-      max-w-[1400px]
-
-      grid
-      items-center
-      gap-20
-      min-h-[420px]
-      lg:grid-cols-2
-    "
+              relative z-10  
+              mx-auto
+              max-w-[1400px]  
+              grid
+              items-center
+              gap-10
+              lg:gap-20
+              min-h-[420px]
+              lg:grid-cols-2
+            "
           >
             {/* LEFT SIDE */}
             <motion.div
@@ -94,7 +90,6 @@ to-teal-500/10
               animate="visible"
               variants={{
                 hidden: {},
-
                 visible: {
                   transition: {
                     staggerChildren: 0.15,
@@ -104,15 +99,16 @@ to-teal-500/10
             >
               {" "}
               <motion.h1
-                className="
-          text-3xl
-          font-black
-          leading-[0.92]
-
-          lg:text-6xl
-        "
+                className="          
+                  font-black
+                  leading-[0.96]
+                  text-3xl
+                  sm:text-5xl
+                  lg:text-6xl
+                  
+               "
               >
-                Build Your{" "}
+                Build Your{" "} 
                 <span
                   className="bg-gradient-to-r
                       from-emerald-400
@@ -136,17 +132,48 @@ to-teal-500/10
                   },
                 }}
                 className="
-          mt-5
-          max-w-[620px]
-
-          text-md
-          leading-6
-          text-gray-400
-        "
+                    mt-5
+                    max-w-[620px]
+                    text-xs
+                    lg:text-sm
+                    sm:text-base
+                    leading-6
+                    leading-6
+                    text-gray-400
+                  "
               >
                 Track stocks, crypto, heatmaps, and market news in one modern
                 trading dashboard experience.
               </motion.p>
+
+              {/* MOBILE DASHBOARD PREVIEW */}
+              <div className="block lg:hidden mt-8">
+                <div
+                  className="
+                    relative
+                    overflow-hidden
+                    rounded-[32px]
+                    border border-white/10
+                    bg-white/[0.04]
+                    max-h-[240px]
+                    p-4
+                    shadow-[0_0_30px_rgba(16,185,129,0.22)]
+                    backdrop-blur-xl
+               "
+                >
+                  <img
+                    src={heroImage}
+                    alt="dashboard"
+                    className="
+                       rounded-2xl
+                       object-cover
+                       w-full
+                       h-full
+                      "
+                  />
+                </div>
+              </div>
+            
               {/* SEARCH BAR */}
               <motion.div
                 variants={{
@@ -161,22 +188,29 @@ to-teal-500/10
                   },
                 }}
                 className="
-          mt-14
+          mt-12
+          mb-2
+          sm:mt-10
           focus-within:
-shadow-[0_0_25px_rgba(16,185,129,0.15)]
+          lg:shadow-[0_0_25px_rgba(16,185,129,0.15)]
           flex
-          items-center
-          gap-4
-
+          flex-col
+          sm:flex-row
+          sm:items-center
+          items-stretch
+          gap-3
+           text-[11px]
+           font-semibold
+          tracking-[0.2em]
+          text-emerald-400/80
           rounded-2xl
-          border border-white/15
-
+          lg:border border-white/15
           bg-white/[0.06]
           max-w-[550px]
-          p-2
+          p-3
+          sm:p-4
           hover:border-emerald-400
-transition-all duration-200
-
+          transition-all duration-200
           backdrop-blur-xl
         "
               >
@@ -186,21 +220,17 @@ transition-all duration-200
                   type="text"
                   placeholder="Search AAPL, TSLA, BTC/USD..."
                   className="
-            flex-1
-            bg-transparent
-
-            px-4
-            
-
-            text-md
-            text-white
-
-            outline-none
-
-            placeholder:text-gray-500
-            focus:ring-emerald-400/40
-        focus:border-emerald-400
-          "
+                      flex-1
+                      bg-transparent
+                      px-3
+                      text-sm
+                      sm:text-base
+                      text-white
+                      outline-none
+                      placeholder:text-gray-500
+                      focus:ring-emerald-400/40
+                    focus:border-emerald-400
+                 "
                 />
 
                 <button
@@ -217,17 +247,15 @@ transition-all duration-200
                     }, 1200);
                   }}
                   className={`
-            rounded-xl
-
-           bg-emerald-500
-          hover:bg-emerald-400
-            px-6
-            py-2
-
-            font-semibold
-            text-black
-
-            transition
+                   rounded-xl
+                 bg-emerald-500
+                hover:bg-emerald-600
+                  w-full
+                  sm:w-auto
+                  font-semibold
+                  text-black
+                  transition
+            
             ${
               search.trim()
                 ? `
@@ -237,14 +265,16 @@ transition-all duration-200
         shadow-[0_0_25px_rgba(16,185,129,0.28)]
       `
                 : `
-        bg-gray-500/40
-        cursor-not-allowed
-        text-gray-300
+                bg-emerald-500/80
+                 text-black/80
+                 sm:bg-gray-500/40
+                 sm:text-gray-300
+                 cursor-not-allowed
       `
             }
 `}
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center justify-center gap-2 py-1.5 lg:py-3 px-4">
                     Launch Dashboard
                     <motion.span
                       animate={{
@@ -272,11 +302,12 @@ transition-all duration-200
                     y: 0,
                   },
                 }}
-                className="mt-3 text-sm text-gray-500"
+                className="mt-2 text-sm text-gray-500"
               >
                 Search any stock or crypto symbol to launch your dashboard
               </motion.p>
-              {/* LIVE STATS */}
+
+ {/* LIVE STATS */}
               <motion.div
                 variants={{
                   hidden: {
@@ -290,11 +321,15 @@ transition-all duration-200
                   },
                 }}
                 className="
-          mt-12
-          p-1
-          flex
-          flex-wrap
-          gap-8
+               mt-10 lg:mt-20  
+                p-1
+               grid
+                grid-cols-3
+                gap-4
+                sm:flex
+                lg:flex lg:flex-wrap
+                lg:gap-8      
+                text-xl sm:text-2xl
         "
               >
                 {[
@@ -319,10 +354,10 @@ transition-all duration-200
               </motion.div>
               <p
                 className="
-    mt-5
-    text-[10px]
-    font-semibold
-    text-gray-500 pb-2
+                  mt-5
+                  text-[12px]
+                  font-semibold
+                  text-gray-500 pb-2
   "
               >
                 No signup required • Instant market access
@@ -331,7 +366,7 @@ transition-all duration-200
 
             {/* RIGHT SIDE */}
             <motion.div
-              className="relative"
+              className="relative hidden lg:block"
               animate={{
                 y: [0, -8, 0],
               }}
@@ -344,49 +379,43 @@ transition-all duration-200
               {/* GLOW */}
               <div
                 className="
-          absolute
-          inset-0
-
-          rounded-[40px]
-
-          bg-gradient-to-r
-from-emerald-500/10
-to-teal-500/10
-          blur-3xl
-        "
+                absolute
+                inset-0
+                rounded-[40px]
+                bg-gradient-to-r
+              from-emerald-500/10
+              to-teal-500/10
+               blur-3xl
+             "
               />
 
               {/* DASHBOARD MOCKUP */}
               <div
                 className="
-          relative
-
-          overflow-hidden
-
-          rounded-[32px]
-          border border-white/10
-          
-          bg-white/[0.04]
-         max-h-[520px]
-          p-5
-
-          shadow-[0_0_30px_rgba(16,185,129,0.22)]
-            hover:scale-[1.01]
-transition-all duration-500
-          backdrop-blur-xl
-        "
+                relative
+                overflow-hidden
+                rounded-[32px]
+                border border-white/10         
+                bg-white/[0.04]
+                 max-h-[240px]
+                sm:max-h-[320px]
+                lg:max-h-[520px]
+                p-5
+                shadow-[0_0_30px_rgba(16,185,129,0.22)]
+                hover:scale-[1.01]
+                transition-all duration-500
+                backdrop-blur-xl
+             "
               >
                 <img
                   src={heroImage}
                   alt="dashboard"
                   className="
-            rounded-2xl
-            object-cover
-            w-full
-    h-full
-            
-          
-          "
+                      rounded-2xl
+                      object-cover
+                      w-full
+                      h-full        
+                 "
                 />
               </div>
             </motion.div>
@@ -397,14 +426,11 @@ transition-all duration-500
       {/* FEATURE STRIP */}
       <div
         className="
-    mx-auto
-    
-    max-w-[1400px]
-
-    
-    -mt-40
-pb-10
-  "
+            mx-auto    
+            max-w-[1400px] 
+            
+            pb-10
+        "
       >
         <motion.div
           initial="hidden"
@@ -420,20 +446,14 @@ pb-10
             },
           }}
           className="
-     
-      mt-14
-
-    flex
-      
-    overflow-hidden
-
-   
-    border border-white/10
-
-    bg-white/[0.03]
-    backdrop-blur-xl
-
-      
+            mt-14
+            grid
+            grid-cols-2
+            xl:grid-cols-5    
+            overflow-hidden 
+            border border-white/10  
+            bg-white/[0.03]
+            backdrop-blur-xl  
     "
         >
           {[
@@ -483,22 +503,21 @@ pb-10
                 ease: "easeOut",
               }}
               className={`
-          relative
-          flex-1
-
-      flex
-      items-start
-      gap-4
-
-      px-6
-      py-3
-
-     hover:bg-white/[0.03]
-hover:shadow-[0_0_20px_rgba(16,1  85,129,0.08)]
-transition-all duration-300
-
-      border-r border-white/10
-      transform-gpu
+                  relative
+                  flex-1
+                  flex
+                  items-start
+                  gap-4    
+                  p-4
+                  min-h-[120px]
+                  lg:px-6
+                  w-full
+                  sm:w-auto
+                  hover:bg-white/[0.03]
+                  hover:shadow-[0_0_20px_rgba(16,1  85,129,0.08)]
+                  transition-all duration-300
+                  border-r border-white/10
+                  transform-gpu
 
           ${index !== 4 ? "xl:border-r xl:border-white/10" : ""}
 
@@ -517,24 +536,19 @@ transition-all duration-300
                   ease: "easeInOut",
                 }}
                 className="
-    relative
-
-    flex
-    h-10
-    w-10
-    items-center
-    justify-center
-
-    rounded-2xl
-
-    bg-emerald-400/25
-  p-4
-    text-lg
-
-    shadow-[0_0_18px_rgba(16,185,129,0.12)]
-
-    transform-gpu
-    will-change-transform
+                  relative
+                  flex
+                  h-12
+                  w-12
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-emerald-400/25
+                   p-4
+                  text-lg
+                  shadow-[0_0_18px_rgba(16,185,129,0.12)]
+                  transform-gpu
+                  will-change-transform
   "
               >
                 {feature.icon}
@@ -556,9 +570,10 @@ transition-all duration-300
                 <p
                   className="
             mt-1
-            leading-6
+            leading-5
             text-gray-400
-            text-[12px]
+            text-[11px]
+            line-clamp-2
           "
                 >
                   {feature.desc}

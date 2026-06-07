@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 export const MarketTicker = () => {
 
   const messages = [
-    "● Live Market Feed Active",
+    " Live Market Feed Active",
     "Data refreshes periodically on free-tier APIs",
     "Search results may take a few moments during sync cycles",
     "Track stocks, crypto & market news in real time",
