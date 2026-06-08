@@ -39,6 +39,7 @@ const CRYPTO_SYMBOLS = [
     if (a.pinned && !b.pinned)
       return -1;
 
+
     if (!a.pinned && b.pinned)
       return 1;
 
@@ -119,27 +120,39 @@ startLoading("crypto");
       // SAVE TO STATE
      // FORMAT POPULAR STOCKS
 const formattedPopular =
-  Object.values(popular).map(
-    (stock) => ({
+  Object.values(popular)
+    .filter(
+      (stock) =>
+        stock.symbol &&
+        Number.isFinite(
+          Number(stock.close)
+        )
+    )
+    .map((stock) => ({
       symbol: stock.symbol,
       price: Number(stock.close),
       percent_change: Number(
         stock.percent_change
       ),
-    })
-  );
+    }));
 
 // FORMAT CRYPTO
 const formattedCrypto =
-  Object.values(crypto).map(
-    (coin) => ({
+  Object.values(crypto)
+    .filter(
+      (coin) =>
+        coin.symbol &&
+        Number.isFinite(
+          Number(coin.close)
+        )
+    )
+    .map((coin) => ({
       symbol: coin.symbol,
       price: Number(coin.close),
       percent_change: Number(
         coin.percent_change
       ),
-    })
-        );
+    }));
       // SAVE TO STATE
 setPopularStocks(formattedPopular);
 
@@ -182,7 +195,9 @@ startLoading("heatmap");
           currentList.map(async (stock) => {
             const data = await fetchStock(stock.symbol);
 
-            if (!data) return stock;
+            if (!data || data.error) {
+          return stock;
+          }
 
             const previousSparkline = stock.sparkline || [];
 

@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import heroImage from "../assets/dashboard-preview.jpg";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
+import  logo  from "../assets/arrow.png";
+
+
 
 export const LandingPage = ({
   setShowDashboard,
@@ -58,9 +61,12 @@ export const LandingPage = ({
        ← Dashboard
     </button>
   </div>
-)}
+      )}
+      
 
-      <div className="pt-22">
+      
+
+      <div className="pt-10">
         <div
           className="
     relative
@@ -72,6 +78,12 @@ export const LandingPage = ({
 
   "
         >
+          <div className="flex items-center gap-2 mb-15">
+  <img src={logo} alt="StockWatch" className="w-7 h-7" />
+  <span className="font-semibold text-xl">
+    StockWatch
+  </span>
+</div>
           {/* BACKGROUND GLOW */}
           <div
             className="
@@ -87,6 +99,8 @@ export const LandingPage = ({
               blur-[140px]
            "
           />
+
+           
 
  {/* HERO */}
           <motion.div
@@ -123,6 +137,7 @@ export const LandingPage = ({
           >
             {/* LEFT SIDE */}
 
+           
            
             
             <motion.div
@@ -488,7 +503,7 @@ export const LandingPage = ({
             },
           }}
           className="
-            mt-14
+            mt-4
             grid
             grid-cols-2
             xl:grid-cols-5    
@@ -550,7 +565,7 @@ export const LandingPage = ({
                   flex
                   items-start
                   gap-4    
-                  p-4
+                  p-3
                   min-h-[120px]
                   lg:px-6
                   w-full

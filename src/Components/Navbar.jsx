@@ -23,8 +23,8 @@ export const Navbar = ({setShowDashboard}) => {
   const [searchedStock, setSearchedStock] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
-
   const { addStock } = useContext(WatchlistContext);
+  const [error, setError] = useState("");
 
   const filteredSuggestions =
   TRENDING_STOCKS.filter((item) =>
@@ -45,21 +45,33 @@ export const Navbar = ({setShowDashboard}) => {
     let isActive = true; // 👈 important
 
     const delay = setTimeout(async () => {
-      setLoading(true);
+      try {
+        setLoading(true);
 
-      const data = await fetchStock(query.toUpperCase());
+        const data = await fetchStock(query.toUpperCase());
 
-      if (!isActive) return; // 🚨 ignore old responses
+        if (!isActive) return; // 🚨 ignore old responses
 
-      if (data && !data.status) {
-        console.log(data);
+        if (data && !data.error) {
+          console.log(data);
 
-        setSearchedStock(data);
-      } else {
-        setSearchedStock(null);
+          setSearchedStock(data);
+        } else {
+          setSearchedStock(null);
+          setError("Stock not found");
+        }
       }
+      catch (err) {
+  if (!isActive) return;
 
-      setLoading(false);
+  setSearchedStock(null);
+  setError(
+    "Unable to fetch market data"
+  );
+}
+      finally {
+  setLoading(false);
+}
     }, 600);
 
     return () => {
@@ -152,6 +164,7 @@ hover:bg-[var(--accent-soft)]
             onChange={(e) => {
               setQuery(e.target.value);
               setSelectedIndex(-1);
+               setError("");
             }}
              onKeyDown={(e) => {
 
@@ -229,6 +242,17 @@ focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
 "
             />
            
+            {error && (
+  <p
+    className="
+      mt-2
+      text-sm
+      text-red-400
+    "
+  >
+    {error}
+  </p>
+)}
           
           {query &&
   filteredSuggestions.length > 0 && (

@@ -138,9 +138,10 @@ export const StockCard = ({ stock, onClick, isActive }) => {
                 top-2
                 right-2
                 z-10               
-                text-red-400/80                
-                opacity-0
-                group-hover:opacity-100                
+                text-red-400/80 
+                opacity-100               
+                lg:opacity-0
+                lg:group-hover:opacity-100                
                 hover:scale-110
                 "
               >

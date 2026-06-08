@@ -11,11 +11,21 @@ export const fetchStock = async (symbol) => {
       `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${API_KEY}`,
     );
 
+    if (!res.ok) {
+  throw new Error("NETWORK_ERROR");
+    }
+    
     const data = await res.json();
 
     if (data.status === "error") {
-      throw new Error(data.message);
-    }
+     if (
+    data.message?.toLowerCase().includes("api")
+  ) {
+    throw new Error("API_LIMIT");
+  }
+
+  throw new Error("INVALID_SYMBOL");
+}
 
     return {
       symbol: data.symbol,
@@ -43,9 +53,13 @@ export const fetchStock = async (symbol) => {
       sparkline: [], //Every stock now always has sparkline field
     };
   } catch (err) {
-    console.error("fetchStock error:", err);
-    return null;
-  }
+  console.error("fetchStock error:", err);
+
+  return {
+    error: true,
+    message: err.message,
+  };
+}
 };
 
 

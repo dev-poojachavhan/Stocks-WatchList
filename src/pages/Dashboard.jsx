@@ -12,9 +12,13 @@ import { CryptoWidget } from "../Components/CryptoWidget";
 import { Shimmer } from "../Components/LoadingShimmer/Shimmer";
 import { fetchStock } from "../services/api";
 import { AnalyticsSection } from "../Components/AnalyticsSection";
+import { EmptyDashboard } from "../Components/EmptyDashboard";
+
+
 
 export const Dashboard = ({ initialSymbol }) => {
   const { watchlist, loadingMap, addStock } = useContext(WatchlistContext);
+  
   const [theme, setTheme] = useState(
     document.documentElement.getAttribute("data-theme") || "light",
   );
@@ -23,6 +27,8 @@ export const Dashboard = ({ initialSymbol }) => {
   const selectedStock = watchlist.find(
     (stock) => stock.symbol === selectedSymbol,
   );
+
+  const isEmpty = watchlist.length === 0;
 
   const totalValue = watchlist.reduce(
     (acc, stock) => acc + Number(stock.price || 0),
@@ -77,6 +83,12 @@ export const Dashboard = ({ initialSymbol }) => {
     loadInitialStock();
   }, [initialSymbol, addStock]);
 
+  useEffect(() => {
+  if (watchlist.length === 0) {
+    setSelectedSymbol(null);
+  }
+}, [watchlist]);
+
   return (
     <motion.div
       initial={{
@@ -100,7 +112,6 @@ export const Dashboard = ({ initialSymbol }) => {
       px-4 py-4 sm:px-6 sm:py-6
       bg-[var(--bg)]"
     >
-      
       {/* ATMOSPHERIC BACKGROUND */}
 
       <div
@@ -108,7 +119,7 @@ export const Dashboard = ({ initialSymbol }) => {
         pointer-events-none
         absolute
         inset-0
-        overflow-hidden"   
+        overflow-hidden"
       >
         {/* TOP EMERALD */}
         <div
@@ -163,7 +174,6 @@ export const Dashboard = ({ initialSymbol }) => {
          gap-6
          items-start"
       >
-
         {/* ================================= */}
         {/* TOP LEFT TITLE */}
         {/* ================================= */}
@@ -193,6 +203,11 @@ export const Dashboard = ({ initialSymbol }) => {
             Track your market movers & portfolio performance
           </p>
         </div>
+
+        {isEmpty && <EmptyDashboard />}
+
+        {!isEmpty && (
+  <>
 
         {/* ================================= */}
         {/* POPULAR STOCKS */}
@@ -257,9 +272,9 @@ export const Dashboard = ({ initialSymbol }) => {
               Stock Details
             </h2>
 
-            {selectedStock
-              ? (<StockDetails stock={selectedStock} />)
-              : (
+            {selectedStock ? (
+              <StockDetails stock={selectedStock} />
+            ) : (
               <p className="text-[var(--text-muted)]">Select a stock</p>
             )}
           </div>
@@ -280,16 +295,12 @@ export const Dashboard = ({ initialSymbol }) => {
           </div>
         </section>
 
-
-
-        
         {/* ================================= */}
         {/* MOBILE ANALYTICS */}
         {/* ================================= */}
 
-         
-            <div
-            className="
+        <div
+          className="
             order-6
             lg:order-none
              lg:hidden
@@ -302,14 +313,14 @@ export const Dashboard = ({ initialSymbol }) => {
           p-4
           h-fit
         "
-          >
-           <AnalyticsSection
-              totalValue={totalValue}
-              watchlistLength={watchlist.length}
-              topGainer={topGainer}
-              topLoser={topLoser}
-            />
-          </div>
+        >
+          <AnalyticsSection
+            totalValue={totalValue}
+            watchlistLength={watchlist.length}
+            topGainer={topGainer}
+            topLoser={topLoser}
+          />
+        </div>
 
         {/* ================================= */}
         {/* WATCHLIST */}
@@ -350,31 +361,8 @@ export const Dashboard = ({ initialSymbol }) => {
                     <Shimmer key={i} className="h-[110px]" />
                   ))}
                 </div>
-              ) : watchlist.length === 0 ? (
-                <div
-                  className="
-                    rounded-2xl
-                    border border-dashed border-white/10
-                    bg-gradient-to-br from-emerald-400/[0.08] to-transparent
-                    p-10
-                    text-center"
-                >
-                  <div className="text-5xl mb-4">📈</div>
-
-                  <h3
-                    className="
-                      text-xl
-                      font-semibold
-                      text-[var(--text)]"
-                  >
-                    Build Your Watchlist
-                  </h3>
-
-                  <p className="mt-3 text-[var(--text-soft)]">
-                    Search stocks from landing page to begin tracking markets.
-                  </p>
-                </div>
-              ) : (
+              ) 
+                 : (
                 watchlist.map((stock) => (
                   <StockCard
                     key={stock.symbol}
@@ -392,35 +380,28 @@ export const Dashboard = ({ initialSymbol }) => {
 
           <div className="hidden lg:block">
             <div
-            className="
+              className="
             order-6
             lg:order-none
           lg:col-start-1
           lg:row-start-3
-
           rounded-2xl
          border border-[var(--surface-border)]
-
           bg-[var(--surface-panel)]
-
-backdrop-blur-xl
-
+          backdrop-blur-xl
           p-4
-
           h-fit
         "
-          >
-           <AnalyticsSection
-      totalValue={totalValue}
-      watchlistLength={watchlist.length}
-      topGainer={topGainer}
-      topLoser={topLoser}
-    />
-          </div>
+            >
+              <AnalyticsSection
+                totalValue={totalValue}
+                watchlistLength={watchlist.length}
+                topGainer={topGainer}
+                topLoser={topLoser}
+              />
+            </div>
           </div>
         </aside>
-
-      
 
         {/* ================================= */}
         {/* CENTER CHART */}
@@ -438,14 +419,17 @@ backdrop-blur-xl
         "
         >
           <div>
-            {selectedStock && (
-              <CandleChart stock={selectedStock} chartTheme={theme} />
-            )}
+            
+            
+              {selectedStock && (
+  <CandleChart
+    stock={selectedStock}
+    chartTheme={theme}
+  />
+)}
+            
           </div>
         </div>
-
-
-          
 
         {/* ================================= */}
         {/* CENTER LOWER CONTENT */}
@@ -493,13 +477,20 @@ backdrop-blur-xl
         <div
           className="
           order-9
-    lg:col-start-2
-    lg:row-start-4
+          lg:col-start-2
+          lg:row-start-4
    "
         >
-          {selectedStock && <StockNews symbol={selectedStock.symbol} />}
-        </div>
-      </div>
-    </motion.div>
+          
+           {selectedStock && (
+  <StockNews symbol={selectedStock.symbol} />
+)}
+          
+                </div>
+          </>)}
+          </div>
+      
+    </motion.div> 
+    
   );
 };
