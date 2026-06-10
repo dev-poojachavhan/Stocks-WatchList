@@ -2,8 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { fetchStock } from "../services/api";
 import { WatchlistContext } from "../context/WatchlistContext";
 import { ThemeToggle } from "../components/ThemeToggle";
-import { motion, AnimatePresence, } from "framer-motion";
-
+import { motion, AnimatePresence } from "framer-motion";
 
 const TRENDING_STOCKS = [
   "AAPL",
@@ -18,7 +17,7 @@ const TRENDING_STOCKS = [
   "ETH/USD",
 ];
 
-export const Navbar = ({setShowDashboard}) => {
+export const Navbar = ({ setShowDashboard }) => {
   const [query, setQuery] = useState("");
   const [searchedStock, setSearchedStock] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -26,19 +25,15 @@ export const Navbar = ({setShowDashboard}) => {
   const { addStock } = useContext(WatchlistContext);
   const [error, setError] = useState("");
 
-  const filteredSuggestions =
-  TRENDING_STOCKS.filter((item) =>
-    item
-      .toLowerCase()
-      .includes(query.toLowerCase())
+  const filteredSuggestions = TRENDING_STOCKS.filter((item) =>
+    item.toLowerCase().includes(query.toLowerCase()),
   );
 
-  
-
-  // 🔍 Debounced search  
+  // 🔍 Debounced search
   useEffect(() => {
-    if (!query) {
+    if (!query.trim()) {
       setSearchedStock(null);
+      setError("");
       return;
     }
 
@@ -49,29 +44,30 @@ export const Navbar = ({setShowDashboard}) => {
         setLoading(true);
 
         const data = await fetchStock(query.toUpperCase());
+        console.log(data);
 
         if (!isActive) return; // 🚨 ignore old responses
 
-        if (data && !data.error) {
-          console.log(data);
-
-          setSearchedStock(data);
-        } else {
+        if (data?.error) {
           setSearchedStock(null);
-          setError("Stock not found");
+
+          if (data.message === "API_LIMIT") {
+            setError("API limit reached. Please wait for 1 minute.");
+          } else if (data.message === "INVALID_SYMBOL") {
+            setError("Invalid symbol");
+          } else {
+            setError("Something went wrong");
+          }
+
+          return;
+        }
+        setError("");
+        setSearchedStock(data);
+      } finally {
+        if (isActive) {
+          setLoading(false);
         }
       }
-      catch (err) {
-  if (!isActive) return;
-
-  setSearchedStock(null);
-  setError(
-    "Unable to fetch market data"
-  );
-}
-      finally {
-  setLoading(false);
-}
     }, 600);
 
     return () => {
@@ -80,6 +76,15 @@ export const Navbar = ({setShowDashboard}) => {
     };
   }, [query]);
 
+  useEffect(() => {
+    if (!error) return;
+
+    const timer = setTimeout(() => {
+      setError("");
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [error]);
   return (
     <header
       className="sticky top-0 z-50 backdrop-blur relative
@@ -95,7 +100,7 @@ backdrop-blur-2xl
 shadow-[var(--nav-shadow)]"
     >
       <div
-  className="
+        className="
     absolute
     inset-0
 
@@ -103,28 +108,20 @@ shadow-[var(--nav-shadow)]"
 
     bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.06),transparent_65%)]
   "
-/>
+      />
       <div className="flex items-center justify-between px-4 gap-3  py-4 sm:px-6 sm:py-6">
-        
         <button
-  onClick={() => {
-            setShowDashboard(false
-      
-    );
-  }}
-
-  className="
+          onClick={() => {
+            setShowDashboard(false);
+          }}
+          className="
 group
 rounded-2xl
 border
-
 border-[var(--border)]
-
 bg-[var(--surface)]
-
 px-3 py-2
 sm:px-4 sm:py-2.5
-
 text-sm
 text-[var(--text-muted)]
 
@@ -137,13 +134,13 @@ hover:border-emerald-400/30
 hover:text-[var(--text)]
 hover:bg-[var(--accent-soft)]
 "
->
-  ← Back
-</button>
+        >
+          ← Back
+        </button>
 
         <div className="flex-1 min-w-0 flex justify-center ">
           <div
-  className="
+            className="
     absolute
     inset-0
     rounded-full
@@ -158,62 +155,37 @@ hover:bg-[var(--accent-soft)]
           />
           <div className="relative w-full sm:w-[320px] lg:w-[420px]">
             <input
-          type="text"
-          placeholder="Search (AAPL)"
-          value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setSelectedIndex(-1);
-               setError("");
-            }}
-             onKeyDown={(e) => {
+              type="text"
+              placeholder="Search (AAPL)"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setSelectedIndex(-1);
+                setError("");
+                setSearchedStock(null);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
 
-    if (
-      e.key === "ArrowDown"
-    ) {
+                  setSelectedIndex((prev) =>
+                    prev < filteredSuggestions.length - 1 ? prev + 1 : prev,
+                  );
+                }
 
-      e.preventDefault();
+                if (e.key === "ArrowUp") {
+                  e.preventDefault();
 
-      setSelectedIndex((prev) =>
-        prev <
-        filteredSuggestions.length - 1
-          ? prev + 1
-          : prev
-      );
-    }
+                  setSelectedIndex((prev) => (prev > 0 ? prev - 1 : 0));
+                }
 
-    if (
-      e.key === "ArrowUp"
-    ) {
-
-      e.preventDefault();
-
-      setSelectedIndex((prev) =>
-        prev > 0
-          ? prev - 1
-          : 0
-      );
-    }
-
-    if (
-      e.key === "Enter"
-    ) {
-
-      if (
-        filteredSuggestions[
-          selectedIndex
-        ]
-      ) {
-
-        setQuery(
-          filteredSuggestions[
-            selectedIndex
-          ]
-        );
-      }
-    }
-  }}
-         className="
+                if (e.key === "Enter") {
+                  if (filteredSuggestions[selectedIndex]) {
+                    setQuery(filteredSuggestions[selectedIndex]);
+                  }
+                }
+              }}
+              className="
 px-4
 py-2
 
@@ -241,40 +213,22 @@ focus:border-emerald-500/30
 focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
 "
             />
-           
-            {error && (
-  <p
-    className="
-      mt-2
-      text-sm
-      text-red-400
-    "
-  >
-    {error}
-  </p>
-)}
-          
-          {query &&
-  filteredSuggestions.length > 0 && (
 
-    <motion.div
-
-      initial={{
-        opacity: 0,
-        y: -8,
-      }}
-
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-
-      exit={{
-        opacity: 0,
-        y: -8,
-      }}
-
-      className="
+            {query && filteredSuggestions.length > 0 && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  y: -8,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: -8,
+                }}
+                className="
         absolute
         top-[55px]
         left-0
@@ -287,19 +241,14 @@ focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
         shadow-2xl
         backdrop-blur-xl
       "
-    >
-
-      {filteredSuggestions.map(
-        (item, index) => (
-
-          <button
-            key={item}
-
-            onClick={() => {
-              setQuery(item);
-            }}
-
-            className={`
+              >
+                {filteredSuggestions.map((item, index) => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      setQuery(item);
+                    }}
+                    className={`
               w-full
               px-4
               py-3
@@ -319,55 +268,87 @@ focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
                   `
               }
             `}
-          >
-            {item}
-          </button>
-        )
-      )}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </div>
 
-    </motion.div> 
-              )}
-             </div>
-      </div>
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  y: -10,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: -10,
+                }}
+                className="
+        absolute
+        top-[60px]
+        left-1/2
+        -translate-x-1/2
+        z-50
+
+        w-[300px]
+        rounded-xl
+
+        border
+        border-amber-500/20
+
+        bg-amber-500/10
+
+        px-4
+        py-3
+
+        text-center
+        text-sm
+        text-amber-300
+
+        backdrop-blur-xl
+      "
+              >
+                {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         <ThemeToggle />
       </div>
 
       {/* 🔄 Loading */}
       {loading && (
-        <p className="px-4 text-sm text-[var(--text-muted)]">
-          Loading...
-        </p>
+        <p className="px-4 text-sm text-[var(--text-muted)]">Loading...</p>
       )}
 
-  
-
       <AnimatePresence>
-
-  {searchedStock && (
-
-    <motion.div
-
-      initial={{
-        opacity: 0,
-        y: -10,
-      }}
-
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-
-      exit={{
-        opacity: 0,
-        y: -10,
-      }}
-
-      transition={{
-        duration: 0.2,
-      }}
-
-      className="
+        {searchedStock && (
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: -10,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: -10,
+            }}
+            transition={{
+              duration: 0.2,
+            }}
+            className="
         absolute
         top-[70px]
         left-1/2
@@ -377,10 +358,9 @@ focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
         sm:w-[300px]
         max-w-[300px]
       "
-    >
-
-      <div
-        className="
+          >
+            <div
+              className="
           rounded-2xl
           border
           shadow-xl
@@ -392,66 +372,48 @@ bg-[var(--surface-solid)]
 shadow-[var(--surface-shadow)]
           backdrop-blur-xl
         "
-      >
-
-        <div
-          className="
+            >
+              <div
+                className="
             flex items-center
             justify-between
           "
-        >
+              >
+                <div>
+                  <p className="font-semibold">{searchedStock.symbol}</p>
 
-          <div>
+                  <p className="text-sm text-[var(--text-muted)]">
+                    {searchedStock.currency}
+                  </p>
+                </div>
 
-            <p className="font-semibold">
-              {searchedStock.symbol}
-            </p>
+                <div className="text-right">
+                  <p className="font-semibold">
+                    ${Number(searchedStock.price).toFixed(2)}
+                  </p>
 
-            <p className="text-sm text-[var(--text-muted)]">
-              {searchedStock.currency}
-            </p>
+                  <p
+                    className={
+                      searchedStock.percent_change >= 0
+                        ? "text-green-400"
+                        : "text-red-400"
+                    }
+                  >
+                    {searchedStock.percent_change}%
+                  </p>
+                </div>
+              </div>
 
-          </div>
+              <button
+                onClick={() => {
+                  addStock({
+                    ...searchedStock,
+                  });
 
-          <div className="text-right">
-
-            <p className="font-semibold">
-              $
-              {Number(
-                searchedStock.price
-              ).toFixed(2)}
-            </p>
-
-            <p
-              className={
-                searchedStock.percent_change >= 0
-                  ? "text-green-400"
-                  : "text-red-400"
-              }
-            >
-              {
-                searchedStock.percent_change
-              }%
-            </p>
-
-          </div>
-
-        </div>
-
-        <button
-          onClick={() => {
-
-            addStock({
-              ...searchedStock,
-            });
-
-            setQuery("");
-            setSearchedStock(null);
-
-          }}
-
-          
-           className="
+                  setQuery("");
+                  setSearchedStock(null);
+                }}
+                className="
 mt-4
 w-full
 
@@ -472,22 +434,13 @@ hover:bg-emerald-500/18
 hover:border-emerald-400/30
 hover:shadow-[0_0_25px_rgba(16,185,129,0.12)]
 "
-          
-        >
-          Add to Watchlist
-        </button>
-
-      </div>
-
-    </motion.div>
-
-  )}
-
-</AnimatePresence>
-
-
-
-
+              >
+                Add to Watchlist
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

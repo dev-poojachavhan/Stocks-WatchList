@@ -64,7 +64,9 @@ export const StockDetails = ({ stock }) => {
         >
           {stock.currency === "USD" ? "$" : "₹"}
 
-          {stock.price.toFixed(2) || "--"}
+         {stock.price != null
+  ? Number(stock.price).toFixed(2)
+  : "--"}
         </motion.p>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -83,7 +85,9 @@ export const StockDetails = ({ stock }) => {
               isPositive ? "text-green-400" : "text-red-400"
             }`}
           >
-            {stock.percent_change.toFixed(2) || "--"}%
+            {stock.percent_change != null
+  ? `${Number(stock.percent_change).toFixed(2)}%`
+  : "--"}
           </motion.p>
 
           <div
@@ -166,11 +170,20 @@ bg-emerald-400/[0.04]
 
         <MetricCard label="Symbol" value={stock.symbol} />
 
-        <MetricCard label="Price" value={Number(stock.price).toFixed(2)} />
+        <MetricCard label="Price"
+          value={
+            stock.price != null
+              ? Number(stock.price).toFixed(2)
+              : "--"
+         } />
 
         <MetricCard
           label="Change"
-          value={`${Number(stock.percent_change).toFixed(2)}%`}
+         value={
+  stock.percent_change != null
+    ? `${Number(stock.percent_change).toFixed(2)}%`
+    : "--"
+}
           valueClassName={
             stock.percent_change >= 0 ? "text-green-400" : "text-red-400"
           }

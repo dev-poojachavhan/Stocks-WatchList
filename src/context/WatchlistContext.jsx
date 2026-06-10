@@ -292,9 +292,7 @@ return sortWatchlist([
   };  
 
   const togglePin = (symbol) => {
-   toast(
-  `${symbol} pinned`
-);
+
   setWatchlist((prev) => {
 
     const updated = prev.map((stock) =>
@@ -304,6 +302,18 @@ return sortWatchlist([
             pinned: !stock.pinned,
           }
         : stock
+    );
+
+     const target = updated.find(
+      (s) => s.symbol === symbol
+    );
+
+    toast(
+      `${symbol} ${
+        target.pinned
+          ? "pinned"
+          : "unpinned"
+      }`
     );
 
     return sortWatchlist(updated);

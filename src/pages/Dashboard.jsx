@@ -24,6 +24,7 @@ export const Dashboard = ({ initialSymbol }) => {
   );
 
   const [selectedSymbol, setSelectedSymbol] = useState(null);
+  
   const selectedStock = watchlist.find(
     (stock) => stock.symbol === selectedSymbol,
   );
@@ -81,13 +82,27 @@ export const Dashboard = ({ initialSymbol }) => {
     };
 
     loadInitialStock();
-  }, [initialSymbol, addStock]);
+  }, [initialSymbol]);
 
   useEffect(() => {
   if (watchlist.length === 0) {
     setSelectedSymbol(null);
   }
-}, [watchlist]);
+  }, [watchlist]);
+  
+  useEffect(() => {
+  if (
+    selectedSymbol &&
+    !watchlist.some(
+      (stock) =>
+        stock.symbol === selectedSymbol
+    )
+  ) {
+    setSelectedSymbol(
+      watchlist[0]?.symbol || null
+    );
+  }
+}, [watchlist, selectedSymbol]);
 
   return (
     <motion.div
