@@ -6,7 +6,7 @@ import './index.css'
 
 const queryClient = new QueryClient();
 const savedTheme =
-  localStorage.getItem("theme") || "light";
+  localStorage.getItem("theme") || "dark";
 
 document.documentElement.setAttribute(
   "data-theme",

@@ -44,7 +44,7 @@ export const Navbar = ({ setShowDashboard }) => {
         setLoading(true);
 
         const data = await fetchStock(query.toUpperCase());
-        console.log(data);
+        // console.log(data);
 
         if (!isActive) return; // 🚨 ignore old responses
 
@@ -88,25 +88,18 @@ export const Navbar = ({ setShowDashboard }) => {
   return (
     <header
       className="sticky top-0 z-50 backdrop-blur relative
-
-border-b
-
-border-[var(--border)]
-
-bg-[var(--nav-bg)]
-
-backdrop-blur-2xl
-
-shadow-[var(--nav-shadow)]"
+          border-b
+          border-[var(--border)]
+          bg-[var(--nav-bg)]
+          backdrop-blur-2xl
+          shadow-[var(--nav-shadow)]"
     >
       <div
         className="
-    absolute
-    inset-0
-
-    pointer-events-none
-
-    bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.06),transparent_65%)]
+        absolute
+        inset-0
+        pointer-events-none
+        bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.06),transparent_65%)]
   "
       />
       <div className="flex items-center justify-between px-4 gap-3  py-4 sm:px-6 sm:py-6">
@@ -115,25 +108,22 @@ shadow-[var(--nav-shadow)]"
             setShowDashboard(false);
           }}
           className="
-group
-rounded-2xl
-border
-border-[var(--border)]
-bg-[var(--surface)]
-px-3 py-2
-sm:px-4 sm:py-2.5
-text-sm
-text-[var(--text-muted)]
-
-backdrop-blur-xl
-
-transition-colors
-duration-300
-
-hover:border-emerald-400/30
-hover:text-[var(--text)]
-hover:bg-[var(--accent-soft)]
-"
+            group
+            rounded-2xl
+            border
+            border-[var(--border)]
+            bg-[var(--surface)]
+            px-3 py-2
+            sm:px-4 sm:py-2.5
+            text-sm
+            text-[var(--text-muted)]
+            backdrop-blur-xl
+            transition-colors
+            duration-300
+            hover:border-emerald-400/30
+            hover:text-[var(--text)]
+            hover:bg-[var(--accent-soft)]
+            "
         >
           ← Back
         </button>
@@ -141,17 +131,17 @@ hover:bg-[var(--accent-soft)]
         <div className="flex-1 min-w-0 flex justify-center ">
           <div
             className="
-    absolute
-    inset-0
-    rounded-full
-    opacity-0
-    focus-within:opacity-100
-    transition-opacity
-    duration-300
-    bg-[radial-gradient(circle,rgba(16,185,129,0.08),transparent_70%)]
-    shadow-[inset_0_1px_2px_rgba(255,255,255,0.35)]
-    pointer-events-none
-  "
+                absolute
+                inset-0
+                rounded-full
+                opacity-0
+                focus-within:opacity-100
+                transition-opacity
+                duration-300
+                bg-[radial-gradient(circle,rgba(16,185,129,0.08),transparent_70%)]
+                shadow-[inset_0_1px_2px_rgba(255,255,255,0.35)]
+                pointer-events-none
+              "
           />
           <div className="relative w-full sm:w-[320px] lg:w-[420px]">
             <input
@@ -186,32 +176,24 @@ hover:bg-[var(--accent-soft)]
                 }
               }}
               className="
-px-4
-py-2
-
-rounded-full
-w-full
-sm:w-[320px]
-lg:w-[420px]
-
-border
-border-[var(--border)]
-
-bg-[var(--surface)]
-
-text-[var(--text)]
-
-placeholder:text-[var(--text-muted)]
-
-backdrop-blur-xl
-
-transition-colors
-duration-300
-
-focus:outline-none
-focus:border-emerald-500/30
-focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
-"
+                  px-4
+                  py-2
+                  rounded-full
+                  w-full
+                  sm:w-[320px]
+                  lg:w-[420px]
+                  border
+                  border-[var(--border)]
+                  bg-[var(--surface)]
+                  text-[var(--text)]
+                  placeholder:text-[var(--text-muted)]
+                  backdrop-blur-xl
+                  transition-colors
+                  duration-300
+                  focus:outline-none
+                  focus:border-emerald-500/30
+                  focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
+                  "
             />
 
             {query && filteredSuggestions.length > 0 && (
@@ -292,29 +274,23 @@ focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
                   y: -10,
                 }}
                 className="
-        absolute
-        top-[60px]
-        left-1/2
-        -translate-x-1/2
-        z-50
-
-        w-[300px]
-        rounded-xl
-
-        border
-        border-amber-500/20
-
-        bg-amber-500/10
-
-        px-4
-        py-3
-
-        text-center
-        text-sm
-        text-amber-300
-
-        backdrop-blur-xl
-      "
+                  absolute
+                  top-[60px]
+                  left-1/2
+                  -translate-x-1/2
+                  z-50
+                  w-[300px]
+                  rounded-xl
+                  border
+                  border-amber-500/20
+                  bg-amber-500/10
+                  px-4
+                  py-3
+                  text-center
+                  text-sm
+                  text-amber-300
+                  backdrop-blur-xl
+                 "
               >
                 {error}
               </motion.div>
@@ -365,19 +341,17 @@ focus:shadow-[0_0_30px_rgba(16,185,129,0.12)]
           border
           shadow-xl
           p-4
-
           border-[var(--border)]
-
-bg-[var(--surface-solid)]
-shadow-[var(--surface-shadow)]
+          bg-[var(--surface-solid)]
+          shadow-[var(--surface-shadow)]
           backdrop-blur-xl
         "
             >
               <div
                 className="
-            flex items-center
-            justify-between
-          "
+                  flex items-center
+                  justify-between
+                "
               >
                 <div>
                   <p className="font-semibold">{searchedStock.symbol}</p>
@@ -414,25 +388,19 @@ shadow-[var(--surface-shadow)]
                   setSearchedStock(null);
                 }}
                 className="
-mt-4
-w-full
-
-rounded-xl
-border border-emerald-400/20
-
-bg-emerald-500/12
-
-py-2
-font-medium
-
-text-emerald-400
-
-transition-all
-duration-300
-
-hover:bg-emerald-500/18
-hover:border-emerald-400/30
-hover:shadow-[0_0_25px_rgba(16,185,129,0.12)]
+                    mt-4
+                    w-full
+                    rounded-xl
+                    border border-emerald-400/20
+                    bg-emerald-500/12
+                    py-2
+                    font-medium
+                    text-emerald-400
+                    transition-all
+                    duration-300
+                    hover:bg-emerald-500/18
+                    hover:border-emerald-400/30
+                    hover:shadow-[0_0_25px_rgba(16,185,129,0.12)]
 "
               >
                 Add to Watchlist

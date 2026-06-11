@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 
-export const Shimmer = ({
-  className = "",
-}) => {
+export const Shimmer = ({ className = "" }) => {
   return (
     <div
       className={`

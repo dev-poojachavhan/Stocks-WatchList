@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 
 export const MarketTicker = () => {
-
   const messages = [
     " Live Market Feed Active",
     "Data refreshes periodically on free-tier APIs",
@@ -14,9 +13,7 @@ export const MarketTicker = () => {
       className="
         fixed top-0 left-0 z-50
         w-full
-
         overflow-hidden
-
         border-b border-white/10
         bg-black/60
         backdrop-blur-xl
@@ -27,49 +24,41 @@ export const MarketTicker = () => {
           flex
           gap-16
           whitespace-nowrap
-
           py-2
         "
-
         animate={{
           x: ["0%", "-50%"],
         }}
-
         transition={{
           repeat: Infinity,
           duration: 20,
           ease: "linear",
         }}
       >
-        {[...messages, ...messages].map(
-          (item, index) => (
-            <div
-              key={index}
-              className="
+        {[...messages, ...messages].map((item, index) => (
+          <div
+            key={index}
+            className="
                 flex
                 items-center
                 gap-3
-
                 text-sm
                 text-gray-300
-
                 shrink-0
               "
-            >
-              <div
-                className="
+          >
+            <div
+              className="
                   h-2 w-2
                   rounded-full
                   bg-emerald-400
-
                   animate-pulse
                 "
-              />
+            />
 
-              <span>{item}</span>
-            </div>
-          )
-        )}
+            <span>{item}</span>
+          </div>
+        ))}
       </motion.div>
     </div>
   );

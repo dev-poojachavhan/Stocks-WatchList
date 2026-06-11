@@ -1,64 +1,44 @@
 import { createContext, useState, useEffect, useRef } from "react";
-import { fetchCryptoData, fetchPopularStocks, fetchStock,  } from "../services/api";
+import {
+  fetchCryptoData,
+  fetchPopularStocks,
+  fetchStock,
+} from "../services/api";
 import toast from "react-hot-toast";
-
-
-
-
 
 export const WatchlistContext = createContext();
 
-
 export const WatchlistProvider = ({ children }) => {
-const POPULAR_SYMBOLS = [
-  "AAPL",
-  "MSFT",
-  "NVDA",
-  "TSLA",
-  "META",
-  "NFLX",
-  "GOOGL",
-];
-
-const CRYPTO_SYMBOLS = [
-  "BTC/USD",
-  "ETH/USD",
-  "SOL/USD",
-  "BNB/USD",
+  const POPULAR_SYMBOLS = [
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "TSLA",
+    "META",
+    "NFLX",
+    "GOOGL",
   ];
-  const MARKET_SYMBOLS = [
-  ...POPULAR_SYMBOLS,
 
-  ...CRYPTO_SYMBOLS,
-  ];
-  
+  const CRYPTO_SYMBOLS = ["BTC/USD", "ETH/USD", "SOL/USD", "BNB/USD"];
+  const MARKET_SYMBOLS = [...POPULAR_SYMBOLS, ...CRYPTO_SYMBOLS];
+
   const sortWatchlist = (list) => {
-  return [...list].sort((a, b) => {
+    return [...list].sort((a, b) => {
+      // pinned first
+      if (a.pinned && !b.pinned) return -1;
 
-    // pinned first
-    if (a.pinned && !b.pinned)
-      return -1;
+      if (!a.pinned && b.pinned) return 1;
 
+      // then rising stocks
+      return b.percent_change - a.percent_change;
+    });
+  };
 
-    if (!a.pinned && b.pinned)
-      return 1;
+  const [popularStocks, setPopularStocks] = useState([]);
 
-    // then rising stocks
-    return (
-      b.percent_change -
-      a.percent_change
-    );
-  });
-};
+  const [cryptoData, setCryptoData] = useState([]);
 
-const [popularStocks, setPopularStocks] =
-  useState([]);
-
-const [cryptoData, setCryptoData] =
-  useState([]);
-
-    const [loadingMap, setLoadingMap] =
-  useState({
+  const [loadingMap, setLoadingMap] = useState({
     chart: false,
     popular: false,
     crypto: false,
@@ -84,95 +64,62 @@ const [cryptoData, setCryptoData] =
   }, [watchlist]);
 
   const startLoading = (key) => {
-  setLoadingMap((prev) => ({
-    ...prev,
-    [key]: true,
-  }));
-};
+    setLoadingMap((prev) => ({
+      ...prev,
+      [key]: true,
+    }));
+  };
 
-const stopLoading = (key) => {
-  setLoadingMap((prev) => ({
-    ...prev,
-    [key]: false,
-  }));
-};
+  const stopLoading = (key) => {
+    setLoadingMap((prev) => ({
+      ...prev,
+      [key]: false,
+    }));
+  };
 
-const fetchExtraMarketData =
-  async () => {
-
+  const fetchExtraMarketData = async () => {
     startLoading("popular");
-startLoading("crypto");
+    startLoading("crypto");
 
     try {
-
       // POPULAR STOCKS
-      const popular =
-        await fetchPopularStocks(
-          POPULAR_SYMBOLS
-        );
+      const popular = await fetchPopularStocks(POPULAR_SYMBOLS);
 
       // CRYPTO
-      const crypto =
-        await fetchCryptoData(
-          CRYPTO_SYMBOLS
-        );
+      const crypto = await fetchCryptoData(CRYPTO_SYMBOLS);
 
       // SAVE TO STATE
-     // FORMAT POPULAR STOCKS
-const formattedPopular =
-  Object.values(popular)
-    .filter(
-      (stock) =>
-        stock.symbol &&
-        Number.isFinite(
-          Number(stock.close)
-        )
-    )
-    .map((stock) => ({
-      symbol: stock.symbol,
-      price: Number(stock.close),
-      percent_change: Number(
-        stock.percent_change
-      ),
-    }));
+      // FORMAT POPULAR STOCKS
+      const formattedPopular = Object.values(popular)
+        .filter((stock) => stock.symbol && Number.isFinite(Number(stock.close)))
+        .map((stock) => ({
+          symbol: stock.symbol,
+          price: Number(stock.close),
+          percent_change: Number(stock.percent_change),
+        }));
 
-// FORMAT CRYPTO
-const formattedCrypto =
-  Object.values(crypto)
-    .filter(
-      (coin) =>
-        coin.symbol &&
-        Number.isFinite(
-          Number(coin.close)
-        )
-    )
-    .map((coin) => ({
-      symbol: coin.symbol,
-      price: Number(coin.close),
-      percent_change: Number(
-        coin.percent_change
-      ),
-    }));
+      // FORMAT CRYPTO
+      const formattedCrypto = Object.values(crypto)
+        .filter((coin) => coin.symbol && Number.isFinite(Number(coin.close)))
+        .map((coin) => ({
+          symbol: coin.symbol,
+          price: Number(coin.close),
+          percent_change: Number(coin.percent_change),
+        }));
       // SAVE TO STATE
-setPopularStocks(formattedPopular);
+      setPopularStocks(formattedPopular);
 
-setCryptoData(formattedCrypto);
+      setCryptoData(formattedCrypto);
 
       stopLoading("popular");
-stopLoading("crypto");
-
+      stopLoading("crypto");
     } catch (err) {
+      stopLoading("popular");
+      stopLoading("crypto");
 
-
-       stopLoading("popular");
-  stopLoading("crypto");
-
-      console.error(
-        "Extra market data error:",
-        err
-      );
+     
     }
-};
+  };
 
   useEffect(() => {
     localStorage.setItem("watchlist", JSON.stringify(watchlist));
@@ -181,14 +128,14 @@ stopLoading("crypto");
   useEffect(() => {
     const updatePrices = async () => {
       startLoading("watchlist");
-startLoading("heatmap");
+      startLoading("heatmap");
       const currentList = watchlistRef.current;
 
       if (currentList.length === 0) {
-  stopLoading("watchlist");
-  stopLoading("heatmap");
-  return;
-}
+        stopLoading("watchlist");
+        stopLoading("heatmap");
+        return;
+      }
 
       try {
         const updated = await Promise.all(
@@ -196,16 +143,15 @@ startLoading("heatmap");
             const data = await fetchStock(stock.symbol);
 
             if (!data || data.error) {
-          return stock;
-          }
+              return stock;
+            }
 
             const previousSparkline = stock.sparkline || [];
 
             const updatedSparkline = [
               ...previousSparkline,
               {
-                price: Number(data.price) 
-                
+                price: Number(data.price),
               },
             ].slice(-10);
 
@@ -229,23 +175,21 @@ startLoading("heatmap");
             );
           });
 
-         return changed
-  ? sortWatchlist(updated)
-  : prev;
+          return changed ? sortWatchlist(updated) : prev;
         });
         stopLoading("watchlist");
-stopLoading("heatmap");
+        stopLoading("heatmap");
       } catch (err) {
         stopLoading("watchlist");
-  stopLoading("heatmap");
-        console.error("Price update error:", err);
+        stopLoading("heatmap");
+      
       }
     };
-  
+
     fetchExtraMarketData();
     updatePrices(); // initial call
 
-   // const interval = setInterval(updatePrices, 6000000); // 1 minute
+    // const interval = setInterval(updatePrices, 6000000); // 1 minute
 
     // return () => clearInterval(interval);
   }, []); // ✅ run only once
@@ -258,83 +202,61 @@ stopLoading("heatmap");
 
       const basePrice = Number(stock.price);
 
-const initialSparkline = Array.from(
-  { length: 10 },
-  (_, i) => ({
-    price:
-      basePrice +
-      Math.sin(i / 2) * 0.8 +
-      (Math.random() - 0.5) * 0.4,
-  })
-);
+      const initialSparkline = Array.from({ length: 10 }, (_, i) => ({
+        price: basePrice + Math.sin(i / 2) * 0.8 + (Math.random() - 0.5) * 0.4,
+      }));
 
-      
-toast.success(
-  `${stock.symbol} added`
-);
+      toast.success(`${stock.symbol} added`);
 
-return sortWatchlist([
-  ...prev,
-  {
-    ...stock,
-    pinned: false,
-    sparkline: initialSparkline,
-  },
-])
+      return sortWatchlist([
+        ...prev,
+        {
+          ...stock,
+          pinned: false,
+          sparkline: initialSparkline,
+        },
+      ]);
     });
   };
 
   const removeStock = (symbol) => {
-    toast.error(
-  `${symbol} removed`
-);
+    toast.error(`${symbol} removed`);
     setWatchlist((prev) => prev.filter((s) => s.symbol !== symbol));
-  };  
+  };
 
   const togglePin = (symbol) => {
+    setWatchlist((prev) => {
+      const updated = prev.map((stock) =>
+        stock.symbol === symbol
+          ? {
+              ...stock,
+              pinned: !stock.pinned,
+            }
+          : stock,
+      );
 
-  setWatchlist((prev) => {
+      const target = updated.find((s) => s.symbol === symbol);
 
-    const updated = prev.map((stock) =>
-      stock.symbol === symbol
-        ? {
-            ...stock,
-            pinned: !stock.pinned,
-          }
-        : stock
-    );
+      toast(`${symbol} ${target.pinned ? "pinned" : "unpinned"}`);
 
-     const target = updated.find(
-      (s) => s.symbol === symbol
-    );
-
-    toast(
-      `${symbol} ${
-        target.pinned
-          ? "pinned"
-          : "unpinned"
-      }`
-    );
-
-    return sortWatchlist(updated);
-  });
-};
-  
-
+      return sortWatchlist(updated);
+    });
+  };
 
   return (
-    <WatchlistContext.Provider  value={{
-    watchlist,
-    addStock,
-    removeStock,
-      togglePin,
-     popularStocks,
-      cryptoData,
-  loadingMap,
-startLoading,
-stopLoading,
-   
-  }}>
+    <WatchlistContext.Provider
+      value={{
+        watchlist,
+        addStock,
+        removeStock,
+        togglePin,
+        popularStocks,
+        cryptoData,
+        loadingMap,
+        startLoading,
+        stopLoading,
+      }}
+    >
       {children}
     </WatchlistContext.Provider>
   );

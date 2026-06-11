@@ -58,7 +58,7 @@ export const StockCard = ({ stock, onClick, isActive }) => {
         scale: 0.08,
       }}
       whileHover={{
-         y: -4,
+        y: -4,
         scale: 1.01,
       }}
       whileTap={{
@@ -69,15 +69,12 @@ export const StockCard = ({ stock, onClick, isActive }) => {
         stiffness: 260,
         damping: 20,
         boxShadow: {
-        duration: 0.35,
+          duration: 0.35,
         },
 
-       scale: {
-       duration: 0.2,
+        scale: {
+          duration: 0.2,
         },
-        
-
-       
       }}
       onClick={onClick}
       className={`
@@ -107,33 +104,33 @@ export const StockCard = ({ stock, onClick, isActive }) => {
           }
           `}
     >
-     
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                togglePin(stock.symbol);
-              }}
-              className="
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          togglePin(stock.symbol);
+        }}
+        className="
                     absolute
                     top-3
                     right-7
                     z-20
                       "
-                   >
-              <FiStar
-                className={`
+      >
+        <FiStar
+          className={`
                 transition
                 ${stock.pinned ? "fill-yellow-400 text-yellow-400" : "text-[var(--text-muted)]"}
               `}
-             /></button>
+        />
+      </button>
 
-          {/* ❌ Remove Button */}
-           <button
-          onClick={(e) => {
+      {/* ❌ Remove Button */}
+      <button
+        onClick={(e) => {
           e.stopPropagation(); // 🔥 IMPORTANT
           removeStock(stock.symbol);
-            }}
-            className="
+        }}
+        className="
                 absolute
                 top-2
                 right-2
@@ -144,11 +141,11 @@ export const StockCard = ({ stock, onClick, isActive }) => {
                 lg:group-hover:opacity-100                
                 hover:scale-110
                 "
-              >
-              ✕
-               </button>
+      >
+        ✕
+      </button>
 
-            <div className="flex items-center justify-around  lg:justify-between  lg:gap-4">
+      <div className="flex items-center justify-around  lg:justify-between  lg:gap-4">
         {/* LEFT SIDE */}
         <div>
           <h2 className="text-sm font-semibold text-[var(--text-strong)]">
@@ -160,7 +157,9 @@ export const StockCard = ({ stock, onClick, isActive }) => {
             {price.toFixed(2)}
           </p>
 
-          <p className={`text-sm ${isPositive ? "text-green-400" : "text-red-400"}`}>
+          <p
+            className={`text-sm ${isPositive ? "text-green-400" : "text-red-400"}`}
+          >
             {percent.toFixed(2)}%
           </p>
         </div>
@@ -169,7 +168,7 @@ export const StockCard = ({ stock, onClick, isActive }) => {
         <div className="w-[110px]  sm:w-[140px] lg:w-[160px]">
           <SparklineChart data={sparklineData} isPositive={isPositive} />
         </div>
-             </div>
+      </div>
     </motion.div>
   );
 };

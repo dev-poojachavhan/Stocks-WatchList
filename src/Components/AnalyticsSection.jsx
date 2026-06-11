@@ -1,4 +1,3 @@
-
 import { AnalyticsCard } from "./AnalyticsCard";
 
 export const AnalyticsSection = ({
@@ -13,22 +12,15 @@ export const AnalyticsSection = ({
         <h2 className="text-xl tracking-tight font-semibold text-[var(--text)]">
           Portfolio Analytics
         </h2>
-
         <p className="text-xs text-[var(--text-muted)] mt-1">
           Quick market overview
         </p>
       </div>
 
       <div className="grid gap-3">
-        <AnalyticsCard
-          label="Portfolio"
-          value={`$${totalValue.toFixed(2)}`}
-        />
+        <AnalyticsCard label="Portfolio" value={`$${totalValue.toFixed(2)}`} />
 
-        <AnalyticsCard
-          label="Assets"
-          value={watchlistLength}
-        />
+        <AnalyticsCard label="Assets" value={watchlistLength} />
 
         <AnalyticsCard
           label="Top Gainer"

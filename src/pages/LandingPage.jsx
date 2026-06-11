@@ -3,9 +3,7 @@ import { motion } from "framer-motion";
 import heroImage from "../assets/dashboard-preview.jpg";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import  logo  from "../assets/arrow.png";
-
-
+import logo from "../assets/arrow.png";
 
 export const LandingPage = ({
   setShowDashboard,
@@ -15,25 +13,21 @@ export const LandingPage = ({
   const [search, setSearch] = useState("");
   const [hasWatchlist, setHasWatchlist] = useState(false);
 
-
   useEffect(() => {
-  try {
-    const savedWatchlist = JSON.parse(
-      localStorage.getItem("watchlist") || "[]"
-    );
+    try {
+      const savedWatchlist = JSON.parse(
+        localStorage.getItem("watchlist") || "[]",
+      );
 
-    setHasWatchlist(savedWatchlist.length > 0);
-  } catch {
-    setHasWatchlist(false);
-  }
+      setHasWatchlist(savedWatchlist.length > 0);
+    } catch {
+      setHasWatchlist(false);
+    }
   }, []);
-  
-
 
   return (
     <motion.div
-      className="
-        
+      className="      
        bg-[#050816]
         text-white
         pb-10
@@ -42,12 +36,13 @@ export const LandingPage = ({
       "
     >
       <MarketTicker />
-{/* back to dashboard */}
+
+      {/* back to dashboard */}
       {hasWatchlist && (
-  <div className="mx-auto max-w-[1400px]  p-8 mt-5 flex justify-end">
-    <button
-      onClick={() => setShowDashboard(true)}
-      className="
+        <div className="mx-auto max-w-[1400px]  p-8 mt-5 flex justify-end">
+          <button
+            onClick={() => setShowDashboard(true)}
+            className="
         rounded-full
         border border-emerald-500/30
         bg-emerald-500/10
@@ -57,33 +52,29 @@ export const LandingPage = ({
         hover:bg-emerald-500/20
         transition-all
       "
-    >
-       ← Dashboard
-    </button>
-  </div>
+          >
+            ← Dashboard
+          </button>
+        </div>
       )}
-      
-
-      
 
       <div className="pt-10">
         <div
           className="
-    relative
-    overflow-hidden    
-    px-6
-    pt-3
-    min-h-[650px]
-    lg:min-h-[490px]
+              relative
+              overflow-hidden    
+              px-6
+              pt-3
+              min-h-[650px]
+              lg:min-h-[490px]
 
-  "
+          "
         >
           <div className="flex items-center gap-2 mb-15">
-  <img src={logo} alt="StockWatch" className="w-7 h-7" />
-  <span className="font-semibold text-xl">
-    StockWatch
-  </span>
-</div>
+            <img src={logo} alt="StockWatch" className="w-7 h-7" />
+            <span className="font-semibold text-xl">StockWatch</span>
+          </div>
+
           {/* BACKGROUND GLOW */}
           <div
             className="
@@ -100,9 +91,7 @@ export const LandingPage = ({
            "
           />
 
-           
-
- {/* HERO */}
+          {/* HERO */}
           <motion.div
             initial={{
               opacity: 0,
@@ -137,9 +126,6 @@ export const LandingPage = ({
           >
             {/* LEFT SIDE */}
 
-           
-           
-            
             <motion.div
               initial="hidden"
               animate="visible"
@@ -163,7 +149,7 @@ export const LandingPage = ({
                   
                "
               >
-                Build Your{" "} 
+                Build Your{" "}
                 <span
                   className="bg-gradient-to-r
                       from-emerald-400
@@ -200,7 +186,6 @@ export const LandingPage = ({
                 Track stocks, crypto, heatmaps, and market news in one modern
                 trading dashboard experience.
               </motion.p>
-
               {/* MOBILE DASHBOARD PREVIEW */}
               <div className="block lg:hidden mt-8">
                 <div
@@ -228,7 +213,6 @@ export const LandingPage = ({
                   />
                 </div>
               </div>
-            
               {/* SEARCH BAR */}
               <motion.div
                 variants={{
@@ -243,30 +227,30 @@ export const LandingPage = ({
                   },
                 }}
                 className="
-          mt-12
-          mb-2
-          sm:mt-10
-          focus-within:
-          lg:shadow-[0_0_25px_rgba(16,185,129,0.15)]
-          flex
-          flex-col
-          sm:flex-row
-          sm:items-center
-          items-stretch
-          gap-3
-           text-[11px]
-           font-semibold
-          tracking-[0.2em]
-          text-emerald-400/80
-          rounded-2xl
-          lg:border border-white/15
-          bg-white/[0.06]
-          max-w-[550px]
-          p-3
-          sm:p-4
-          hover:border-emerald-400
-          transition-all duration-200
-          backdrop-blur-xl
+                      mt-12
+                      mb-2
+                      sm:mt-10
+                      focus-within:
+                      lg:shadow-[0_0_25px_rgba(16,185,129,0.15)]
+                      flex
+                      flex-col
+                      sm:flex-row
+                      sm:items-center
+                      items-stretch
+                      gap-3
+                       text-[11px]
+                       font-semibold
+                      tracking-[0.2em]
+                      text-emerald-400/80
+                      rounded-2xl
+                      lg:border border-white/15
+                      bg-white/[0.06]
+                      max-w-[550px]
+                      p-3
+                      sm:p-4
+                      hover:border-emerald-400
+                      transition-all duration-200
+                      backdrop-blur-xl
         "
               >
                 <input
@@ -314,10 +298,10 @@ export const LandingPage = ({
             ${
               search.trim()
                 ? `
-        bg-emerald-500
-        hover:bg-emerald-400
-        hover:scale-105
-        shadow-[0_0_25px_rgba(16,185,129,0.28)]
+                bg-emerald-500
+                hover:bg-emerald-400
+                hover:scale-105
+                shadow-[0_0_25px_rgba(16,185,129,0.28)]
       `
                 : `
                 bg-emerald-500/80
@@ -361,8 +345,7 @@ export const LandingPage = ({
               >
                 Search any stock or crypto symbol to launch your dashboard
               </motion.p>
-
- {/* LIVE STATS */}
+              {/* LIVE STATS */}
               <motion.div
                 variants={{
                   hidden: {
@@ -420,8 +403,7 @@ export const LandingPage = ({
             </motion.div>
 
             {/* RIGHT SIDE */}
-           
-            
+
             <motion.div
               className="relative hidden lg:block"
               animate={{

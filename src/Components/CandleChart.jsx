@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { createChart, CandlestickSeries } from "lightweight-charts";
 import { useQuery } from "@tanstack/react-query";
-import {FiMaximize2,FiMinimize2,FiRotateCcw,FiMoon,FiSun} from "react-icons/fi";
+import {
+  FiMaximize2,
+  FiMinimize2,
+  FiRotateCcw,
+  FiMoon,
+  FiSun,
+} from "react-icons/fi";
 import { Shimmer } from "./LoadingShimmer/Shimmer";
 import { WatchlistContext } from "../context/WatchlistContext";
 import { motion } from "framer-motion";
 
-
-
-
-
-
-export const CandleChart = ({ stock, chartTheme}) => {
+export const CandleChart = ({ stock, chartTheme }) => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
   const seriesRef = useRef(null);
@@ -19,7 +20,7 @@ export const CandleChart = ({ stock, chartTheme}) => {
   const [hoverData, setHoverData] = useState(null);
   const containerRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false); //changing icon state
-  const {loadingMap} = useContext(WatchlistContext)
+  const { loadingMap } = useContext(WatchlistContext);
 
   const symbol = stock?.symbol;
   //  Fetch function (TanStack handles caching)
@@ -38,7 +39,7 @@ export const CandleChart = ({ stock, chartTheme}) => {
 
     const data = await res.json();
 
-    console.log("TWELVE RESPONSE:", data);
+    // console.log("TWELVE RESPONSE:", data);
 
     if (data.status === "error") {
       throw new Error(data.message || "Failed to fetch data");
@@ -47,7 +48,6 @@ export const CandleChart = ({ stock, chartTheme}) => {
     if (!data.values) {
       throw new Error("No candle data available");
     }
-
 
     return data.values
       .map((item) => ({
@@ -73,54 +73,49 @@ export const CandleChart = ({ stock, chartTheme}) => {
     retryDelay: 60000, // 1 minute
   });
 
-// fullscreen chart
+  // fullscreen chart
   const handleFullscreen = async () => {
-  if (!document.fullscreenElement) {
-    await containerRef.current?.requestFullscreen();
-    setIsFullscreen(true);
-  } else {
-    await document.exitFullscreen();
-    setIsFullscreen(false);
-  }
-};
-
- 
- 
+    if (!document.fullscreenElement) {
+      await containerRef.current?.requestFullscreen();
+      setIsFullscreen(true);
+    } else {
+      await document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
 
   const handleResetZoom = () => {
-  chartInstance.current?.timeScale().fitContent();
+    chartInstance.current?.timeScale().fitContent();
   };
-  
 
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
   //Create chart ONLY once
   useEffect(() => {
-    
     if (!chartRef.current) return;
-   
 
- 
-     // create chart
-    chartInstance.current = createChart(
-      chartRef.current,
-      {
+    // create chart
+    chartInstance.current = createChart(chartRef.current, {
       width: chartRef.current.clientWidth,
-      height:   chartRef.current.clientHeight,
-    layout: {
-  background: {
-    color:
-      chartTheme === "dark"
-        ? "#07101a"
-        : "#ffffff",
-  },
+      height: chartRef.current.clientHeight,
+      layout: {
+        background: {
+          color: chartTheme === "dark" ? "#07101a" : "#ffffff",
+        },
 
-  textColor:
-    chartTheme === "dark"
-      ? "#d1d5db"
-      : "#111827",
-},
+        textColor: chartTheme === "dark" ? "#d1d5db" : "#111827",
+      },
       grid: {
-        vertLines: { color: "rgba(255,255,255,0.06)"  },
-        horzLines: { color: "rgba(255,255,255,0.06)"  },
+        vertLines: { color: "rgba(255,255,255,0.06)" },
+        horzLines: { color: "rgba(255,255,255,0.06)" },
       },
       crosshair: { mode: 1 },
       rightPriceScale: {
@@ -133,59 +128,47 @@ export const CandleChart = ({ stock, chartTheme}) => {
       },
     });
 
- setTimeout(() => {
+    setTimeout(() => {
+      if (!chartRef.current) return;
 
-  if (!chartRef.current) return;
+      chartInstance.current.applyOptions({
+        width: chartRef.current.clientWidth,
+        height: chartRef.current.clientHeight,
+      });
 
-  chartInstance.current.applyOptions({
-    width:chartRef.current.clientWidth,
-    height:chartRef.current.clientHeight,
-  });
-
-  chartInstance.current.timeScale().fitContent();
-
-}, 0);
+      chartInstance.current.timeScale().fitContent();
+    }, 0);
 
     seriesRef.current = chartInstance.current.addSeries(CandlestickSeries);
 
     if (data) {
-  seriesRef.current.setData(data);
-  chartInstance.current.timeScale().fitContent();
-}
-
-    chartInstance.current.subscribeCrosshairMove(
-  (param) => {
-    if (
-      !param.time ||
-      !param.seriesData.size
-    ) {
-      setHoverData(null);
-      return;
+      seriesRef.current.setData(data);
+      chartInstance.current.timeScale().fitContent();
     }
 
-    const candle =
-      param.seriesData.get(
-        seriesRef.current
-      );
+    chartInstance.current.subscribeCrosshairMove((param) => {
+      if (!param.time || !param.seriesData.size) {
+        setHoverData(null);
+        return;
+      }
 
-    if (!candle) return;
+      const candle = param.seriesData.get(seriesRef.current);
 
-    setHoverData({
-      open: candle.open,
-      high: candle.high,
-      low: candle.low,
-      close: candle.close,
-      time: param.time,
+      if (!candle) return;
+
+      setHoverData({
+        open: candle.open,
+        high: candle.high,
+        low: candle.low,
+        close: candle.close,
+        time: param.time,
+      });
     });
-  }
-);
 
     const handleResize = () => {
-     
       chartInstance.current.applyOptions({
         width: chartRef.current.clientWidth,
-         height:
-      chartRef.current.clientHeight,
+        height: chartRef.current.clientHeight,
       });
     };
 
@@ -204,10 +187,6 @@ export const CandleChart = ({ stock, chartTheme}) => {
     }
   }, [data]);
 
-
-  
-
-
   return (
     <div
       ref={containerRef}
@@ -223,47 +202,44 @@ export const CandleChart = ({ stock, chartTheme}) => {
                  shadow-[0_0_60px_rgba(16,185,129,0.05)]"
     >
       <div
-  className="
-    absolute
-    inset-0
-    pointer-events-none
-     
-    bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.08),transparent_28%)]
-  "
-/>
+        className="
+            absolute
+            inset-0
+            pointer-events-none    
+            bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.08),transparent_28%)]
+           "
+      />
       <h2 className="mb-4 text-sm font-semibold  text-[var(--text-soft)]">
         {stock.symbol}
       </h2>
 
       <p className="text-2xl sm:text-3xl font-bold text-[var(--text)]">
-          {stock.currency === "USD" ? "$" : "₹"}
-           {Number(stock?.price || 0).toFixed(2)}
-     </p>
+        {stock.currency === "USD" ? "$" : "₹"}
+        {Number(stock?.price || 0).toFixed(2)}
+      </p>
 
-<p
-  className={
-     Number(stock?.percent_change || 0) >= 0
-      ? "text-green-400"
-      : "text-red-400"
-  }
->
- {Number(
-    stock?.percent_change || 0
-  ).toFixed(2)}
-  %
-</p>  
+      <p
+        className={
+          Number(stock?.percent_change || 0) >= 0
+            ? "text-green-400"
+            : "text-red-400"
+        }
+      >
+        {Number(stock?.percent_change || 0).toFixed(2)}%
+      </p>
 
       {/* 🔥 Timeframe buttons */}
-     <div className="flex items-center justify-between sm:flex-row sm:items-center
-    sm:justify-between mb-5">
-
-  {/* LEFT */}
-  <div className="flex gap-2">
-    {["DAILY", "WEEKLY", "MONTHLY"].map((item) => (
-      <button
-        key={item}
-        onClick={() => setTimeframe(item)}
-        className={`
+      <div
+        className="flex items-center justify-between sm:flex-row sm:items-center
+                  sm:justify-between mb-5"
+      >
+        {/* LEFT */}
+        <div className="flex gap-2">
+          {["DAILY", "WEEKLY", "MONTHLY"].map((item) => (
+            <button
+              key={item}
+              onClick={() => setTimeframe(item)}
+              className={`
           px-3 py-1.5
           rounded-xl
           text-sm
@@ -282,22 +258,17 @@ export const CandleChart = ({ stock, chartTheme}) => {
                   hover:bg-[var(--accent-soft)]`
           }
         `}
-      >
-        {item === "DAILY"
-          ? "1D"
-          : item === "WEEKLY"
-          ? "1W"
-          : "1M"}
-      </button>
-    ))}
-  </div>
+            >
+              {item === "DAILY" ? "1D" : item === "WEEKLY" ? "1W" : "1M"}
+            </button>
+          ))}
+        </div>
 
-  {/* RIGHT */}
-  <div className="flex items-center gap-2">
-
-    <button
-      onClick={handleResetZoom}
-      className="p-2 rounded-lg
+        {/* RIGHT */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleResetZoom}
+            className="p-2 rounded-lg
                  bg-[var(--surface)]
                  border border-[var(--border)]
                  text-[var(--text-soft)]
@@ -305,35 +276,36 @@ export const CandleChart = ({ stock, chartTheme}) => {
                  hover:border-emerald-400/15
                  hover:text-emerald-200
                  transition"
-    >
-      <FiRotateCcw size={16} />
-      </button>
+          >
+            <FiRotateCcw size={16} />
+          </button>
 
-      <button
-      onClick={handleFullscreen}
-      className=" p-2 rounded-lg
+          <button
+            onClick={handleFullscreen}
+            className=" p-2 rounded-lg
                 border border-white/[0.05]
                 hover:bg-emerald-400/[0.08]
                 hover:border-emerald-400/15
                 hover:text-emerald-200
                 transition"
-      >
-    
-     { document.fullscreenElement ? (<FiMinimize2 size={16} />) : (<FiMaximize2 size={16} />) }
-    </button>
-  </div>
-</div>
-
+          >
+            {isFullscreen ? (
+              <FiMinimize2 size={16} />
+            ) : (
+              <FiMaximize2 size={16} />
+            )}
+          </button>
+        </div>
+      </div>
 
       {/* 🔥 Error */}
       {error && <p className="text-red-400 mb-2">{error.message}</p>}
 
-     <div className="relative  ">
-
-  {/* LIVE HOVER PANEL */}
-  {hoverData && (
-    <div
-      className="
+      <div className="relative  ">
+        {/* LIVE HOVER PANEL */}
+        {hoverData && (
+          <div
+            className="
       absolute top-2 left-2 z-10
       rounded-lg
       border border-white/10
@@ -344,59 +316,54 @@ export const CandleChart = ({ stock, chartTheme}) => {
       space-y-1
       
       "
-    >
-      <p className="text-gray-400">
-        O:
-        <span className="text-white ml-1">
-         {Number( hoverData?.open || 0).toFixed(2)}
-        </span>
-      </p>
+          >
+            <p className="text-gray-400">
+              O:
+              <span className="text-white ml-1">
+                {Number(hoverData?.open || 0).toFixed(2)}
+              </span>
+            </p>
 
-      <p className="text-gray-400">
-        H:
-        <span className="text-green-400 ml-1">
-          {Number(hoverData?.high || 0).toFixed(2)}
-        </span>
-      </p>
+            <p className="text-gray-400">
+              H:
+              <span className="text-green-400 ml-1">
+                {Number(hoverData?.high || 0).toFixed(2)}
+              </span>
+            </p>
 
-      <p className="text-gray-400">
-        L:
-        <span className="text-red-400 ml-1">
-          {Number(hoverData?.low || 0).toFixed(2)}
-        </span>
-      </p>
+            <p className="text-gray-400">
+              L:
+              <span className="text-red-400 ml-1">
+                {Number(hoverData?.low || 0).toFixed(2)}
+              </span>
+            </p>
 
-      <p className="text-gray-400">
-        C:
-        <span className="text-emerald-300 ml-1">
-          {Number(hoverData?.close || 0).toFixed(2)}
-        </span>
-      </p>
-    </div>
-  )}
-
-
-        
-
+            <p className="text-gray-400">
+              C:
+              <span className="text-emerald-300 ml-1">
+                {Number(hoverData?.close || 0).toFixed(2)}
+              </span>
+            </p>
+          </div>
+        )}
 
         <div className="relative h-[240px] sm:h-[320px] lg:h-[350px] ">
-
-  {/* CHART ALWAYS MOUNTED */}
-  <div
-    ref={chartRef}
-    className={`
+          {/* CHART ALWAYS MOUNTED */}
+          <div
+            ref={chartRef}
+            className={`
       h-full
       transition-opacity
       duration-300
       
       ${isLoading ? "opacity-0" : "opacity-100"}
     `}
-  />
+          />
 
-  {/* SHIMMER OVERLAY */}
-  {isLoading && (
-    <div
-      className="
+          {/* SHIMMER OVERLAY */}
+          {isLoading && (
+            <div
+              className="
         absolute
         inset-0
         z-20
@@ -406,17 +373,17 @@ export const CandleChart = ({ stock, chartTheme}) => {
         bg-[#07101a]/88
         
       "
-    >
-      <motion.div
-        animate={{
-          x: ["-100%", "220%"],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 1.4,
-          ease: "linear",
-        }}
-        className="
+            >
+              <motion.div
+                animate={{
+                  x: ["-100%", "220%"],
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 1.4,
+                  ease: "linear",
+                }}
+                className="
           absolute
           inset-y-0
           left-0
@@ -424,35 +391,33 @@ export const CandleChart = ({ stock, chartTheme}) => {
           skew-x-[-20deg]
        
         "
-      />
+              />
 
-      <div className="absolute inset-0 p-6 ">
-        <div className="space-y-4 opacity-40">
+              <div className="absolute inset-0 p-6 ">
+                <div className="space-y-4 opacity-40">
+                  <div className="h-4 w-32 rounded bg-white/10" />
 
-          <div className="h-4 w-32 rounded bg-white/10" />
+                  <div className="h-[250px] rounded-xl " />
 
-          <div className="h-[250px] rounded-xl " />
-
-          <div className="flex gap-3">
-            {[1,2,3].map((i) => (
-              <div
-                key={i}
-                className="
+                  <div className="flex gap-3">
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        className="
                   h-8
                   w-16
                   rounded-lg
                   bg-white/10
                 "
-              />
-            ))}
-          </div>
-
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
-  )}
-</div>
-</div>
-  </div>
   );
 };

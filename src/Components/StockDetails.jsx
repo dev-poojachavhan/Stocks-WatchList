@@ -38,7 +38,9 @@ export const StockDetails = ({ stock }) => {
     >
       {/* HEADER */}
       <div>
-        <h2 className="text-lg font-semibold text-[var(--text-strong)] tracking-tight">{stock.symbol}</h2>
+        <h2 className="text-lg font-semibold text-[var(--text-strong)] tracking-tight">
+          {stock.symbol}
+        </h2>
 
         <motion.p
           key={stock.price}
@@ -64,9 +66,7 @@ export const StockDetails = ({ stock }) => {
         >
           {stock.currency === "USD" ? "$" : "₹"}
 
-         {stock.price != null
-  ? Number(stock.price).toFixed(2)
-  : "--"}
+          {stock.price != null ? Number(stock.price).toFixed(2) : "--"}
         </motion.p>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -86,18 +86,16 @@ export const StockDetails = ({ stock }) => {
             }`}
           >
             {stock.percent_change != null
-  ? `${Number(stock.percent_change).toFixed(2)}%`
-  : "--"}
+              ? `${Number(stock.percent_change).toFixed(2)}%`
+              : "--"}
           </motion.p>
 
           <div
             className={`
-    mt-2  inline-flex items-center gap-1.5
-    rounded-full px2.5 py-1 text-[11px] font-medium sm:px-3
-sm:text-xs
-    border
+            mt-2  inline-flex items-center gap-1.5
+            rounded-full px2.5 py-1 text-[11px] font-medium sm:px-3   sm:text-xs border
 
-    ${  
+    ${
       stock.is_market_open
         ? `
         border-emerald-400/30
@@ -128,9 +126,9 @@ sm:text-xs
           value={stock.high?.toFixed(2)}
           valueClassName="text-green-400"
           cardClassName="
-    border-green-500/20
-    bg-green-500/[0.03]
-  "
+          border-green-500/20
+          bg-green-500/[0.03]
+        "
         />
 
         <MetricCard
@@ -138,9 +136,9 @@ sm:text-xs
           value={stock.low?.toFixed(2)}
           valueClassName="text-red-400"
           cardClassName="
-    border-red-500/20
-    bg-red-500/[0.03]
-  "
+          border-red-500/20
+          bg-red-500/[0.03]
+         "
         />
 
         <MetricCard
@@ -153,8 +151,8 @@ sm:text-xs
           value={stock.volume}
           valueClassName="text-emerald-300"
           cardClassName="
-    border-emerald-400/20
-bg-emerald-400/[0.04]
+           border-emerald-400/20
+          bg-emerald-400/[0.04]
   "
         />
 
@@ -170,40 +168,40 @@ bg-emerald-400/[0.04]
 
         <MetricCard label="Symbol" value={stock.symbol} />
 
-        <MetricCard label="Price"
-          value={
-            stock.price != null
-              ? Number(stock.price).toFixed(2)
-              : "--"
-         } />
+        <MetricCard
+          label="Price"
+          value={stock.price != null ? Number(stock.price).toFixed(2) : "--"}
+        />
 
         <MetricCard
           label="Change"
-         value={
-  stock.percent_change != null
-    ? `${Number(stock.percent_change).toFixed(2)}%`
-    : "--"
-}
+          value={
+            stock.percent_change != null
+              ? `${Number(stock.percent_change).toFixed(2)}%`
+              : "--"
+          }
           valueClassName={
             stock.percent_change >= 0 ? "text-green-400" : "text-red-400"
           }
           cardClassName={
             stock.percent_change >= 0
               ? `
-        border-green-500/20
-        bg-green-500/[0.03]
-      `
+                border-green-500/20
+                bg-green-500/[0.03]
+                `
               : `
-        border-red-500/20
-        bg-red-500/[0.03]
-      `
+                 border-red-500/20
+                 bg-red-500/[0.03]
+               `
           }
         />
       </div>
 
       {/*//overview section*/}
       <div className="pt-4 lg:pt-5 border-t border-[var(--surface-border)]">
-        <h3 className="text-sm font-semibold text-[var(--text-soft)] mb-3">Overview</h3>
+        <h3 className="text-sm font-semibold text-[var(--text-soft)] mb-3">
+          Overview
+        </h3>
 
         <div className="space-y-3">
           <OverviewRow label="Exchange" value={stock.exchange || "--"} />

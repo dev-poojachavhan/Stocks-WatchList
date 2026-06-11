@@ -14,17 +14,15 @@ import { fetchStock } from "../services/api";
 import { AnalyticsSection } from "../Components/AnalyticsSection";
 import { EmptyDashboard } from "../Components/EmptyDashboard";
 
-
-
 export const Dashboard = ({ initialSymbol }) => {
   const { watchlist, loadingMap, addStock } = useContext(WatchlistContext);
-  
+
   const [theme, setTheme] = useState(
     document.documentElement.getAttribute("data-theme") || "light",
   );
 
   const [selectedSymbol, setSelectedSymbol] = useState(null);
-  
+
   const selectedStock = watchlist.find(
     (stock) => stock.symbol === selectedSymbol,
   );
@@ -85,24 +83,19 @@ export const Dashboard = ({ initialSymbol }) => {
   }, [initialSymbol]);
 
   useEffect(() => {
-  if (watchlist.length === 0) {
-    setSelectedSymbol(null);
-  }
+    if (watchlist.length === 0) {
+      setSelectedSymbol(null);
+    }
   }, [watchlist]);
-  
+
   useEffect(() => {
-  if (
-    selectedSymbol &&
-    !watchlist.some(
-      (stock) =>
-        stock.symbol === selectedSymbol
-    )
-  ) {
-    setSelectedSymbol(
-      watchlist[0]?.symbol || null
-    );
-  }
-}, [watchlist, selectedSymbol]);
+    if (
+      selectedSymbol &&
+      !watchlist.some((stock) => stock.symbol === selectedSymbol)
+    ) {
+      setSelectedSymbol(watchlist[0]?.symbol || null);
+    }
+  }, [watchlist, selectedSymbol]);
 
   return (
     <motion.div
@@ -222,14 +215,13 @@ export const Dashboard = ({ initialSymbol }) => {
         {isEmpty && <EmptyDashboard />}
 
         {!isEmpty && (
-  <>
+          <>
+            {/* ================================= */}
+            {/* POPULAR STOCKS */}
+            {/* ================================= */}
 
-        {/* ================================= */}
-        {/* POPULAR STOCKS */}
-        {/* ================================= */}
-
-        <div
-          className="
+            <div
+              className="
           order-1
           lg:order-none
           col-span-1
@@ -246,16 +238,16 @@ export const Dashboard = ({ initialSymbol }) => {
           h-[90px]
           flex items-center
         "
-        >
-          <PopularStocks />
-        </div>
+            >
+              <PopularStocks />
+            </div>
 
-        {/* ================================= */}
-        {/* STOCK DETAILS */}
-        {/* ================================= */}
+            {/* ================================= */}
+            {/* STOCK DETAILS */}
+            {/* ================================= */}
 
-        <section
-          className="
+            <section
+              className="
             order-5
             lg:order-none
             lg:col-start-3
@@ -272,9 +264,9 @@ export const Dashboard = ({ initialSymbol }) => {
 
             h-fit
         "
-        >
-          <div
-            className="
+            >
+              <div
+                className="
             rounded-2xl
             border border-[var(--surface-border)]
             bg-[var(--surface-panel)]
@@ -282,122 +274,43 @@ export const Dashboard = ({ initialSymbol }) => {
            shadow-[var(--surface-shadow)]
             p-5
           "
-          >
-            <h2 className="text-xl font-semibold text-[var(--text)] mb-5">
-              Stock Details
-            </h2>
+              >
+                <h2 className="text-xl font-semibold text-[var(--text)] mb-5">
+                  Stock Details
+                </h2>
 
-            {selectedStock ? (
-              <StockDetails stock={selectedStock} />
-            ) : (
-              <p className="text-[var(--text-muted)]">Select a stock</p>
-            )}
-          </div>
+                {selectedStock ? (
+                  <StockDetails stock={selectedStock} />
+                ) : (
+                  <p className="text-[var(--text-muted)]">Select a stock</p>
+                )}
+              </div>
 
-          {/* ================================= */}
-          {/* CRYPTO MARKET */}
-          {/* ================================= */}
+              {/* ================================= */}
+              {/* CRYPTO MARKET */}
+              {/* ================================= */}
 
-          <div
-            className="
+              <div
+                className="
             order-7
             rounded-2xl 
             border border-[var(--surface-border)]
             bg-[var(--surface-panel)]
             p-5"
-          >
-            <CryptoWidget />
-          </div>
-        </section>
+              >
+                <CryptoWidget />
+              </div>
+            </section>
 
-        {/* ================================= */}
-        {/* MOBILE ANALYTICS */}
-        {/* ================================= */}
+            {/* ================================= */}
+            {/* MOBILE ANALYTICS */}
+            {/* ================================= */}
 
-        <div
-          className="
-            order-6
-            lg:order-none
-             lg:hidden
-          lg:col-start-1
-          lg:row-start-3
-          rounded-2xl
-         border border-[var(--surface-border)]
-          bg-[var(--surface-panel)]
-          backdrop-blur-xl
-          p-4
-          h-fit
-        "
-        >
-          <AnalyticsSection
-            totalValue={totalValue}
-            watchlistLength={watchlist.length}
-            topGainer={topGainer}
-            topLoser={topLoser}
-          />
-        </div>
-
-        {/* ================================= */}
-        {/* WATCHLIST */}
-        {/* ================================= */}
-
-        <aside
-          className="
-          order-3
-          lg:order-none
-          lg:col-start-1
-          lg:row-start-2
-          lg:sticky
-          lg:top-24
-          self-start
-          flex
-          flex-col
-          gap-6  
-          pr-2"
-        >
-          <div
-            className="
-              flex
-              flex-col
-              gap-6
-              max-h-[470px]
-              overflow-y-auto    
-              scrollbar-thin
-              scrollbar-thumb-emerald-400/30
-              hover:scrollbar-thumb-emerald-300/50
-              scrollbar-track-transparent
-              pb-4
-              pr-3"
-          >
-            <AnimatePresence>
-              {loadingMap.watchlist ? (
-                <div className="space-y-4">
-                  {[1, 2, 3, 4].map((i) => (
-                    <Shimmer key={i} className="h-[110px]" />
-                  ))}
-                </div>
-              ) 
-                 : (
-                watchlist.map((stock) => (
-                  <StockCard
-                    key={stock.symbol}
-                    stock={stock}
-                    onClick={() => setSelectedSymbol(stock.symbol)}
-                    isActive={selectedSymbol === stock.symbol}
-                  />
-                ))
-              )}
-            </AnimatePresence>
-          </div>
-          {/* ================================= */}
-          {/* ANALYTICS */}
-          {/* ================================= */}
-
-          <div className="hidden lg:block">
             <div
               className="
             order-6
             lg:order-none
+             lg:hidden
           lg:col-start-1
           lg:row-start-3
           rounded-2xl
@@ -415,15 +328,93 @@ export const Dashboard = ({ initialSymbol }) => {
                 topLoser={topLoser}
               />
             </div>
-          </div>
-        </aside>
 
-        {/* ================================= */}
-        {/* CENTER CHART */}
-        {/* ================================= */}
+            {/* ================================= */}
+            {/* WATCHLIST */}
+            {/* ================================= */}
 
-        <div
-          className="
+            <aside
+              className="
+          order-3
+          lg:order-none
+          lg:col-start-1
+          lg:row-start-2
+          lg:sticky
+          lg:top-24
+          self-start
+          flex
+          flex-col
+          gap-6  
+          pr-2"
+            >
+              <div
+                className="
+              flex
+              flex-col
+              gap-6
+              max-h-[470px]
+              overflow-y-auto    
+              scrollbar-thin
+              scrollbar-thumb-emerald-400/30
+              hover:scrollbar-thumb-emerald-300/50
+              scrollbar-track-transparent
+              pb-4
+              pr-3"
+              >
+                <AnimatePresence>
+                  {loadingMap.watchlist ? (
+                    <div className="space-y-4">
+                      {[1, 2, 3, 4].map((i) => (
+                        <Shimmer key={i} className="h-[110px]" />
+                      ))}
+                    </div>
+                  ) : (
+                    watchlist.map((stock) => (
+                      <StockCard
+                        key={stock.symbol}
+                        stock={stock}
+                        onClick={() => setSelectedSymbol(stock.symbol)}
+                        isActive={selectedSymbol === stock.symbol}
+                      />
+                    ))
+                  )}
+                </AnimatePresence>
+              </div>
+              {/* ================================= */}
+              {/* ANALYTICS */}
+              {/* ================================= */}
+
+              <div className="hidden lg:block">
+                <div
+                  className="
+            order-6
+            lg:order-none
+          lg:col-start-1
+          lg:row-start-3
+          rounded-2xl
+         border border-[var(--surface-border)]
+          bg-[var(--surface-panel)]
+          backdrop-blur-xl
+          p-4
+          h-fit
+        "
+                >
+                  <AnalyticsSection
+                    totalValue={totalValue}
+                    watchlistLength={watchlist.length}
+                    topGainer={topGainer}
+                    topLoser={topLoser}
+                  />
+                </div>
+              </div>
+            </aside>
+
+            {/* ================================= */}
+            {/* CENTER CHART */}
+            {/* ================================= */}
+
+            <div
+              className="
           order-4
 
   lg:order-none
@@ -432,80 +423,65 @@ export const Dashboard = ({ initialSymbol }) => {
           
           overflow-hidden
         "
-        >
-          <div>
-            
-            
-              {selectedStock && (
-  <CandleChart
-    stock={selectedStock}
-    chartTheme={theme}
-  />
-)}
-            
-          </div>
-        </div>
+            >
+              <div>
+                {selectedStock && (
+                  <CandleChart stock={selectedStock} chartTheme={theme} />
+                )}
+              </div>
+            </div>
 
-        {/* ================================= */}
-        {/* CENTER LOWER CONTENT */}
-        {/* ================================= */}
+            {/* ================================= */}
+            {/* CENTER LOWER CONTENT */}
+            {/* ================================= */}
 
-        {/* HEATMAP */}
+            {/* HEATMAP */}
 
-        <div
-          className="
-          order-7
+            <div
+              className="
+                order-7
+              lg:order-none
+              lg:col-start-2
+              lg:row-start-3
+              rounded-2xl
+               border border-[var(--surface-border)]
+              bg-[var(--surface-panel)]
+              backdrop-blur-xl
+                  p-5
+                  h-fit
+                "
+            >
+              <div className="mb-5">
+                <h2 className="text-2xl font-bold text-[var(--text)]">
+                  Market Heatmap
+                </h2>
 
-lg:order-none
-    lg:col-start-2
-    lg:row-start-3
+                <p className="text-sm text-[var(--text-muted)] mt-2">
+                  Visual market movement overview
+                </p>
+              </div>
 
-    rounded-2xl
-   border border-[var(--surface-border)]
-bg-[var(--surface-panel)]
+              <MarketHeatmap
+                watchlist={watchlist}
+                selectedSymbol={selectedSymbol}
+                setSelectedSymbol={setSelectedSymbol}
+              />
+            </div>
 
-backdrop-blur-xl
+            {/* NEWS */}
 
-    p-5
-    h-fit
-  "
-        >
-          <div className="mb-5">
-            <h2 className="text-2xl font-bold text-[var(--text)]">
-              Market Heatmap
-            </h2>
-
-            <p className="text-sm text-[var(--text-muted)] mt-2">
-              Visual market movement overview
-            </p>
-          </div>
-
-          <MarketHeatmap
-            watchlist={watchlist}
-            selectedSymbol={selectedSymbol}
-            setSelectedSymbol={setSelectedSymbol}
-          />
-        </div>
-
-        {/* NEWS */}
-
-        <div
-          className="
-          order-9
-          lg:col-start-2
-          lg:row-start-4
-   "
-        >
-          
-           {selectedStock && (
-  <StockNews symbol={selectedStock.symbol} />
-)}
-          
-                </div>
-          </>)}
-          </div>
-      
-    </motion.div> 
-    
+            <div
+              className="
+                  order-9
+                  lg:col-start-2
+                  lg:row-start-4
+               "
+            >
+              {selectedStock && <StockNews symbol={selectedStock.symbol} />}
+            </div>
+          </>
+        )}
+      </div>
+    </motion.div>
   );
 };
