@@ -84,7 +84,6 @@ export const WatchlistProvider = ({ children }) => {
     try {
       // POPULAR STOCKS
       const popular = await fetchPopularStocks(POPULAR_SYMBOLS);
-
       // CRYPTO
       const crypto = await fetchCryptoData(CRYPTO_SYMBOLS);
 
@@ -107,8 +106,8 @@ export const WatchlistProvider = ({ children }) => {
           percent_change: Number(coin.percent_change),
         }));
       // SAVE TO STATE
-      setPopularStocks(formattedPopular);
 
+      setPopularStocks(formattedPopular);
       setCryptoData(formattedCrypto);
 
       stopLoading("popular");
@@ -116,8 +115,6 @@ export const WatchlistProvider = ({ children }) => {
     } catch (err) {
       stopLoading("popular");
       stopLoading("crypto");
-
-     
     }
   };
 
@@ -182,11 +179,9 @@ export const WatchlistProvider = ({ children }) => {
       } catch (err) {
         stopLoading("watchlist");
         stopLoading("heatmap");
-      
       }
     };
 
-    fetchExtraMarketData();
     updatePrices(); // initial call
 
     // const interval = setInterval(updatePrices, 6000000); // 1 minute
@@ -255,6 +250,7 @@ export const WatchlistProvider = ({ children }) => {
         loadingMap,
         startLoading,
         stopLoading,
+        fetchExtraMarketData,
       }}
     >
       {children}
