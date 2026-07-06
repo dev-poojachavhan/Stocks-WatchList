@@ -70,7 +70,7 @@ export const Dashboard = ({ initialSymbol }) => {
         const stockData = await fetchStock(initialSymbol);
 
         if (!stockData) return;
-
+        
         addStock(stockData);
 
         setSelectedSymbol(stockData.symbol);

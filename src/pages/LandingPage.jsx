@@ -25,6 +25,18 @@ export const LandingPage = ({
     }
   }, []);
 
+  const launchDashboard = () => {
+  if (!search.trim()) return;
+
+  setInitialSymbol(search);
+  setIsLaunching(true);
+
+  setTimeout(() => {
+    setShowDashboard(true);
+    setIsLaunching(false);
+  }, 1200);
+};
+
   return (
     <motion.div
       className="      
@@ -256,6 +268,11 @@ export const LandingPage = ({
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
+                  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      launchDashboard();
+    }
+  }}
                   type="text"
                   placeholder="Search AAPL, TSLA, BTC/USD..."
                   className="
@@ -272,20 +289,11 @@ export const LandingPage = ({
                  "
                 />
 
-                <button
-                  onClick={() => {
-                    if (!search.trim()) return;
-                    setInitialSymbol(search);
-
-                    setIsLaunching(true);
-
-                    setTimeout(() => {
-                      setShowDashboard(true);
-
-                      setIsLaunching(false);
-                    }, 1200);
-                  }}
-                  className={`
+                {!hasWatchlist && (
+                  <button
+                    onClick={launchDashboard}
+                    
+                    className={`
                    rounded-xl
                  bg-emerald-500
                 hover:bg-emerald-600
@@ -312,22 +320,23 @@ export const LandingPage = ({
       `
             }
 `}
-                >
-                  <span className="flex items-center justify-center gap-2 py-1.5 lg:py-3 px-4">
-                    Launch Dashboard
-                    <motion.span
-                      animate={{
-                        x: [0, 4, 0],
-                      }}
-                      transition={{
-                        duration: 1.4,
-                        repeat: Infinity,
-                      }}
-                    >
-                      →
-                    </motion.span>
-                  </span>
-                </button>
+                  >
+                    <span className="flex items-center justify-center gap-2 py-1.5 lg:py-3 px-4">
+                      Launch Dashboard
+                      <motion.span
+                        animate={{
+                          x: [0, 4, 0],
+                        }}
+                        transition={{
+                          duration: 1.4,
+                          repeat: Infinity,
+                        }}
+                      >
+                        →
+                      </motion.span>
+                    </span>
+                  </button>
+                )}
               </motion.div>
               <motion.p
                 variants={{
