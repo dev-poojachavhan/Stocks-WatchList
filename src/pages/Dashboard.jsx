@@ -14,7 +14,7 @@ import { fetchStock } from "../services/api";
 import { AnalyticsSection } from "../Components/AnalyticsSection";
 import { EmptyDashboard } from "../Components/EmptyDashboard";
 
-export const Dashboard = ({ initialSymbol }) => {
+export const Dashboard = ({ initialSymbol,initialStockData, }) => {
   const { watchlist, loadingMap, addStock,fetchExtraMarketData } = useContext(WatchlistContext);
 
   const [theme, setTheme] = useState(
@@ -42,9 +42,18 @@ export const Dashboard = ({ initialSymbol }) => {
     (a, b) => a.percent_change - b.percent_change,
   )[0];
 
+  // useEffect(() => {
+  // fetchExtraMarketData();
+  // }, []);
+  
+
+
   useEffect(() => {
-  fetchExtraMarketData();
-}, []);
+  if (!initialStockData) return;
+
+  addStock(initialStockData);
+  setSelectedSymbol(initialStockData.symbol);
+}, [initialStockData]);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {

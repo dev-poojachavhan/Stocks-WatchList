@@ -94,7 +94,8 @@ function App() {
                 <Navbar setShowDashboard={setShowDashboard} />
 
                 <main>
-                  <Dashboard initialSymbol={initialSymbol} />
+                  <Dashboard initialSymbol={initialSymbol}
+                  initialStockData={initialStockData}/>
                 </main>
               </motion.div>
             ) : (
@@ -117,7 +118,8 @@ function App() {
                 <LandingPage
                   key="landing"
                   setShowDashboard={setShowDashboard}
-                  setInitialSymbol={setInitialSymbol}
+                    setInitialSymbol={setInitialSymbol}
+                    setInitialStockData={setInitialStockData}
                   setIsLaunching={setIsLaunching}
                 />
               </motion.div>

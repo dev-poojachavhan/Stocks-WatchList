@@ -1,6 +1,7 @@
 import { MarketTicker } from "../components/landing/MarketTicker";
-  import { SupportedMarkets } from "../components/landing/SupportedMarkets";
-  import { motion } from "framer-motion";
+import { SupportedMarkets } from "../components/landing/SupportedMarkets";
+  import { fetchStock } from "../services/api";
+  import { AnimatePresence,motion } from "framer-motion";
   import heroImage from "../assets/dashboard-preview.jpg";
   import { useEffect, useState } from "react";
   import { Toaster } from "react-hot-toast";
@@ -9,9 +10,11 @@ import { MarketTicker } from "../components/landing/MarketTicker";
   export const LandingPage = ({
     setShowDashboard,
     setInitialSymbol,
+     setInitialStockData,
     setIsLaunching,
   }) => {
     const [search, setSearch] = useState("");
+    const [invalidSymbol, setInvalidSymbol] = useState("");
     const [hasWatchlist, setHasWatchlist] = useState(false);
 
     useEffect(() => {
@@ -26,17 +29,44 @@ import { MarketTicker } from "../components/landing/MarketTicker";
       }
     }, []);
 
-    const launchDashboard = (symbol = search) => {
-  if (!symbol.trim()) return;
+const launchDashboard = async (symbol = search) => {
+  const trimmedSymbol = symbol.trim();
 
-  setInitialSymbol(symbol.trim());
+  if (!trimmedSymbol) return;
 
-  setIsLaunching(true);
+  try {
+    // Validate/fetch stock while staying on landing page
+    const stockData = await fetchStock(trimmedSymbol);
 
-  setTimeout(() => {
-    setShowDashboard(true);
-    setIsLaunching(false);
-  }, 1200);
+    // Invalid / API error
+    if (stockData?.error) {
+      if (stockData.message === "INVALID_SYMBOL") {
+        setInvalidSymbol(trimmedSymbol);
+      } else if (stockData.message === "API_LIMIT") {
+        setInvalidSymbol("API_LIMIT");
+      } else {
+        setInvalidSymbol("API_ERROR");
+      }
+
+      return;
+    }
+
+    // Valid stock
+    setInitialSymbol(trimmedSymbol);
+    setInitialStockData(stockData);
+
+    // Only now show the launching screen
+    setIsLaunching(true);
+
+    setTimeout(() => {
+      setShowDashboard(true);
+      setIsLaunching(false);
+    }, 800);
+  } catch (error) {
+    console.error("Launch failed:", error);
+
+    setInvalidSymbol("API_ERROR");
+  }
 };
     return (
       <motion.div
@@ -103,6 +133,154 @@ import { MarketTicker } from "../components/landing/MarketTicker";
                 blur-[140px]
             "
             />
+
+      <AnimatePresence>
+  {invalidSymbol && (
+    <motion.div
+      className="
+        fixed
+        inset-0
+        z-[100]
+        flex
+        items-center
+        justify-center
+        bg-black/60
+        px-4
+        backdrop-blur-sm
+      "
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div
+        initial={{
+          opacity: 0,
+          scale: 0.92,
+          y: 20,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+          y: 0,
+        }}
+        exit={{
+          opacity: 0,
+          scale: 0.95,
+          y: 10,
+        }}
+        transition={{
+          duration: 0.25,
+          ease: "easeOut",
+        }}
+        className="
+           w-[calc(100%-2rem)]
+  max-w-md
+  rounded-2xl
+  border border-white/[0.08]
+  bg-[#0b1220]
+  p-5
+  text-center
+  shadow-[0_0_60px_rgba(0,0,0,0.45)]
+
+  sm:rounded-3xl
+  sm:p-7
+        "
+      >
+        {invalidSymbol === "API_LIMIT" ? (
+          <>
+            <div
+              className="
+                mx-auto
+                mb-5
+                flex
+                h-14
+                w-14
+                items-center
+                justify-center
+                rounded-2xl
+                bg-amber-400/10
+                text-2xl
+              "
+            >
+              ⏳
+            </div>
+
+            <h2 className="text-lg font-bold text-white sm:text-xl">
+              Market Data Temporarily Unavailable
+            </h2>
+
+            <p className="mt-3
+  text-xs
+  leading-5
+  text-slate-400
+  sm:text-sm
+  sm:leading-6">
+              We've reached the free market-data request limit.
+              Please wait a moment and try again.
+            </p>
+          </>
+        ) : (
+          <>
+            <div
+              className="
+                mx-auto
+                mb-5
+                flex
+                h-14
+                w-14
+                items-center
+                justify-center
+                rounded-2xl
+                bg-emerald-400/10
+                text-2xl
+              "
+            >
+              🔎
+            </div>
+
+            <h2 className="text-xl font-bold text-white">
+              Stock Not Available
+            </h2>
+
+            {invalidSymbol !== "API_ERROR" && (
+              <p className="mt-2 text-sm font-semibold text-emerald-400">
+                {invalidSymbol.toUpperCase()}
+              </p>
+            )}
+
+            <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-gray-400">
+              We couldn't find market data for this symbol.
+              Try a supported US stock or choose one from the
+              popular stocks below.
+            </p>
+          </>
+        )}
+
+        <button
+          onClick={() => setInvalidSymbol("")}
+          className="
+            mt-6
+            rounded-xl
+            bg-emerald-500
+            px-6
+            py-3
+            text-sm
+            font-semibold
+            text-black
+            transition
+            hover:bg-emerald-400
+            hover:scale-[1.02]
+          "
+        >
+          Got it
+        </button>
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>      
+
+
+
 
             {/* HERO */}
             <motion.div
@@ -203,25 +381,29 @@ import { MarketTicker } from "../components/landing/MarketTicker";
                 <div className="block lg:hidden mt-8">
                   <div
                     className="
-                      relative
-                      overflow-hidden
-                      rounded-[32px]
-                      border border-white/10
-                      bg-white/[0.04]
-                      max-h-[240px]
-                      p-4
-                      shadow-[0_0_30px_rgba(16,185,129,0.22)]
-                      backdrop-blur-xl
+                       mt-7
+    overflow-hidden
+    rounded-2xl
+    border border-white/[0.08]
+    bg-[#0b1220]
+    p-2
+    shadow-[0_0_30px_rgba(16,185,129,0.12)]
+
+    sm:rounded-3xl
+    sm:p-3
                 "
                   >
                     <img
                       src={heroImage}
-                      alt="dashboard"
+                      alt="StockWatch dashboard"
                       className="
-                        rounded-2xl
-                        object-cover
-                        w-full
-                        h-full
+                        h-[180px]
+      w-full
+      rounded-xl
+      object-cover
+      object-top
+      
+      sm:h-[300px]
                         "
                     />
                   </div>
@@ -240,30 +422,29 @@ import { MarketTicker } from "../components/landing/MarketTicker";
                     },
                   }}
                   className="
-                        mt-12
-                        mb-2
-                        sm:mt-10
-                        focus-within:
-                        lg:shadow-[0_0_25px_rgba(16,185,129,0.15)]
-                        flex
-                        flex-col
-                        sm:flex-row
-                        sm:items-center
-                        items-stretch
-                        gap-3
-                        text-[11px]
-                        font-semibold
-                        tracking-[0.2em]
-                        text-emerald-400/80
-                        rounded-2xl
-                        lg:border border-white/15
-                        bg-white/[0.06]
-                        max-w-[550px]
-                        p-3
-                        sm:p-4
-                        hover:border-emerald-400
-                        transition-all duration-200
-                        backdrop-blur-xl
+                        mt-8
+  mb-2
+  flex
+  w-full
+  max-w-[550px]
+  flex-col
+  gap-2
+  rounded-2xl
+  border
+  border-white/[0.08]
+  bg-[#0b1220]/80
+  p-2.5
+  backdrop-blur-xl
+  transition-all
+
+  focus-within:border-emerald-400/40
+  focus-within:shadow-[0_0_25px_rgba(16,185,129,0.10)]
+
+  sm:mt-10
+  sm:flex-row
+  sm:items-center
+  sm:gap-3
+  sm:p-3
           "
                 >
                   <input
@@ -277,16 +458,18 @@ import { MarketTicker } from "../components/landing/MarketTicker";
                     type="text"
                     placeholder="Search stocks, crypto or symbols..."
                     className="
-                        flex-1
-                        bg-transparent
-                        px-3
-                        text-sm
-                        sm:text-base
-                        text-white
-                        outline-none
-                        placeholder:text-gray-500
-                        focus:ring-emerald-400/40
-                      focus:border-emerald-400
+                        min-w-0
+  flex-1
+  bg-transparent
+  px-2
+  py-2
+  text-sm
+  text-white
+  outline-none
+  placeholder:text-slate-600
+
+  sm:px-3
+  sm:text-base
                   "
                   />
 
@@ -294,33 +477,33 @@ import { MarketTicker } from "../components/landing/MarketTicker";
                     <button
                       onClick={() => launchDashboard()}
                       
-                      className={`
-                    rounded-xl
-                  bg-emerald-500
-                  hover:bg-emerald-600
-                    w-full
-                    sm:w-auto
-                    font-semibold
-                    text-black
-                    transition
-              
-              ${
-                search.trim()
-                  ? `
-                  bg-emerald-500
-                  hover:bg-emerald-400
-                  hover:scale-105
-                  shadow-[0_0_25px_rgba(16,185,129,0.28)]
-        `
-                  : `
-                  bg-emerald-500/80
-                  text-black/80
-                  sm:bg-gray-500/40
-                  sm:text-gray-300
-                  cursor-not-allowed
-        `
-              }
-  `}
+                     className={`
+  w-full
+  rounded-xl
+  px-4
+  py-2.5
+  text-sm
+  font-semibold
+  transition-all
+
+  sm:w-auto
+
+  ${
+    search.trim()
+      ? `
+        bg-emerald-500
+        text-black
+        shadow-[0_0_20px_rgba(16,185,129,0.20)]
+        hover:bg-emerald-400
+        hover:shadow-[0_0_25px_rgba(16,185,129,0.30)]
+      `
+      : `
+        cursor-not-allowed
+        bg-slate-700/50
+        text-slate-500
+      `
+  }
+`}
                     >
                       <span className="flex items-center justify-center gap-2 py-1.5 lg:py-3 px-4">
                         Launch Dashboard
@@ -375,15 +558,16 @@ import { MarketTicker } from "../components/landing/MarketTicker";
                     },
                   }}
                   className="
-                mt-10 lg:mt-20  
-                  p-1
-                grid
-                  grid-cols-3
-                  gap-4
-                  sm:flex
-                  lg:flex lg:flex-wrap
-                  lg:gap-8      
-                  text-xl sm:text-2xl
+                mt-8
+  grid
+  grid-cols-3
+  gap-2
+
+  sm:mt-10
+  sm:flex
+  sm:gap-8
+
+  lg:mt-16
           "
                 >
                   {[
@@ -394,15 +578,20 @@ import { MarketTicker } from "../components/landing/MarketTicker";
                     <div key={label}>
                       <h3
                         className="
-                  text-2xl
+                  text-lg
                   font-bold
                   text-emerald-400
+                  sm:text-2xl
                 "
                       >
                         {value}
                       </h3>
 
-                      <p className="text-gray-500 text-[16px]">{label}</p>
+                      <p className=" mt-1
+  text-[9px]
+  leading-4
+  text-slate-600
+  sm:text-xs">{label}</p>
                     </div>
                   ))}
                 </motion.div>
