@@ -1,4 +1,5 @@
-  import { MarketTicker } from "../components/landing/MarketTicker";
+import { MarketTicker } from "../components/landing/MarketTicker";
+  import { SupportedMarkets } from "../components/landing/SupportedMarkets";
   import { motion } from "framer-motion";
   import heroImage from "../assets/dashboard-preview.jpg";
   import { useEffect, useState } from "react";
@@ -25,18 +26,18 @@
       }
     }, []);
 
-    const launchDashboard = () => {
-    if (!search.trim()) return;
+    const launchDashboard = (symbol = search) => {
+  if (!symbol.trim()) return;
 
-    setInitialSymbol(search);
-    setIsLaunching(true);
+  setInitialSymbol(symbol.trim());
 
-    setTimeout(() => {
-      setShowDashboard(true);
-      setIsLaunching(false);
-    }, 1200);
-  };
+  setIsLaunching(true);
 
+  setTimeout(() => {
+    setShowDashboard(true);
+    setIsLaunching(false);
+  }, 1200);
+};
     return (
       <motion.div
         className="      
@@ -274,7 +275,7 @@
       }
     }}
                     type="text"
-                    placeholder="Search AAPL, TSLA, BTC/USD..."
+                    placeholder="Search stocks, crypto or symbols..."
                     className="
                         flex-1
                         bg-transparent
@@ -291,7 +292,7 @@
 
                   {!hasWatchlist && (
                     <button
-                      onClick={launchDashboard}
+                      onClick={() => launchDashboard()}
                       
                       className={`
                     rounded-xl
@@ -352,8 +353,14 @@
                   }}
                   className="mt-2 text-sm text-gray-500"
                 >
-                  Search any stock or crypto symbol to launch your dashboard
+                 Search a symbol or explore popular stocks below
                 </motion.p>
+
+                {/* SUPPORTED MARKETS */}
+<SupportedMarkets onSelectSymbol={launchDashboard} />
+
+
+
                 {/* LIVE STATS */}
                 <motion.div
                   variants={{
@@ -470,6 +477,10 @@
             </motion.div>
           </div>
         </div>
+
+
+
+    
 
         {/* FEATURE STRIP */}
         <div

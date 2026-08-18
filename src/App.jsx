@@ -12,8 +12,8 @@ function App() {
     return localStorage.getItem("showDashboard") === "true";
   });
   const [isLaunching, setIsLaunching] = useState(false);
-
   const [initialSymbol, setInitialSymbol] = useState("");
+  const [initialStockData, setInitialStockData] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("showDashboard", showDashboard);
