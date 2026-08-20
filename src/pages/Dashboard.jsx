@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StockCard } from "../components/StockCard";
+import { StockCard } from "../Components/StockCard";
 import { WatchlistContext } from "../context/WatchlistContext";
 import { StockDetails } from "../Components/StockDetails";
 import { AnimatePresence, motion } from "framer-motion";
-import { CandleChart } from "../components/CandleChart";
+import { CandleChart } from "../Components/CandleChart";
 import { AnalyticsCard } from "../Components/AnalyticsCard";
 import { StockNews } from "../Components/StockNews";
 import { MarketHeatmap } from "../Components/MarketHeatmap";
@@ -13,9 +13,16 @@ import { Shimmer } from "../Components/LoadingShimmer/Shimmer";
 import { fetchStock } from "../services/api";
 import { AnalyticsSection } from "../Components/AnalyticsSection";
 import { EmptyDashboard } from "../Components/EmptyDashboard";
+import { FiTrash2 } from "react-icons/fi";
 
-export const Dashboard = ({ initialSymbol,initialStockData, }) => {
-  const { watchlist, loadingMap, addStock,fetchExtraMarketData } = useContext(WatchlistContext);
+export const Dashboard = ({ initialSymbol, initialStockData }) => {
+  const {
+    watchlist,
+    loadingMap,
+    addStock,
+    fetchExtraMarketData,
+    clearWatchlist,
+  } = useContext(WatchlistContext);
 
   const [theme, setTheme] = useState(
     document.documentElement.getAttribute("data-theme") || "light",
@@ -42,18 +49,16 @@ export const Dashboard = ({ initialSymbol,initialStockData, }) => {
     (a, b) => a.percent_change - b.percent_change,
   )[0];
 
-  // useEffect(() => {
-  // fetchExtraMarketData();
-  // }, []);
-  
-
+  useEffect(() => {
+    fetchExtraMarketData();
+  }, []);
 
   useEffect(() => {
-  if (!initialStockData) return;
+    if (!initialStockData) return;
 
-  addStock(initialStockData);
-  setSelectedSymbol(initialStockData.symbol);
-}, [initialStockData]);
+    addStock(initialStockData);
+    setSelectedSymbol(initialStockData.symbol);
+  }, [initialStockData]);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -83,7 +88,7 @@ export const Dashboard = ({ initialSymbol,initialStockData, }) => {
         const stockData = await fetchStock(initialSymbol);
 
         if (!stockData) return;
-        
+
         addStock(stockData);
 
         setSelectedSymbol(stockData.symbol);
@@ -208,17 +213,42 @@ export const Dashboard = ({ initialSymbol,initialStockData, }) => {
           flex flex-col justify-start
            "
         >
-          <h2
-            className="
-            text-2xl
-            sm:text-3xl
-            xl:text-4xl
-            font-bold
-            text-[var(--text)]
-    "
-          >
-            My Watchlist
-          </h2>
+          <div className="flex items-center gap-5">
+            <h1 className="text-3xl font-bold text-white">My Watchlist</h1>
+
+            {watchlist.length > 0 && (
+              <button
+                onClick={clearWatchlist}
+                aria-label="Clear all stocks"
+                title="Clear all stocks"
+                className="
+        flex
+        h-6
+        w-6
+        shrink-0
+        items-center
+        justify-center
+        rounded-md
+        border
+        border-red-400/20
+        bg-red-400/5
+        text-red-400
+        transition-all
+
+        hover:border-red-400/40
+        hover:bg-red-400/10
+        hover:text-red-300
+
+        active:scale-90
+
+        sm:h-7
+        sm:w-7
+      "
+              >
+                <FiTrash2 className="text-xs sm:text-sm" />
+              </button>
+            )}
+          </div>
 
           <p className="text-[var(--text-soft)] text-sm mt-3">
             Track your market movers & portfolio performance

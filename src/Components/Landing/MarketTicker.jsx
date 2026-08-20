@@ -22,9 +22,11 @@ export const MarketTicker = () => {
       <motion.div
         className="
           flex
-          gap-16
+          gap-8
           whitespace-nowrap
-          py-2
+          py-1.5
+           sm:gap-12
+          sm:py-2
         "
         animate={{
           x: ["0%", "-50%"],
@@ -41,10 +43,12 @@ export const MarketTicker = () => {
             className="
                 flex
                 items-center
-                gap-3
-                text-sm
+                gap-2
+                text-[12px]
                 text-gray-300
                 shrink-0
+                sm:text-sm
+                 sm:gap-3
               "
           >
             <div

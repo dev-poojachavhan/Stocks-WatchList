@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { fetchStock } from "../services/api";
 import { WatchlistContext } from "../context/WatchlistContext";
-import { ThemeToggle } from "../components/ThemeToggle";
+import { ThemeToggle } from "../Components/ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
 
 const TRENDING_STOCKS = [

@@ -6,6 +6,11 @@ import {
 } from "../services/api";
 import toast from "react-hot-toast";
 
+
+
+
+
+
 export const WatchlistContext = createContext();
 
 export const WatchlistProvider = ({ children }) => {
@@ -55,6 +60,7 @@ export const WatchlistProvider = ({ children }) => {
       return [];
     }
   });
+
 
   //Create a ref to track latest watchlist
   const watchlistRef = useRef(watchlist);
@@ -164,11 +170,14 @@ export const WatchlistProvider = ({ children }) => {
         // ✅ prevent unnecessary re-renders
         setWatchlist((prev) => {
           const changed = prev.some((stock, index) => {
+            const next = updated[index];
+            if (!next) return false;
+            
             return (
-              stock.price !== updated[index].price ||
-              stock.percent_change !== updated[index].percent_change ||
-              stock.volume !== updated[index].volume ||
-              stock.sparkline?.length !== updated[index].sparkline?.length
+              stock.price !== next.price || 
+              stock.percent_change !==next.percent_change ||
+              stock.volume !== next.volume ||
+              stock.sparkline?.length !== next.sparkline?.length
             );
           });
 
@@ -219,6 +228,12 @@ export const WatchlistProvider = ({ children }) => {
     setWatchlist((prev) => prev.filter((s) => s.symbol !== symbol));
   };
 
+  const clearWatchlist = () => {
+  setWatchlist([]);
+  toast.success("Watchlist cleared");
+};
+
+
   const togglePin = (symbol) => {
     setWatchlist((prev) => {
       const updated = prev.map((stock) =>
@@ -238,12 +253,16 @@ export const WatchlistProvider = ({ children }) => {
     });
   };
 
+  
+
+
   return (
     <WatchlistContext.Provider
       value={{
         watchlist,
         addStock,
         removeStock,
+        clearWatchlist,
         togglePin,
         popularStocks,
         cryptoData,

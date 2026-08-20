@@ -70,7 +70,9 @@ const launchDashboard = async (symbol = search) => {
 };
     return (
       <motion.div
-        className="      
+        className="   
+        w-full
+overflow-x-hidden   
         bg-[#050816]
           text-white
           pb-10
@@ -135,7 +137,7 @@ const launchDashboard = async (symbol = search) => {
             />
 
       <AnimatePresence>
-  {invalidSymbol && (
+         {invalidSymbol && (
     <motion.div
       className="
         fixed
@@ -284,6 +286,7 @@ const launchDashboard = async (symbol = search) => {
 
             {/* HERO */}
             <motion.div
+              
               initial={{
                 opacity: 0,
                 y: 40,
@@ -304,15 +307,18 @@ const launchDashboard = async (symbol = search) => {
                 scale: 0.98,
               }}
               className="
-                relative z-10  
+             
+                relative 
+                z-10  
                 mx-auto
+                 w-full
                 max-w-[1400px]  
-                grid
-                items-center
+                lg:grid
+                lg:items-center
                 gap-10
-                lg:gap-20
-                min-h-[420px]
+                px-1
                 lg:grid-cols-2
+                lg:gap-16
               "
             >
               {/* LEFT SIDE */}
@@ -332,11 +338,12 @@ const launchDashboard = async (symbol = search) => {
                 {" "}
                 <motion.h1
                   className="          
-                    font-black
-                    leading-[0.96]
-                    text-3xl
-                    sm:text-5xl
-                    lg:text-6xl
+                     font-black
+    text-[2rem]
+    leading-[1.05]
+    tracking-tight
+    sm:text-5xl
+    lg:text-6xl
                     
                 "
                 >
@@ -377,11 +384,15 @@ const launchDashboard = async (symbol = search) => {
                   Track stocks, crypto, heatmaps, and market news in one modern
                   trading dashboard experience.
                 </motion.p>
+
+
                 {/* MOBILE DASHBOARD PREVIEW */}
-                <div className="block lg:hidden mt-8">
+                <div className="block lg:hidden mt-8 ">
                   <div
                     className="
-                       mt-7
+                      
+                        max-w-[750px]
+                        
     overflow-hidden
     rounded-2xl
     border border-white/[0.08]
@@ -402,8 +413,9 @@ const launchDashboard = async (symbol = search) => {
       rounded-xl
       object-cover
       object-top
-      
-      sm:h-[300px]
+      overflow-hidden
+      sm:h-[230px] 
+      md:h-[260px] 
                         "
                     />
                   </div>
@@ -633,7 +645,7 @@ const launchDashboard = async (symbol = search) => {
               "
                 />
 
-                {/* DASHBOARD MOCKUP */}
+                {/* DASHBOARD preview */}
                 <div
                   className="
                   relative

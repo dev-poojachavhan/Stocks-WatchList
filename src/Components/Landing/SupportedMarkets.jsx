@@ -16,6 +16,26 @@ export const SupportedMarkets = ({ onSelectSymbol }) => {
     });
   };
 
+
+
+  const stockVariants = {
+  hidden: {
+    opacity: 0,
+    y: 10,
+    scale: 0.96,
+  },
+  visible: (index) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.35,
+      delay: index * 0.06,
+      ease: "easeOut",
+    },
+  }),
+};
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -33,7 +53,8 @@ export const SupportedMarkets = ({ onSelectSymbol }) => {
         bg-[#0a1020]/80
         p-3
         shadow-[0_0_30px_rgba(16,185,129,0.05)]
-        backdrop-blur-xl
+        backdrop-blur-lg
+        shadow-green-400/30
 
         sm:mt-9
         sm:p-4
@@ -59,7 +80,7 @@ export const SupportedMarkets = ({ onSelectSymbol }) => {
             className="
               mt-0.5
               text-[10px]
-              text-slate-500
+              text-slate-400
               sm:text-[11px]
             "
           >
@@ -79,14 +100,14 @@ export const SupportedMarkets = ({ onSelectSymbol }) => {
               items-center
               justify-center
               rounded-lg
-              border border-white/[0.08]
+              border border-white/[0.10]
               bg-white/[0.035]
               text-xs
               text-slate-400
               transition-all
 
-              hover:border-emerald-400/30
-              hover:bg-emerald-400/10
+              hover:border-emerald-400/40
+              hover:bg-emerald-400/20
               hover:text-emerald-400
 
               active:scale-90
@@ -115,10 +136,10 @@ export const SupportedMarkets = ({ onSelectSymbol }) => {
               text-slate-400
               transition-all
 
-              hover:border-emerald-400/30
-              hover:bg-emerald-400/10
+             
+              hover:border-emerald-400/40
+              hover:bg-emerald-400/20
               hover:text-emerald-400
-
               active:scale-90
 
               sm:h-8
@@ -148,8 +169,12 @@ export const SupportedMarkets = ({ onSelectSymbol }) => {
             [&::-webkit-scrollbar]:hidden
           "
         >
-          {market.symbols.map((stock) => (
-            <button
+          {market.symbols.map((stock,index) => (
+            <motion.button
+               custom={index}
+  variants={stockVariants}
+  initial="hidden"
+  animate="visible"
               key={stock.symbol}
               onClick={() => onSelectSymbol(stock.symbol)}
               className="
@@ -165,9 +190,11 @@ export const SupportedMarkets = ({ onSelectSymbol }) => {
                 transition-all
                 duration-200
 
+                
+
                 hover:-translate-y-0.5
                 hover:border-emerald-400/30
-                hover:bg-emerald-400/[0.06]
+                hover:bg-emerald-400/[0.10]
                 hover:shadow-[0_0_15px_rgba(16,185,129,0.08)]
 
                 active:scale-[0.96]
@@ -199,7 +226,7 @@ export const SupportedMarkets = ({ onSelectSymbol }) => {
               >
                 {stock.name}
               </p>
-            </button>
+            </motion.button>
           ))}
         </div>
 
